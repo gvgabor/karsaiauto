@@ -6,7 +6,6 @@ use Yii;
 
 class ColumnsHelper
 {
-
     public static function felhasznalokColumns(): array
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
@@ -25,7 +24,7 @@ class ColumnsHelper
     public static function adminColumns(): array
     {
         $columns[] = [
-            "command"    => [
+            "command" => [
                 "template" => "<button data-name='edit-btn' class='btn btn-warning  edit-btn rounded-0'><i class='fa fa-pen-alt'></i></button>"
             ],
             "attributes" => ["style" => "text-align:center"],
@@ -37,6 +36,22 @@ class ColumnsHelper
             "width"      => 60,
         ];
 
+        return $columns;
+    }
+
+    public static function idoszakokColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "idoszak_megnevezes", "title" => Yii::t("app", "Idoszak Megnevezes")];
+        return $columns;
+    }
+
+    public static function arvalasztoColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "megnevezes", "title" => Yii::t("app", "Megnevezes")];
+        $columns[] = ["field" => "kezdo_osszeg", "title" => Yii::t("app", "Kezdo Osszeg")];
+        $columns[] = ["field" => "veg_osszeg", "title" => Yii::t("app", "Veg Osszeg")];
         return $columns;
     }
 
@@ -70,12 +85,12 @@ class ColumnsHelper
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
         $columns[] = ["field" => "menu_name", "title" => Yii::t("app", "Menu Name")];
-//        $columns[] = [
-//            "field"      => "sorrend",
-//            "title"      => Yii::t("app", "Sorrend"),
-//            "attributes" => ["style" => "text-align:center"],
-//            "width"      => 120
-//        ];
+        //        $columns[] = [
+        //            "field"      => "sorrend",
+        //            "title"      => Yii::t("app", "Sorrend"),
+        //            "attributes" => ["style" => "text-align:center"],
+        //            "width"      => 120
+        //        ];
         $columns[] = ["field" => "parent_name", "title" => Yii::t("app", "Parent ID"), "encoded" => false];
         $columns[] = [
             "command"    => ["name" => "delete", "text" => "alma"],
@@ -97,12 +112,12 @@ class ColumnsHelper
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
         $columns[] = ["field" => "menu_name", "title" => Yii::t("app", "Menu Name")];
         $columns[] = ["field" => "parent_name", "title" => Yii::t("app", "Parent ID"), "encoded" => false];
-//        $columns[] = [
-//            "field"      => "sorrend",
-//            "title"      => Yii::t("app", "Sorrend"),
-//            "attributes" => ["style" => "text-align:center"],
-//            "width"      => 120
-//        ];
+        //        $columns[] = [
+        //            "field"      => "sorrend",
+        //            "title"      => Yii::t("app", "Sorrend"),
+        //            "attributes" => ["style" => "text-align:center"],
+        //            "width"      => 120
+        //        ];
 
         return $columns;
     }
