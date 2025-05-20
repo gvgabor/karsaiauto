@@ -22,7 +22,6 @@ class OptionsHelper
     {
         return [
             1 => "Kisteherautó",
-            2 => "Személyautó",
         ];
     }
 

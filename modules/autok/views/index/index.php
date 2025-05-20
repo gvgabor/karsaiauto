@@ -3,11 +3,14 @@
  * @var View $this
  */
 
+use app\helpers\ColumnsHelper;
 use app\helpers\HtmlHelper;
 use yii\web\JqueryAsset;
 use yii\web\View;
 
+$this->registerJsVar("autokColumns", ColumnsHelper::autokColumns());
 $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class]]);
+
 
 ?>
 
@@ -21,7 +24,7 @@ $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class
         </div>
     </div>
     <div class="card-body">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa eos, placeat! Autem illo iste molestiae quis tenetur. Adipisci beatae commodi deleniti dolores expedita iste laborum obcaecati, officia pariatur! Labore, numquam.
+      <div id="autok-grid" class="border-0"></div>
     </div>
 </div>
 

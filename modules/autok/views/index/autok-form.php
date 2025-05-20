@@ -41,11 +41,12 @@ use yii\web\View;
                         <?= $form->field($model, "hirdetes_leirasa")->textarea() ?>
 
 
-                        <div class="grid-col-2">
+                        <div class="grid-col-3">
                             <?= $form->field($model, "marka_id")->dropDownList(OptionsHelper::markakOptions(), [
                                 "prompt" => Yii::t("app", "Please Select")
                             ]) ?>
                             <?= $form->field($model, "model") ?>
+                            <?= $form->field($model, "gyartasi_ev") ?>
                         </div>
 
                         <?= $form->field($model, "jarmutipus_id")->dropDownList(OptionsHelper::jarmutipusaOptions(), [

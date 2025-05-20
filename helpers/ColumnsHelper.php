@@ -55,6 +55,28 @@ class ColumnsHelper
         return $columns;
     }
 
+    public static function autokColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "hirdetes_cime", "title" => Yii::t("app", "Hirdetes Cime")];
+        $columns[] = ["field" => "marka", "title" => Yii::t("app", "Marka ID")];
+        $columns[] = ["field" => "model", "title" => Yii::t("app", "Model")];
+        $columns[] = [
+            "field"      => "vetelar_format",
+            "title"      => Yii::t("app", "Vetelar"),
+            "attributes" => ["style" => "text-align:right"],
+            "width"      => 160,
+        ];
+        $columns[] = [
+            "field"      => "gyartasi_ev",
+            "title"      => Yii::t("app", "Gyartasi Ev"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 160,
+        ];
+        $columns = array_merge($columns, self::adminColumns());
+        return $columns;
+    }
+
     public static function menuColumns(): array
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
