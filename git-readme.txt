@@ -1,1 +1,1 @@
-alma
+Ez a szöveg a dev branchből jött.
