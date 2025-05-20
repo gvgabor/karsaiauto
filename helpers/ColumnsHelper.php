@@ -60,6 +60,7 @@ class ColumnsHelper
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
         $columns[] = ["field" => "menu_name", "title" => Yii::t("app", "Menu Name")];
         $columns[] = ["field" => "parent_name", "title" => Yii::t("app", "Parent ID"), "encoded" => false];
+        $columns[] = ["field" => "menu_url", "title" => Yii::t("app", "Menu Url")];
         $columns[] = [
             "field"      => "sorrend",
             "title"      => Yii::t("app", "Sorrend"),
