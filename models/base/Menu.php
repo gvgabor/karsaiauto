@@ -11,7 +11,6 @@ use app\models\query\MenuQuery;
  */
 class Menu extends \app\models\Menu
 {
-
     public int $diveder = 0;
 
     public function rules()
@@ -27,8 +26,8 @@ class Menu extends \app\models\Menu
 
         $fields["parent_name"] = function () {
             $parentArray = [];
-            $parentList = $this->findParent($this, $parentArray);
-            $parentList = array_reverse($parentList);
+            $parentList  = $this->findParent($this, $parentArray);
+            $parentList  = array_reverse($parentList);
             return join("&nbsp;<i class='fa fa-arrow-right'></i>&nbsp;", $parentList);
         };
         $fields["hasChild"] = function () {
@@ -71,12 +70,12 @@ class Menu extends \app\models\Menu
             ["IS", "parent_id", null]
         ])->all();
 
-        $options = [];
+        $options             = [];
         $currentChildrenList = [];
         $this->childList($currentModel, $currentChildrenList);
         $currentChildrenList[] = $currentModel->id;
         foreach ($possibleList as $model) {
-            $list = [];
+            $list     = [];
             $children = $this->childList($model, $list);
 
             if ($model->id != $currentModel->id) {
@@ -88,10 +87,10 @@ class Menu extends \app\models\Menu
                 if (in_array($child->id, $currentChildrenList)) {
                     continue;
                 }
-                $init = [];
+                $init       = [];
                 $parentList = $this->findParent($child, $init);
                 $parentList = array_reverse($parentList);
-                $label = "";
+                $label      = "";
                 foreach ($parentList as $parent) {
                     $label .= $parent . "-";
                 }
