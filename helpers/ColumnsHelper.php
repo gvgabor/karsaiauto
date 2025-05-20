@@ -21,13 +21,6 @@ class ColumnsHelper
         return $columns;
     }
 
-    public static function idoszakokColumns(): array
-    {
-        $columns[] = ["field" => "id","title" => Yii::t("app", "ID"),"hidden" => true];
-        $columns[] = ["field" => "idoszak_megnevezes","title" => Yii::t("app", "Idoszak Megnevezes")];
-        return $columns;
-    }
-
     public static function adminColumns(): array
     {
         $columns[] = [
@@ -43,6 +36,22 @@ class ColumnsHelper
             "width"      => 60,
         ];
 
+        return $columns;
+    }
+
+    public static function idoszakokColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "idoszak_megnevezes", "title" => Yii::t("app", "Idoszak Megnevezes")];
+        return $columns;
+    }
+
+    public static function arvalasztoColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "megnevezes", "title" => Yii::t("app", "Megnevezes")];
+        $columns[] = ["field" => "kezdo_osszeg", "title" => Yii::t("app", "Kezdo Osszeg")];
+        $columns[] = ["field" => "veg_osszeg", "title" => Yii::t("app", "Veg Osszeg")];
         return $columns;
     }
 
