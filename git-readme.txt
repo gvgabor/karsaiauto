@@ -1,1 +1,1 @@
-Ez a szöveg a dev branchből jött.
+Ez a szöveg a feature branchből jött.
