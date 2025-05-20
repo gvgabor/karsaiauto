@@ -33,6 +33,8 @@ return [
     'Idoszak Megnevezes'    => '',
     'Jelszo'                => '',
     'Jogosultsag Neve'      => '',
+    'Kezdo Osszeg'          => '',
+    'Megnevezes'            => '',
     'Menu ID'               => '',
     'Menu Name'             => '',
     'Menu Url'              => '',
@@ -42,6 +44,7 @@ return [
     'Sorrend'               => '',
     'Updated At'            => '',
     'Updated By'            => '',
+    'Veg Osszeg'            => '',
     'logout'                => '',
     'save'                  => '',
 ];
