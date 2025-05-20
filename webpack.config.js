@@ -5,7 +5,8 @@ module.exports = {
         helper   : './helpers/class.helper.ts',
         formpopup: './helpers/class.formpopup.ts',
         util     : './helpers/class.util.ts',
-        admin    : './modules/admin/assets/admin.js'
+        admin    : './modules/admin/assets/admin.js',
+        idoszakok: './modules/karbantartas/assets/idoszakok.ts'
         // login    : './views/assets/login.ts',
     },
     output : {

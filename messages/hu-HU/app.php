@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -17,28 +18,30 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Email'                 => 'E-mail',
+    'Felhasznaloi Jog'      => 'Felhasználói jog',
+    'Felhasznaloi Nev'      => 'Felhasználói név',
+    'Felhasznalok'          => 'Felhasználók',
+    'Felhasznalok Szama'    => 'Felhasználók száma',
+    'Jelszo'                => 'Jelszó',
+    'Jogosultsag Neve'      => 'Jogosultság',
+    'Menu Name'             => 'Menü neve',
+    'Menu Url'              => 'URL',
+    'Parent ID'             => 'Szülő elem',
+    'Please Select'         => 'Kérem válasszon',
+    'Sorrend'               => 'Sorrend',
+    'save'                  => 'Mentés',
     'Active'                => '',
     'Create By'             => '',
     'Created At'            => '',
     'Deleted'               => '',
-    'Email'                 => 'E-mail',
-    'Felhasznaloi Jog'      => 'Felhasználói jog',
     'Felhasznaloi Jogok ID' => '',
-    'Felhasznaloi Nev'      => 'Felhasználói név',
     'Friendly Name'         => '',
     'ID'                    => '',
-    'Jelszo'                => 'Jelszó',
-    'Jogosultsag Neve'      => 'Jogosultság',
+    'Idoszak Megnevezes'    => 'Megnevezés',
     'Menu ID'               => '',
-    'Menu Name'             => 'Menü neve',
-    'Menu Url'              => 'URL',
     'Name'                  => '',
-    'Parent ID'             => 'Szülő elem',
-    'Sorrend'               => 'Sorrend',
     'Updated At'            => '',
     'Updated By'            => '',
-    'Felhasznalok Szama'    => 'Felhasználók száma',
-    'Felhasznalok'          => 'Felhasználók',
-    'save'                  => 'Mentés',
-    'Please Select'         => 'Kérem válasszon',
+    'logout'                => '',
 ];

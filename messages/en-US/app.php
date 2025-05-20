@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -17,24 +18,30 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Active' => '',
-    'Create By' => '',
-    'Created At' => '',
-    'Deleted' => '',
-    'Email' => '',
-    'Felhasznaloi Jog' => '',
+    'Active'                => '',
+    'Create By'             => '',
+    'Created At'            => '',
+    'Deleted'               => '',
+    'Email'                 => '',
+    'Felhasznaloi Jog'      => '',
     'Felhasznaloi Jogok ID' => '',
-    'Felhasznaloi Nev' => '',
-    'Friendly Name' => '',
-    'ID' => '',
-    'Jelszo' => '',
-    'Jogosultsag Neve' => '',
-    'Menu ID' => '',
-    'Menu Name' => '',
-    'Menu Url' => '',
-    'Name' => '',
-    'Parent ID' => '',
-    'Sorrend' => '',
-    'Updated At' => '',
-    'Updated By' => '',
+    'Felhasznaloi Nev'      => '',
+    'Felhasznalok'          => '',
+    'Felhasznalok Szama'    => '',
+    'Friendly Name'         => '',
+    'ID'                    => '',
+    'Idoszak Megnevezes'    => '',
+    'Jelszo'                => '',
+    'Jogosultsag Neve'      => '',
+    'Menu ID'               => '',
+    'Menu Name'             => '',
+    'Menu Url'              => '',
+    'Name'                  => '',
+    'Parent ID'             => '',
+    'Please Select'         => '',
+    'Sorrend'               => '',
+    'Updated At'            => '',
+    'Updated By'            => '',
+    'logout'                => '',
+    'save'                  => '',
 ];
