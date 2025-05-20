@@ -2,20 +2,21 @@
 
 use app\models\base\Felhasznalok;
 use app\modules\admin\Admin;
+use app\modules\karbantartas\Karbantartas;
 use yii\symfonymailer\Mailer;
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+$db     = require __DIR__ . '/db.php';
 
 $config = [
-    'id'             => 'basic',
-    'basePath'       => dirname(__DIR__),
-    'bootstrap'      => ['log'],
-    'defaultRoute'   => 'index',
-    'aliases'        => [
+    'id'           => 'basic',
+    'basePath'     => dirname(__DIR__),
+    'bootstrap'    => ['log'],
+    'defaultRoute' => 'index',
+    'aliases'      => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
@@ -23,7 +24,7 @@ $config = [
     'sourceLanguage' => 'en-US',
     'name'           => mb_strtoupper('karsai autó'),
     'components'     => [
-        'request'      => [
+        'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'ETQkYIG7hliyy-ddOORg4n6WbRU7RkhR',
             'parsers'             => [
@@ -31,23 +32,23 @@ $config = [
                 'multipart/form-data' => 'yii\web\MultipartFormDataParser',
             ],
         ],
-        'cache'        => [
+        'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'user'         => [
+        'user' => [
             'identityClass'   => Felhasznalok::class,
             'enableAutoLogin' => false,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer'       => [
-            'class'            => Mailer::class,
-            'viewPath'         => '@app/mail',
+        'mailer' => [
+            'class'    => Mailer::class,
+            'viewPath' => '@app/mail',
             // send all mails to a file by default.
             'useFileTransport' => true,
         ],
-        'log'          => [
+        'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets'    => [
                 [
@@ -56,8 +57,8 @@ $config = [
                 ],
             ],
         ],
-        'db'           => $db,
-        'urlManager'   => [
+        'db'         => $db,
+        'urlManager' => [
             'enablePrettyUrl'     => true,
             'showScriptName'      => false,
             'enableStrictParsing' => false,
@@ -69,7 +70,7 @@ $config = [
                 'admin/RemoveMenu/<id:\d+>'              => 'admin/index/remove-menu',
             ],
         ],
-        'i18n'         => [
+        'i18n' => [
             'translations' => [
                 'app*' => [
                     'class'          => yii\i18n\PhpMessageSource::class,
@@ -81,31 +82,38 @@ $config = [
                 ],
             ],
         ],
-        'authManager'  => [
+        'authManager' => [
             'class' => 'yii\rbac\DbManager', // vagy PhpManager
         ],
     ],
-    'modules'        => [
+    'modules' => [
         'admin' => [
             'class'        => Admin::class,
             'defaultRoute' => 'index',
             'layoutPath'   => '@app/views/layouts',
             'layout'       => 'admin-main',
-        ]
+        ],
+        'karbantartas' => [
+            'class'        => Karbantartas::class,
+            'defaultRoute' => 'index',
+            'layoutPath'   => '@app/views/layouts',
+            'layout'       => 'admin-main',
+        ],
+
     ],
-    'params'         => $params,
+    'params' => $params,
 ];
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
-//    $config['bootstrap'][] = 'debug';
-//    $config['modules']['debug'] = [
-//        'class' => 'yii\debug\Module',
-//        // uncomment the following to add your IP if you are not connecting from localhost.
-//        //'allowedIPs' => ['127.0.0.1', '::1'],
-//    ];
+    //    $config['bootstrap'][] = 'debug';
+    //    $config['modules']['debug'] = [
+    //        'class' => 'yii\debug\Module',
+    //        // uncomment the following to add your IP if you are not connecting from localhost.
+    //        //'allowedIPs' => ['127.0.0.1', '::1'],
+    //    ];
 
-    $config['bootstrap'][] = 'gii';
+    $config['bootstrap'][]    = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
