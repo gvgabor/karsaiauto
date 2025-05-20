@@ -61,6 +61,8 @@ class Menu extends \app\models\Menu
     public static function find()
     {
         // TODO: majd megcsinálni
+        // TODO: majd megcsinálni
+        // TODO: majd megcsinálni
         return new MenuQuery(get_called_class());
     }
 
