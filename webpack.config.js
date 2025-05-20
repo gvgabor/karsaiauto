@@ -7,7 +7,8 @@ module.exports = {
         util     : './helpers/class.util.ts',
         admin    : './modules/admin/assets/admin.js',
         idoszakok: './modules/karbantartas/assets/idoszakok.ts',
-        arak     : './modules/karbantartas/assets/arak.ts'
+        arak     : './modules/karbantartas/assets/arak.ts',
+        markak     : './modules/karbantartas/assets/markak.ts',
         // login    : './views/assets/login.ts',
     },
     output : {

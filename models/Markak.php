@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\MainActiveRecord;
 use Yii;
 
 /**
@@ -17,10 +18,8 @@ use Yii;
  * @property int|null $updated_by
  * @property int|null $create_by
  */
-class Markak extends \app\components\MainActiveRecord
+abstract class Markak extends MainActiveRecord
 {
-
-
     /**
      * {@inheritdoc}
      */
@@ -35,7 +34,11 @@ class Markak extends \app\components\MainActiveRecord
     public function rules()
     {
         return [
-            [['name', 'friendly_name', 'created_at', 'updated_at', 'updated_by', 'create_by'], 'default', 'value' => null],
+            [
+                ['name', 'friendly_name', 'created_at', 'updated_at', 'updated_by', 'create_by'],
+                'default',
+                'value' => null
+            ],
             [['deleted'], 'default', 'value' => 0],
             [['active'], 'default', 'value' => 1],
             [['deleted', 'active', 'updated_by', 'create_by'], 'integer'],
@@ -50,15 +53,15 @@ class Markak extends \app\components\MainActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'name' => Yii::t('app', 'Name'),
+            'id'            => Yii::t('app', 'ID'),
+            'name'          => Yii::t('app', 'Name'),
             'friendly_name' => Yii::t('app', 'Friendly Name'),
-            'deleted' => Yii::t('app', 'Deleted'),
-            'active' => Yii::t('app', 'Active'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
-            'updated_by' => Yii::t('app', 'Updated By'),
-            'create_by' => Yii::t('app', 'Create By'),
+            'deleted'       => Yii::t('app', 'Deleted'),
+            'active'        => Yii::t('app', 'Active'),
+            'created_at'    => Yii::t('app', 'Created At'),
+            'updated_at'    => Yii::t('app', 'Updated At'),
+            'updated_by'    => Yii::t('app', 'Updated By'),
+            'create_by'     => Yii::t('app', 'Create By'),
         ];
     }
 

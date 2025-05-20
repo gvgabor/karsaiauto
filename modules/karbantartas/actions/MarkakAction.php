@@ -3,38 +3,31 @@
 namespace app\modules\karbantartas\actions;
 
 use app\components\MainAction;
-use app\models\base\Felhasznalok;
 use app\models\base\Idoszakok;
+use app\models\base\Markak;
 use Throwable;
 use Yii;
-use yii\helpers\Inflector;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
-class IdoszakokAction extends MainAction
+class MarkakAction extends MainAction
 {
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $result                     = [];
-
-
-        $query           = Idoszakok::find();
-        $result['total'] = $query->count();
-        $result['data']  = $query->all();
-
-
-        return $result;
+        $query                      = Markak::find();
+        return [
+            "total" => $query->count(),
+            "data"  => $query->all(),
+        ];
     }
 
-
-    public function save(array $formData)
+    public function save($formData)
     {
         $transaction = Yii::$app->db->beginTransaction();
         $result      = [];
-
-        $model = empty($formData["id"]) ? new Idoszakok() : Idoszakok::findOne($formData["id"]);
+        $model       = empty($formData["id"]) ? new Markak() : Markak::findOne($formData["id"]);
         $this->baseStatus($model);
         try {
             $model->setAttributes($formData);
@@ -51,7 +44,5 @@ class IdoszakokAction extends MainAction
         }
         return $result;
     }
-
-
 
 }

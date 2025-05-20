@@ -82,6 +82,16 @@ class ColumnsHelper
         return $columns;
     }
 
+    public static function markakColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "name", "title" => Yii::t("app", "Name")];
+        $columns[] = ["field" => "friendly_name", "title" => Yii::t("app", "Friendly Name")];
+        $columns   = array_merge($columns, self::adminColumns());
+
+        return $columns;
+    }
+
     public static function hozzarendelesMenuColumns(): array
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
