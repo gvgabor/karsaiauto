@@ -2,6 +2,7 @@
 
 use app\models\base\Felhasznalok;
 use app\modules\admin\Admin;
+use app\modules\autok\Autok;
 use app\modules\karbantartas\Karbantartas;
 use yii\symfonymailer\Mailer;
 
@@ -95,6 +96,12 @@ $config = [
         ],
         'karbantartas' => [
             'class'        => Karbantartas::class,
+            'defaultRoute' => 'index',
+            'layoutPath'   => '@app/views/layouts',
+            'layout'       => 'admin-main',
+        ],
+        'autok' => [
+            'class'        => Autok::class,
             'defaultRoute' => 'index',
             'layoutPath'   => '@app/views/layouts',
             'layout'       => 'admin-main',

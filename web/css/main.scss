@@ -343,6 +343,91 @@ div.hozzarendeles-grid-box {
   white-space: nowrap;
   background-color: transparent;
   border: 0;
-  border-radius: var(--bs-dropdown-item-border-radius,0);
+  border-radius: var(--bs-dropdown-item-border-radius, 0);
   font-size: 0.8rem;
+}
+
+#autok-hirdetes_leirasa {
+  height: 200px;
+  resize: none;
+}
+
+.grid-col-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.grid-col-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.form-wrapper {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 0;
+
+  > div {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+#form-tab {
+  * {
+    box-sizing: border-box;
+  }
+
+  .k-tabstrip-content {
+    padding: 10px !important;
+  }
+}
+
+.image-box {
+  * {
+    box-sizing: border-box !important;
+  }
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  #upload-kepek-box {
+    background: white;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(100px, 200px));
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    align-content: start;
+    border: 1px solid #cccccc;
+
+    row-gap: 10px;
+    height: 600px;
+    padding: 10px;
+    overflow-y: scroll;
+
+    div.image-item-box {
+      //width: 200px;
+      height: 160px;
+      background: white;
+      overflow: clip;
+      padding: 10px;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+
+  }
+}
+
+.kepek-list {
+  height: 600px;
 }
