@@ -1,0 +1,42 @@
+{
+  "name": "karsaiauto",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">     <a href=\"https://github.com/yiisoft\" target=\"_blank\">         <img src=\"https://avatars0.githubusercontent.com/u/993323\" height=\"100px\">     </a>     <h1 align=\"center\">Yii 2 Basic Project Template</h1>     <br> </p>",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile:sass": "sass --watch scss:./web/css",
+    "modelCreate": "php yii hello/ModelCreate",
+    "webpack_watch": "npx webpack --watch",
+    "webpack_development": "npx webpack --mode=development",
+    "webpack_production": "npx webpack --mode=production",
+    "message": "php yii message config.php"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@progress/kendo-ui": "^2025.1.227",
+    "animate.css": "^4.1.1",
+    "bootstrap-checkbox": "^2.0.0",
+    "moment": "^2.29.1",
+    "postcss-cli": "^9.1.0",
+    "readmore-js": "^2.2.1",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^4.10.0"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.32",
+    "@types/kendo-ui": "^2023.2.5",
+    "css-loader": "^7.1.2",
+    "replace-in-file": "^7.1.0",
+    "sass": "^1.87.0",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.8.3"
+  }
+}

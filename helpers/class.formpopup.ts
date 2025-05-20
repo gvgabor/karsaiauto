@@ -1,0 +1,55 @@
+import {ClassUtil} from "./class.util";
+
+export class ClassFormpopup extends ClassUtil {
+
+    public readonly root: HTMLDivElement;
+    public readonly layer: HTMLDivElement;
+    public form!: HTMLFormElement;
+
+    constructor(title: string = "Karsai autó", content: string = "", width: number = 800) {
+        super();
+
+        this.root = document.createElement("div");
+        this.root.classList.add("form-popup")
+
+        this.layer = document.createElement("div");
+        this.layer.classList.add("form-popup-layer")
+
+        const style = document.createElement("style");
+        style.innerText = `.form-popup-layer { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.2); } .form-popup { width: ${width}px; background: white; position: absolute; top: 0; left: 50%; transition: 0.5s; transform: translateX(-50%); box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2); opacity: 0; pointer-events: none; } .form-popup.active { opacity: 1; top: 120px; pointer-events: all; } .form-popup .card-footer { display: flex; justify-content: flex-end; }`;
+
+        document.head.appendChild(style);
+        document.body.appendChild(this.layer);
+        this.layer.style.zIndex = (this.maxZIndex + 1).toString();
+        document.body.appendChild(this.root);
+        this.root.style.zIndex = (this.maxZIndex + 1).toString();
+        const observer = new MutationObserver((records) => {
+            const closeBox = this.root.querySelector(`div.close-box`);
+            if (closeBox) {
+                (closeBox as HTMLDivElement).onclick = () => this.close();
+                (closeBox as HTMLDivElement).style.cursor = "pointer";
+                this.form = this.root.querySelector(`form`)!;
+                observer.disconnect();
+            }
+
+            requestAnimationFrame(() => this.root.classList.add("active"));
+        });
+
+        observer.observe(this.root, {
+            childList: true,
+        });
+    }
+
+
+    close() {
+        this.root.ontransitionend = (event) => {
+            if (event.propertyName == "top") {
+                this.root.remove();
+                this.layer.remove();
+            }
+        }
+        this.root.classList.remove("active");
+    }
+
+}
+

@@ -1,0 +1,46 @@
+const path = require('path');
+
+module.exports = {
+    entry  : {
+        helper   : './helpers/class.helper.ts',
+        formpopup: './helpers/class.formpopup.ts',
+        util     : './helpers/class.util.ts',
+        admin    : './modules/admin/assets/admin.js'
+        // login    : './views/assets/login.ts',
+    },
+    output : {
+        filename: '[name].js',
+        path    : path.resolve(__dirname, 'web/webpack'),
+    },
+    resolve: {
+        extensions: [
+            '.ts',
+            '.js'
+        ]
+    },
+    module : {
+        rules: [
+            {
+                test   : /\.ts$/,
+                use    : 'ts-loader',
+                exclude: /node_modules/
+            },
+            {
+                test: /\.css$/i,
+                use : [
+                    'style-loader',
+                    'css-loader'
+                ],
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use : [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ],
+            }
+        ],
+    },
+    mode   : 'development', // vagy 'production'
+};

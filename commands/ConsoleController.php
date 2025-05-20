@@ -1,0 +1,164 @@
+<?php
+
+namespace app\commands;
+
+use app\helpers\OptionsHelper;
+use app\models\base\FelhasznaloiJogok;
+use app\models\base\Felhasznalok;
+use app\models\base\Menu;
+use Faker\Factory;
+use Yii;
+use yii\console\Controller;
+use yii\gii\generators\model\Generator as ModelGenerator;
+use yii\helpers\BaseConsole;
+use yii\helpers\Inflector;
+
+class ConsoleController extends Controller
+{
+
+    public ?string $tableName = null;
+
+    public function options($actionID)
+    {
+        return ["tableName"];
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->color = true;
+    }
+
+    /**
+     * @return void
+     * php yii console/import-markak
+     */
+    public function actionImportMarkak()
+    {
+        Yii::$app->db->createCommand()->truncateTable('{{%markak}}')->execute();
+        $path = Yii::getAlias("@app/web/import/markak.txt");
+        if (is_file($path)) {
+            $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            $data = [];
+            $count = 0;
+            foreach ($lines as $line) {
+                $trimmed = trim($line);
+                if ($trimmed !== '') {
+                    $data[] = [$trimmed, Inflector::slug($trimmed)];
+                    $count++;
+                }
+            }
+
+            Yii::$app->db->createCommand()->batchInsert('{{%markak}}', ['name', 'friendly_name'], $data)->execute();
+
+            $this->writeOut(gethostname() . PHP_EOL);
+            $this->writeOut("Sikeresen importálva: ");
+            $this->stdout($count);
+            $this->stdout(" márka." . PHP_EOL);
+        }
+    }
+
+    public function writeOut($text, $param = [
+        BaseConsole::FG_YELLOW,
+        BaseConsole::BOLD
+    ])
+    {
+        $this->stdout(BaseConsole::ansiFormat($text, $param));
+    }
+
+    /**
+     * @return void
+     * php yii console/create-model-list
+     */
+    public function actionCreateModelList()
+    {
+        $except = ['migration'];
+        $tables = Yii::$app->db->schema->getTableNames();
+        $tables = array_diff($tables, $except);
+        foreach ($tables as $item) {
+            $this->tableName = $item;
+            $this->actionCreateModel();
+        }
+    }
+
+    /**
+     * @return int
+     * php yii console/create-model --tableName=
+     */
+    public function actionCreateModel()
+    {
+        $generator = new ModelGenerator();
+
+        $generator->tableName = $this->tableName;
+
+        $generator->modelClass = Inflector::camelize($this->tableName);
+        $generator->baseClass = 'app\components\MainActiveRecord';
+        $generator->enableI18N = true;
+        $generator->messageCategory = 'app';
+        $generator->generateRelations = ModelGenerator::RELATIONS_NONE;
+
+        $generator->queryNs = 'app\\models\\query';
+        $generator->ns = 'app\\models';
+        $generator->queryClass = Inflector::id2camel($this->tableName, '_') . 'Query';
+        $generator->generateQuery = true;
+        $queryFile = Yii::getAlias('@app/models/query/' . $generator->queryClass . '.php');
+
+        if (file_exists($queryFile)) {
+            $generator->generateQuery = false;
+        }
+
+        $generator->queryBaseClass = 'app\\components\\MainActiveQuery';
+        if (!$generator->validate()) {
+            print_r($generator->getErrors());
+            return 1;
+        }
+
+        $files = $generator->generate();
+        if (empty($files)) {
+            echo "Nincsenek fájlok generálva. Lehet, hogy a tábla nem létezik, vagy nem olvasható.\n";
+            return 1;
+        }
+
+        foreach ($files as $file) {
+            if (!$file->save()) {
+                echo "Nem sikerült elmenteni: {$file->path}. Ellenőrizd az írási jogokat vagy az elérési utat.\n";
+                return 1;
+            } else {
+                echo "Sikeresen elmentve: {$file->path}\n";
+            }
+
+        }
+
+        return 0;
+    }
+
+    public function actionRandomMenu()
+    {
+        $model = new Menu();
+        $factory = Factory::create('hu_HU');
+        $model->menu_name = $factory->word();
+        $model->parent_id = $factory->randomElement(array_keys($model->possibleParentList($model)));
+        $model->sorrend = $factory->numberBetween(1, 100);
+        return $model;
+    }
+
+    public function actionRandomFelhasznaloiJog()
+    {
+        $model = new FelhasznaloiJogok();
+        $factory = Factory::create('hu_HU');
+        $model->jogosultsag_neve = $factory->word();
+        return $model;
+    }
+
+    public function actionRandomFelhasznalo()
+    {
+        $model = new Felhasznalok();
+        $factory = Factory::create('hu_HU');
+        $model->felhasznaloi_nev = $factory->userName();
+        $model->jelszo = $factory->password();
+        $model->email = $factory->email();
+        $model->felhasznaloi_jog = $factory->randomElement(array_keys(OptionsHelper::felhasznaloiJogokOptions()));
+        return $model;
+    }
+
+}
