@@ -1,1 +1,1 @@
-Ez a szöveg a feature branchből jött.
+Ez a sor a dev ágon van.
