@@ -40,9 +40,14 @@ class IndexController extends MainController
         if (UtilHelper::isLocal()) {
             $model = Yii::$container->get(ConsoleController::class)->actionRandomAuto();
         }
+
         if ($formData = $this->request->post($model->shortname)) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return Yii::$container->get(AutokAction::class)->save($formData);
+        }
+
+        if ($id = $this->request->post("id")) {
+            $model = Autok::findOne($id);
         }
 
         return $this->renderPartial("autok-form", ['model' => $model]);

@@ -7,6 +7,7 @@ use yii\web\UploadedFile;
 
 /**
  *
+ * @property-read AutokImage[] $autokImage
  * @property-read Markak $marka
  */
 class Autok extends \app\models\Autok
@@ -31,7 +32,18 @@ class Autok extends \app\models\Autok
         $fields                   = parent::fields();
         $fields["marka"]          = fn () => $this->marka->name;
         $fields["vetelar_format"] = fn () => number_format($this->vetelar, 0, '', ' ') . ' Ft';
+        $fields['images']         = fn () => $this->autokImage;
+        $fields['kepek_szama']    = fn () => count($this->autokImage);
+        $fields['fooldalra']      = fn () => $this->fooldalra ? "IGEN" : "NEM";
+        $fields['akcios']         = fn () => $this->akcios ? "IGEN" : "NEM";
+        $fields['eladva']         = fn () => $this->eladva ? "IGEN" : "NEM";
+        $fields['publikalva']     = fn () => $this->publikalva ? "IGEN" : "NEM";
         return $fields;
+    }
+
+    public function getAutokImage()
+    {
+        return $this->hasMany(AutokImage::class, ['autok_id' => 'id'])->orderBy(["{{%autok_image}}.sorrend" => SORT_ASC]);
     }
 
     public function rules()
@@ -50,7 +62,13 @@ class Autok extends \app\models\Autok
                 ],
                 'required'
             ],
-            [['image'], 'file', 'extensions' => 'png, jpg, jpeg, webp', 'maxFiles' => 30],
+            [
+                ['image'],
+                'file',
+                'extensions' => 'png, jpg, jpeg, webp',
+                'maxFiles'   => 30,
+                'mimeTypes'  => 'image/jpeg, image/png, image/webp'
+            ],
         ]);
     }
 

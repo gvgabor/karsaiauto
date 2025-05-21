@@ -9,6 +9,7 @@ export enum AutokEndPoints {
     AUTOK_FORM = "AutokForm",
     AUTOK = "Autok",
     REMOVE_AUTO = "RemoveAuto",
+    TIPUS_UPLOAD = "upload",
 }
 
 export class ClassAutok extends ClassUtil {
@@ -26,7 +27,14 @@ export class ClassAutok extends ClassUtil {
                         grid.dataSource.remove(dataItem);
                     }
                 }
-            })
+            });
+            this.gridButtonList(grid, "edit-btn").forEach(item => {
+                const dataItem = item.data as ObservableObject & { id: number, hirdetes_cime: string };
+                item.button.onclick = async () => {
+                    const response = await this.autoForm({id: dataItem.id});
+                    grid.dataSource.pushUpdate(response.model);
+                }
+            });
         })
 
         const createAutoBtn = this.button("create-auto-btn");
@@ -84,27 +92,40 @@ export class ClassAutok extends ClassUtil {
         })
 
         formTab.select(0);
-        // const kepekList = this.kepekList(this.div("kepek-list"));
+        const kTabstripContent: HTMLDivElement = formTab.wrapper[0].querySelector(`div.k-tabstrip-content`)!;
         const uploadKepekBox = this.div("upload-kepek-box");
+        uploadKepekBox.style.height = `${kTabstripContent.offsetHeight}px`;
 
         const autokImage = this.input("autok-image") as HTMLFormElement;
-        const showOrder = () => {
-            uploadKepekBox.querySelectorAll(`div.image-item-box:not(.placeholder)`).forEach((element, index) => {
-                const orderBox = element.querySelector(`div.order-box`);
-                if (orderBox) {
-                    orderBox.innerHTML = (index + 1).toString();
-                }
-            })
+
+        if (uploadKepekBox.dataset.images) {
+            const images: Array<{
+                id: string,
+                name: string,
+                image: "string"
+            }> = JSON.parse(uploadKepekBox.dataset.images);
+            images.forEach(item => {
+                this.imageBox(uploadKepekBox, item.name, item.image).dataset.id = item.id;
+            });
+            this.showOrder(uploadKepekBox);
+            this.sortImages(uploadKepekBox);
         }
 
 
         autokImage.onchange = () => {
             const files = autokImage.files;
-            uploadKepekBox.innerHTML = "";
             if (files) {
                 const observer = new MutationObserver(() => {
-                    if (files.length == uploadKepekBox.children.length) {
-                        showOrder();
+                    const children = Array.from(uploadKepekBox.children) as HTMLDivElement[];
+                    const childCount: number = children.reduce((carry, item) => {
+                        if (item.dataset.tipus == AutokEndPoints.TIPUS_UPLOAD) {
+                            carry++;
+                        }
+                        return carry;
+                    }, 0);
+                    if (files.length == childCount) {
+                        children.forEach(item => item.removeAttribute("data-tipus"));
+                        this.showOrder(uploadKepekBox);
                         observer.disconnect();
                     }
                 });
@@ -115,49 +136,11 @@ export class ClassAutok extends ClassUtil {
                     const current = files[i];
                     const reader = new FileReader();
                     reader.onload = event => {
-                        const imageBox = document.createElement("div");
-                        imageBox.classList.add("image-item-box")
-                        const image = document.createElement("img");
-                        const orderBox = document.createElement("div");
-                        orderBox.classList.add("order-box");
-                        image.src = event.target?.result as string;
-                        imageBox.appendChild(image);
-                        imageBox.appendChild(orderBox);
-                        uploadKepekBox.appendChild(imageBox);
+                        this.imageBox(uploadKepekBox, current.name, event.target?.result as string).dataset.tipus = AutokEndPoints.TIPUS_UPLOAD;
                     }
                     reader.readAsDataURL(current);
                 }
-
-                jQuery(uploadKepekBox).kendoSortable({
-                    filter: ".image-item-box",
-                    cursor: "move",
-                    cursorOffset: {
-                        top: -80,
-                        left: -100
-                    },
-                    hint: (element: JQuery) => {
-                        const clone = element.clone().css({
-                            width: "200px",
-                            maxWidth: "200px",
-                            height: "160px"
-                        }).addClass("drag-hint");
-                        clone.find("img").css({
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            display: "block"
-                        });
-                        return clone;
-                    },
-                    placeholder: (element: JQuery) => {
-                        return element.clone().css({
-                            opacity: 0.3,
-                            width: "200px",
-                            height: "160px"
-                        }).addClass("placeholder").text("IDE JÖHET");
-                    },
-                    change: () => showOrder()
-                })
+                this.sortImages(uploadKepekBox);
             }
         }
 
@@ -165,11 +148,86 @@ export class ClassAutok extends ClassUtil {
         return new Promise((resolve) => {
             saveBtn.onclick = async () => {
                 const formData = new FormData(popup.form);
+                const sorrend = (Array.from(uploadKepekBox.children) as HTMLDivElement[]).map((item, index) => ({
+                    index: index + 1,
+                    name: item.dataset.name,
+                    id: item.dataset.id,
+                }));
+                formData.append("sorrend", JSON.stringify(sorrend));
                 const response = await this.fetchForm(url, formData, popup.form, "autok") as ApiResponse;
                 resolve(response)
                 popup.close();
             }
         });
+    }
+
+    sortImages(element: HTMLDivElement) {
+        jQuery(element).kendoSortable({
+            filter: ".image-item-box",
+            cursor: "move",
+            cursorOffset: {
+                top: -80,
+                left: -100
+            },
+            hint: (element: JQuery) => {
+                const clone = element.clone().css({
+                    width: "200px",
+                    maxWidth: "200px",
+                    height: "160px"
+                }).addClass("drag-hint");
+                clone.find("img").css({
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block"
+                });
+                return clone;
+            },
+            placeholder: (element: JQuery) => {
+                return element.clone().css({
+                    opacity: 0.3,
+                    width: "200px",
+                    height: "160px"
+                }).addClass("placeholder").text("IDE JÖHET");
+            },
+            change: () => this.showOrder(element)
+        })
+    }
+
+    showOrder(element: HTMLDivElement) {
+        element.querySelectorAll(`div.image-item-box:not(.placeholder)`).forEach((element, index) => {
+            const orderBox = element.querySelector(`div.order-box`);
+            if (orderBox) {
+                orderBox.innerHTML = (index + 1).toString();
+            }
+        })
+    }
+
+    imageBox(parent: HTMLDivElement, name: string, src: string) {
+        const imageBox = document.createElement("div");
+        imageBox.classList.add("image-item-box");
+        imageBox.dataset.name = name;
+        const image = document.createElement("img");
+        const orderBox = document.createElement("div");
+        orderBox.classList.add("order-box");
+        image.src = src;
+        const removeBox = document.createElement("div");
+        removeBox.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+        removeBox.classList.add("remove-box")
+
+
+        imageBox.appendChild(image);
+        imageBox.appendChild(orderBox);
+        imageBox.appendChild(removeBox);
+        parent.appendChild(imageBox);
+
+        removeBox.onclick = async () => {
+            await this.confirm(`Biztosan törli a képet?`, removeBox);
+            imageBox.remove();
+            this.showOrder(parent);
+        }
+
+        return imageBox;
     }
 
     autokGrid(element: HTMLDivElement): Promise<kendo.ui.Grid> {
@@ -197,14 +255,5 @@ export class ClassAutok extends ClassUtil {
         })
     }
 
-    kepekList(element: HTMLDivElement): kendo.ui.ListView {
-        const kepekList = jQuery(element).kendoListView({
-            template: function (data: any) {
-                console.log(data);
-                return "alma";
-            }
-        }).data("kendoListView");
-        return kepekList;
-    }
 
 }

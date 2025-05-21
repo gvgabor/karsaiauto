@@ -16,4 +16,29 @@ class HtmlHelper
         return $button->render();
     }
 
+    public static function formCheckBox($label, $id)
+    {
+        $chekboxMain = Html::div("{input}")
+            ->addContent(
+                Html::label()->class("checkbox")->forId($id)
+                    ->addContent(
+                        Html::span()->class("checkbox__inner")
+                            ->addContent(Html::span()->class("green__ball"))
+                    ),
+                Html::div()->class("checkbox__text")
+                    ->addContent(
+                        Html::span($label),
+                        Html::div()->class("checkbox__text--options")
+                            ->addContent(
+                                Html::span("NEM")->class("off"),
+                                Html::span("IGEN")->class("on"),
+                            )
+                    )
+            )
+            ->class("chekbox-main")
+            ->encode(false);
+
+        return $chekboxMain->render();
+    }
+
 }

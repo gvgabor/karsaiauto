@@ -3,7 +3,6 @@
 namespace app\models;
 
 use app\components\MainActiveRecord;
-use app\models\query\AutokQuery;
 use Yii;
 
 /**
@@ -28,6 +27,10 @@ use Yii;
  * @property string|null $updated_at
  * @property int|null $updated_by
  * @property int|null $create_by
+ * @property int|null $publikalva
+ * @property int|null $eladva
+ * @property int|null $akcios
+ * @property int|null $fooldalra
  */
 abstract class Autok extends MainActiveRecord
 {
@@ -37,15 +40,6 @@ abstract class Autok extends MainActiveRecord
     public static function tableName()
     {
         return 'autok';
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return AutokQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new AutokQuery(get_called_class());
     }
 
     /**
@@ -76,7 +70,7 @@ abstract class Autok extends MainActiveRecord
                 'default',
                 'value' => null
             ],
-            [['deleted'], 'default', 'value' => 0],
+            [['fooldalra'], 'default', 'value' => 0],
             [['active'], 'default', 'value' => 1],
             [
                 [
@@ -90,7 +84,11 @@ abstract class Autok extends MainActiveRecord
                     'deleted',
                     'active',
                     'updated_by',
-                    'create_by'
+                    'create_by',
+                    'publikalva',
+                    'eladva',
+                    'akcios',
+                    'fooldalra'
                 ],
                 'integer'
             ],
@@ -125,6 +123,10 @@ abstract class Autok extends MainActiveRecord
             'updated_at'       => Yii::t('app', 'Updated At'),
             'updated_by'       => Yii::t('app', 'Updated By'),
             'create_by'        => Yii::t('app', 'Create By'),
+            'publikalva'       => Yii::t('app', 'Publikalva'),
+            'eladva'           => Yii::t('app', 'Eladva'),
+            'akcios'           => Yii::t('app', 'Akcios'),
+            'fooldalra'        => Yii::t('app', 'Fooldalra'),
         ];
     }
 

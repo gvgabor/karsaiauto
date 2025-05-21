@@ -6,9 +6,21 @@
  */
 
 use app\components\MainForm;
+use app\helpers\HtmlHelper;
 use app\helpers\OptionsHelper;
 use app\models\base\Autok;
+use yii\helpers\Json;
 use yii\web\View;
+use Yiisoft\Html\Html;
+
+$uploadKepekBox = Html::div()
+    ->id("upload-kepek-box");
+
+if ($model->isNewRecord === false) {
+    $uploadKepekBox = $uploadKepekBox->addAttributes([
+        "data-images" => Json::encode($model->autokImage)
+    ]);
+}
 
 ?>
 
@@ -37,6 +49,8 @@ use yii\web\View;
                         <li>Alapadatok</li>
                     </ul>
                     <div>
+
+
                         <?= $form->field($model, "hirdetes_cime") ?>
                         <?= $form->field($model, "hirdetes_leirasa")->textarea() ?>
 
@@ -67,6 +81,28 @@ use yii\web\View;
 
                         <?= $form->field($model, "muszaki_ervenyes") ?>
                         <?= $form->field($model, "vetelar") ?>
+
+                        <div class="grid-col-3">
+
+                            <?= $form->field($model, "fooldalra")->checkbox([
+                                "template" => HtmlHelper::formCheckBox($model->getAttributeLabel("fooldalra"), \yii\helpers\Html::getInputId($model, "fooldalra")),
+                            ]) ?>
+
+                            <?= $form->field($model, "publikalva")->checkbox([
+                                "template" => HtmlHelper::formCheckBox($model->getAttributeLabel("publikalva"), \yii\helpers\Html::getInputId($model, "publikalva")),
+                            ]) ?>
+
+                            <?= $form->field($model, "eladva")->checkbox([
+                                "template" => HtmlHelper::formCheckBox($model->getAttributeLabel("eladva"), \yii\helpers\Html::getInputId($model, "eladva")),
+                            ]) ?>
+
+                            <?= $form->field($model, "akcios")->checkbox([
+                                "template" => HtmlHelper::formCheckBox($model->getAttributeLabel("akcios"), \yii\helpers\Html::getInputId($model, "akcios")),
+                            ]) ?>
+
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -77,9 +113,7 @@ use yii\web\View;
                         "accept"   => "image/*"
                     ])->label(false) ?>
                 </div>
-                <div id="upload-kepek-box"></div>
-                <div id="kepek-list" class="kepek-list">
-                </div>
+                <?= $uploadKepekBox->render() ?>
             </div>
         </div>
 

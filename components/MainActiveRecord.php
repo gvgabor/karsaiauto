@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 /**
  * @property-read string $shortname
  * @property-read array $adminColumns
- * @property int $deleted
+ * @property-read string $longId
  */
 abstract class MainActiveRecord extends ActiveRecord
 {
@@ -30,7 +30,7 @@ abstract class MainActiveRecord extends ActiveRecord
     public function getAdminColumns()
     {
         $columns[] = [
-            "command"    => [
+            "command" => [
                 "template" => "<button data-name='edit-btn' class='btn btn-warning  edit-btn rounded-0'><i class='fa fa-pen-alt'></i></button>"
             ],
             "attributes" => ["style" => "text-align:center"],
@@ -63,6 +63,10 @@ abstract class MainActiveRecord extends ActiveRecord
         return (new ReflectionClass($this))->getShortName();
     }
 
+    public function getLongId()
+    {
+        return str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
 
 
 }
