@@ -3,6 +3,7 @@
 namespace app\helpers;
 
 use Yii;
+use yii\helpers\Url;
 use Yiisoft\Html\Html;
 
 class HtmlHelper
@@ -15,6 +16,40 @@ class HtmlHelper
             ->addContent($content)
             ->encode(false);
         return $button->render();
+    }
+
+    public static function languageSelector()
+    {
+        $languages = [];
+
+        $langs = [
+            "Magyar"  => "hu-HU",
+            "English" => "en-US"
+        ];
+
+        foreach ($langs as $key => $item) {
+            $url         = Url::to(["/autok/index", "lang" => $item]);
+            $languages[] = Html::li()->addContent(
+                Html::a()->class("dropdown-item")->href($url)->addContent('<i class="fa-sharp fa-solid fa-circle" ></i>&nbsp;&nbsp;' . $key)->encode(false),
+            );
+        }
+
+        $li = Html::li()
+            ->class("nav-item dropdown")
+            ->addContent(
+                Html::a("Nyelvek")
+                    ->href("#")
+                    ->class("nav-link dropdown-toggle")
+                    ->addAttributes([
+                        "data-bs-toggle"     => "dropdown",
+                        "data-bs-auto-close" => "outside"
+                    ]),
+                Html::ul()
+                    ->class("dropdown-menu shadow")
+                    ->items(...$languages)
+            );
+
+        return $li->encode(false)->render();
     }
 
     public static function formCheckBox($label, $id)

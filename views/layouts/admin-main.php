@@ -5,6 +5,7 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
+use app\helpers\HtmlHelper;
 use app\models\base\Felhasznalok;
 use richardfan\widget\JSRegister;
 use yii\bootstrap5\Html;
@@ -35,8 +36,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?php JSRegister::end() ?>
 
 
-
-
         <nav class="navbar navbar-expand-xxl  navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="<?= Yii::$app->homeUrl ?>">
@@ -56,10 +55,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <div class="collapse navbar-collapse" id="navbar-content">
                     <?= Felhasznalok::findOne(Yii::$app->user->id)->getHtmlMenu() ?>
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item d-inline-flex align-items-center text-white">
-                            <?= Html::a('Magyar', ['/autok/index','lang' => 'hu-HU']) ?>
-                            <?= Html::a('English', ['/autok/index','lang' => 'en-US']) ?>
-                        </li>
+                        <?= HtmlHelper::languageSelector() ?>
                         <li class="nav-item d-inline-flex align-items-center text-white">
                             <i class="fa fa-user-alt"></i>&nbsp;
                             Felhasználó: <?= Yii::$app->user->identity?->username ?>
