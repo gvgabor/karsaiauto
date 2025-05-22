@@ -3,6 +3,7 @@
 namespace app\models\base;
 
 use app\models\query\AutokQuery;
+use Yii;
 use yii\web\UploadedFile;
 
 /**
@@ -32,12 +33,14 @@ class Autok extends \app\models\Autok
         $fields                   = parent::fields();
         $fields["marka"]          = fn () => $this->marka->name;
         $fields["vetelar_format"] = fn () => number_format($this->vetelar, 0, '', ' ') . ' Ft';
-        $fields['images']         = fn () => $this->autokImage;
         $fields['kepek_szama']    = fn () => count($this->autokImage);
         $fields['fooldalra']      = fn () => $this->fooldalra ? "IGEN" : "NEM";
         $fields['akcios']         = fn () => $this->akcios ? "IGEN" : "NEM";
         $fields['eladva']         = fn () => $this->eladva ? "IGEN" : "NEM";
         $fields['publikalva']     = fn () => $this->publikalva ? "IGEN" : "NEM";
+        $fields["edit_text"]      = fn () => Yii::t("app", "edit_text", ["name" => $this->hirdetes_cime]);
+        $fields["delete_text"]    = fn () => Yii::t("app", "delete_text", ["name" => $this->hirdetes_cime]);
+        $fields["confirm_text"]   = fn () => Yii::t("app", "confirm_text", ["name" => $this->hirdetes_cime]);
         return $fields;
     }
 
@@ -59,6 +62,7 @@ class Autok extends \app\models\Autok
                     'vetelar',
                     'hirdetes_cime',
                     'motortipus_id',
+                    'valto_id'
                 ],
                 'required'
             ],

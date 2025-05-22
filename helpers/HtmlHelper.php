@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 
+use Yii;
 use Yiisoft\Html\Html;
 
 class HtmlHelper
@@ -30,8 +31,8 @@ class HtmlHelper
                         Html::span($label),
                         Html::div()->class("checkbox__text--options")
                             ->addContent(
-                                Html::span("NEM")->class("off"),
-                                Html::span("IGEN")->class("on"),
+                                Html::span(Yii::t("app", "nem"))->class("off"),
+                                Html::span(Yii::t("app", "igen"))->class("on"),
                             )
                     )
             )

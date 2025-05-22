@@ -9,7 +9,7 @@ use yii\web\View;
 
 
 
-<div class="card hozzarendeles-box rounded-0">
+<div class="card hozzarendeles-box">
     <div class="card-header">
         <div class="card-title">
             Hozzárendelés

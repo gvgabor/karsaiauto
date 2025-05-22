@@ -21,7 +21,15 @@ class IndexController extends MainController
 
     public function actionIndex()
     {
+
         return $this->render("index");
+    }
+
+    public function beforeAction($action)
+    {
+        //        Yii::$app->session->set('language', 'en-US');
+        //        Yii::$app->language = 'en-US';
+        return parent::beforeAction($action);
     }
 
     public function actionRemoveAuto()

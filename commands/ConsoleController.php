@@ -121,10 +121,10 @@ class ConsoleController extends Controller
 
         foreach ($files as $file) {
             if (!$file->save()) {
-                echo "Nem sikerült elmenteni: {$file->path}. Ellenőrizd az írási jogokat vagy az elérési utat.\n";
+                echo "Nem sikerült elmenteni: $file->path. Ellenőrizd az írási jogokat vagy az elérési utat.\n";
                 return 1;
             } else {
-                echo "Sikeresen elmentve: {$file->path}\n";
+                echo "Sikeresen elmentve: $file->path\n";
             }
 
         }
@@ -177,6 +177,31 @@ class ConsoleController extends Controller
         $model->email            = $factory->email();
         $model->felhasznaloi_jog = $factory->randomElement(array_keys(OptionsHelper::felhasznaloiJogokOptions()));
         return $model;
+    }
+
+    /**
+     * @return void
+     * php yii console/create-language-file
+     */
+    public function actionCreateLanguageFile()
+    {
+        $path    = Yii::getAlias("@app/views/index/lang.php");
+        $options = [
+            OptionsHelper::motortipusOptions(),
+            OptionsHelper::motortipusOptions(),
+            OptionsHelper::valtoOptions(),
+            OptionsHelper::jarmutipusaOptions(),
+            OptionsHelper::felhasznaloiJogokOptions(),
+        ];
+        $text = "<?php  ";
+        foreach ($options as $item) {
+            foreach ($item as $value) {
+                $text .= "Yii::t('app',\"$value\");";
+            }
+        }
+
+        file_put_contents($path, $text);
+
     }
 
 }
