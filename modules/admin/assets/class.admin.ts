@@ -43,7 +43,7 @@ export class ClassAdmin extends ClassUtil {
                 }
             }
         }).data("kendoTabStrip") as kendo.ui.TabStrip;
-        adminTab.select(2);
+        adminTab.select(0);
         const felhasznalokGrid = await this.felhasznalokGrid(this.div("felhasznalok-grid"));
         const felhasznaloiJogokGrid = await this.felhasznaloiJogokGrid(this.div("felhasznaloi-jogok-grid"));
         const menuGrid = await this.menuGrid(this.div("menu-grid"));
@@ -73,7 +73,7 @@ export class ClassAdmin extends ClassUtil {
                 } else {
                     cell.innerHTML = `<button class="btn btn-danger remove-btn"><i class='fa fa-trash-alt'></i></button>`
                     cell.onclick = async () => {
-                        await this.confirm(`Biztosan töli a <strong>${dataItem.menu_name}</strong> elemet?`, cell);
+                        await this.confirm(`Biztosan törli a <strong>${dataItem.menu_name}</strong> elemet?`, cell);
                         await this.fetchDelete(this.url(AdminEndPoints.REMOVE_MENU), dataItem.id);
                         grid.dataSource.read();
                     }
@@ -318,16 +318,10 @@ export class ClassAdmin extends ClassUtil {
                 schema: schema
             });
             const columns = menuColumns;
-            const observer = new ResizeObserver((entries) => {
+            const observer = new ResizeObserver(() => {
                 const kGridContent = element.querySelector(`div.k-grid-content`);
                 if (kGridContent) {
-                    (kGridContent as HTMLDivElement).style.height = `${element.closest(`div.admin-tab`)!.clientHeight - 204}px`
-                    console.log(entries);
-                    console.log({
-                        heigh: element.clientHeight,
-                        element: element,
-                        parent: element.closest(`div.admin-tab`)
-                    })
+                    (kGridContent as HTMLDivElement).style.height = `${element.closest(`div.admin-tab`)!.clientHeight - 184}px`
                 }
 
             });

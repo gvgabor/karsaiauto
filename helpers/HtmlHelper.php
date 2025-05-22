@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 
+use Yii;
 use Yiisoft\Html\Html;
 
 class HtmlHelper
@@ -14,6 +15,31 @@ class HtmlHelper
             ->addContent($content)
             ->encode(false);
         return $button->render();
+    }
+
+    public static function formCheckBox($label, $id)
+    {
+        $chekboxMain = Html::div("{input}")
+            ->addContent(
+                Html::label()->class("checkbox")->forId($id)
+                    ->addContent(
+                        Html::span()->class("checkbox__inner")
+                            ->addContent(Html::span()->class("green__ball"))
+                    ),
+                Html::div()->class("checkbox__text")
+                    ->addContent(
+                        Html::span($label),
+                        Html::div()->class("checkbox__text--options")
+                            ->addContent(
+                                Html::span(Yii::t("app", "nem"))->class("off"),
+                                Html::span(Yii::t("app", "igen"))->class("on"),
+                            )
+                    )
+            )
+            ->class("chekbox-main")
+            ->encode(false);
+
+        return $chekboxMain->render();
     }
 
 }

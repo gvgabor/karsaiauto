@@ -8,7 +8,8 @@ module.exports = {
         admin    : './modules/admin/assets/admin.js',
         idoszakok: './modules/karbantartas/assets/idoszakok.ts',
         arak     : './modules/karbantartas/assets/arak.ts',
-        markak     : './modules/karbantartas/assets/markak.ts',
+        markak   : './modules/karbantartas/assets/markak.ts',
+        autok    : './modules/autok/assets/autok.ts',
         // login    : './views/assets/login.ts',
     },
     output : {

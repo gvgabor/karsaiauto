@@ -1,0 +1,10 @@
+<?php  Yii::t('app', "Dízel");
+Yii::t('app', "Benzines");
+Yii::t('app', "Dízel");
+Yii::t('app', "Benzines");
+Yii::t('app', "Manuális");
+Yii::t('app', "Automata");
+Yii::t('app', "Kisteherautó");
+Yii::t('app', "Szuperadmin");
+Yii::t('app', "Admin");
+Yii::t('app',"Teszt");

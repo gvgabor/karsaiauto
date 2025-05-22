@@ -39,3 +39,4 @@ tests/_support/_generated
 .env
 *.log
 .php-cs-fixer.cache
+/web/uploads/

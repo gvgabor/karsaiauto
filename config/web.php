@@ -2,7 +2,9 @@
 
 use app\models\base\Felhasznalok;
 use app\modules\admin\Admin;
+use app\modules\autok\Autok;
 use app\modules\karbantartas\Karbantartas;
+use yii\i18n\PhpMessageSource;
 use yii\symfonymailer\Mailer;
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
@@ -16,14 +18,17 @@ $config = [
     'basePath'     => dirname(__DIR__),
     'bootstrap'    => ['log'],
     'defaultRoute' => 'index',
-    'aliases'      => [
+    // A forrásnyelv (a kódban szereplő kulcsok “alapja”) legyen magyar
+    'sourceLanguage' => 'hu-HU',
+    // Az induló alkalmazásnyelv (ha a felhasználó nem választ) legyen hu-HU
+    'language' => 'hu-HU',
+    'aliases'  => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'language'       => 'hu-HU',
-    'sourceLanguage' => 'en-US',
-    'name'           => mb_strtoupper('karsai autó'),
-    'components'     => [
+//    'language'     => "hu-HU",
+    'name'       => mb_strtoupper('karsai autó'),
+    'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'ETQkYIG7hliyy-ddOORg4n6WbRU7RkhR',
@@ -72,10 +77,11 @@ $config = [
         ],
         'i18n' => [
             'translations' => [
+                // csak az “app” kategóriát fordítjuk
                 'app*' => [
-                    'class'          => yii\i18n\PhpMessageSource::class,
+                    'class'          => PhpMessageSource::class,
                     'basePath'       => '@app/messages',
-                    'sourceLanguage' => 'en-US',
+                    'sourceLanguage' => 'hu',
                     'fileMap'        => [
                         'app' => 'app.php',
                     ],
@@ -95,6 +101,12 @@ $config = [
         ],
         'karbantartas' => [
             'class'        => Karbantartas::class,
+            'defaultRoute' => 'index',
+            'layoutPath'   => '@app/views/layouts',
+            'layout'       => 'admin-main',
+        ],
+        'autok' => [
+            'class'        => Autok::class,
             'defaultRoute' => 'index',
             'layoutPath'   => '@app/views/layouts',
             'layout'       => 'admin-main',
