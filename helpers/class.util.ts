@@ -1,18 +1,5 @@
 import ObservableObject = kendo.data.ObservableObject;
 
-/**
- * FormPopup típusdefiníció
- */
-type FormPopup = {
-    popup: HTMLDivElement;
-    closeHandler: () => void;
-    errorHandler: () => void;
-    clearFormHandler: () => void;
-    saveBtn: HTMLButtonElement;
-    form: HTMLFormElement;
-    disable: () => void;
-    enable: () => void;
-};
 
 
 export interface ApiResponse<T = any> {
@@ -59,6 +46,50 @@ export class ClassUtil {
     }
 
 
+
+
+    message(text: string) {
+
+        const oldItems: HTMLDivElement[] = Array.from(document.querySelectorAll(`div.message-box`));
+        const currentPosition = oldItems.reduce((carry) => {
+            carry += 90;
+            return carry;
+        },50);
+
+
+        const messageBox = document.createElement("div");
+        messageBox.classList.add("message-box");
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('hu-HU', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+
+        messageBox.style.zIndex = (this.maxZIndex + 1).toString();
+        messageBox.innerHTML = text + "&nbsp;" + timeString;
+        messageBox.style.top = `${currentPosition}px`;
+        document.body.appendChild(messageBox);
+        messageBox.ontransitionend = () => {
+
+        }
+
+
+
+        requestAnimationFrame(() => messageBox.classList.add("active"));
+        messageBox.onclick = () => {
+            messageBox.ontransitionend = () => messageBox.remove();
+            messageBox.classList.remove("active");
+        }
+
+        setTimeout(() => {
+            messageBox.ontransitionend = () => messageBox.remove();
+            messageBox.classList.remove("active");
+        }, 3000);
+
+    }
+
     /**
      *
      * @param {string} model
@@ -74,6 +105,7 @@ export class ClassUtil {
             const fieldBox: HTMLDivElement | null = form.querySelector(`div.field-${model}-${key}`) as HTMLDivElement | null;
             const errorBox = document.createElement("div");
             errorBox.classList.add("error-box");
+            errorBox.style.zIndex = (this.maxZIndex + 1).toString();
             errorBox.innerHTML = value[0];
             if (fieldBox) {
                 fieldBox.appendChild(errorBox);
@@ -241,7 +273,6 @@ export class ClassUtil {
             body: () => {
                 return `<div class="confirm-body"><i class="fa fa-question-circle"></i><div>${text}</div><div><button class="btn btn-primary btn" data-name="no-btn">Nem</button><button class="btn btn-danger btn" data-name="yes-btn">Igen</button></div></div>`
             },
-            width: 400,
             position: "left",
             header: () => {
                 return "Megerősítés"
@@ -302,7 +333,7 @@ export class ClassUtil {
             if (!response.ok) {
                 // A hibát előbb naplózzuk, majd kidobjuk újra (felsőbb rétegek számára biztosítva)
                 console.error("Hiba a válaszban:", data.message || 'Ismeretlen hiba történt.');
-                throw new Error(data.message || 'Ismeretlen hiba történt.');
+                // throw new Error(data.message || 'Ismeretlen hiba történt.');
             }
 
             return data;

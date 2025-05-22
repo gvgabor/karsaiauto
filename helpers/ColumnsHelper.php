@@ -244,7 +244,7 @@ class ColumnsHelper
             "width"      => 230,
         ];
         $columns[] = [
-            "command"    => ["template" => "<button class='btn btn-danger  hozzarendeles-btn rounded-0'><i class=\"fa-solid fa-toggle-on\"></i>&nbsp;Hozzárendelés</button>"],
+            "command"    => ["template" => "<button class='btn btn-danger  hozzarendeles-btn rounded-0 text-nowrap'><i class=\"fa-solid fa-toggle-on\"></i>&nbsp;Hozzárendelés</button>"],
             "attributes" => ["style" => "text-align:center"],
             "width"      => 180,
         ];

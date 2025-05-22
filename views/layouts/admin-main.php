@@ -28,11 +28,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     </head>
     <body class="">
         <?php $this->beginBody() ?>
-        <?PHP JSRegister::begin(["position" => View::POS_HEAD]) ?>
+        <?php JSRegister::begin(["position" => View::POS_HEAD]) ?>
         <script>
             kendo.culture("hu-HU");
         </script>
-        <?PHP JSRegister::end() ?>
+        <?php JSRegister::end() ?>
 
 
 
@@ -56,6 +56,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <div class="collapse navbar-collapse" id="navbar-content">
                     <?= Felhasznalok::findOne(Yii::$app->user->id)->getHtmlMenu() ?>
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item d-inline-flex align-items-center text-white">
+                            <?= Html::a('Magyar', ['/autok/index','lang' => 'hu-HU']) ?>
+                            <?= Html::a('English', ['/autok/index','lang' => 'en-US']) ?>
+                        </li>
                         <li class="nav-item d-inline-flex align-items-center text-white">
                             <i class="fa fa-user-alt"></i>&nbsp;
                             Felhasználó: <?= Yii::$app->user->identity?->username ?>

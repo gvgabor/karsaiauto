@@ -21,6 +21,17 @@ abstract class MainController extends Controller
         return parent::createAction($id);
     }
 
+    public function beforeAction($action)
+    {
+        if ($lang = Yii::$app->request->get('lang')) {
+            Yii::$app->language = $lang;
+            Yii::$app->session->set('language', $lang);
+        } elseif (Yii::$app->session->has('language')) {
+            Yii::$app->language = Yii::$app->session->get('language');
+        }
+        return parent::beforeAction($action);
+    }
+
     public function removeModel(?MainActiveRecord $model)
     {
         try {
@@ -37,22 +48,22 @@ abstract class MainController extends Controller
 
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
+        $behaviors           = parent::behaviors();
         $behaviors["access"] = [
             'class'        => AccessControl::class,
             'denyCallback' => function () {
                 Yii::$app->response->redirect([Yii::$app->homeUrl])->send();
             },
-            'rules'        => [
+            'rules' => [
                 [
                     'allow'         => true,
                     'roles'         => ['@'],
                     'matchCallback' => function () {
-                        $module = Yii::$app->controller->module->id;
-                        $controller = Yii::$app->controller->id;
-                        $url = $module . "/" . $controller;
-                        $felhasznalo = Felhasznalok::findOne(Yii::$app->user->id);
-                        $menu = Menu::find()->andWhere(["menu_url" => $url])->one();
+                        $module                = Yii::$app->controller->module->id;
+                        $controller            = Yii::$app->controller->id;
+                        $url                   = $module . "/" . $controller;
+                        $felhasznalo           = Felhasznalok::findOne(Yii::$app->user->id);
+                        $menu                  = Menu::find()->andWhere(["menu_url" => $url])->one();
                         $felhasznaloiJogokMenu = FelhasznaloiJogokMenu::find()->andWhere([
                             "felhasznaloi_jogok_id" => $felhasznalo->felhasznaloi_jog,
                             "menu_id"               => $menu->id

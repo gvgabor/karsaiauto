@@ -19,20 +19,31 @@ export class ClassAutok extends ClassUtil {
         this.dataBound(autokGrid, () => {
             const grid = autokGrid;
             this.gridButtonList(grid, "remove-btn").forEach(item => {
-                const dataItem = item.data as ObservableObject & { id: number, hirdetes_cime: string };
+                const dataItem = item.data as ObservableObject & {
+                    id: number,
+                    hirdetes_cime: string,
+                    delete_text: string,
+                    confirm_text: string,
+                };
                 item.button.onclick = async () => {
-                    await this.confirm(`˙Biztos törli a(z) ${dataItem.hirdetes_cime} hírdetést?`, item.button);
+                    await this.confirm(dataItem.confirm_text, item.button);
                     const response = await this.fetchData(this.url(AutokEndPoints.REMOVE_AUTO), {id: dataItem.id});
                     if (response.success) {
                         grid.dataSource.remove(dataItem);
+                        this.message(dataItem.delete_text);
                     }
                 }
             });
             this.gridButtonList(grid, "edit-btn").forEach(item => {
-                const dataItem = item.data as ObservableObject & { id: number, hirdetes_cime: string };
+                const dataItem = item.data as ObservableObject & {
+                    id: number,
+                    hirdetes_cime: string,
+                    edit_text: string
+                };
                 item.button.onclick = async () => {
                     const response = await this.autoForm({id: dataItem.id});
                     grid.dataSource.pushUpdate(response.model);
+                    this.message(dataItem.edit_text)
                 }
             });
         })
@@ -94,7 +105,12 @@ export class ClassAutok extends ClassUtil {
         formTab.select(0);
         const kTabstripContent: HTMLDivElement = formTab.wrapper[0].querySelector(`div.k-tabstrip-content`)!;
         const uploadKepekBox = this.div("upload-kepek-box");
-        uploadKepekBox.style.height = `${kTabstripContent.offsetHeight}px`;
+        const resizeObserver = new ResizeObserver(() => {
+            uploadKepekBox.style.height = `${kTabstripContent.offsetHeight}px`;
+        });
+
+        resizeObserver.observe(kTabstripContent);
+
 
         const autokImage = this.input("autok-image") as HTMLFormElement;
 
