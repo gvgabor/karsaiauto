@@ -23,12 +23,13 @@ class HtmlHelper
         $languages = [];
 
         $langs = [
-            "Magyar"  => "hu-HU",
-            "English" => "en-US"
+            "Magyar"   => "hu-HU",
+            "English"  => "en-US",
+            "Français" => "fr-FR",
         ];
 
         foreach ($langs as $key => $item) {
-            $url         = Url::to(["/autok/index", "lang" => $item]);
+            $url         = Url::to(["/index/change-language", "lang" => $item]);
             $languages[] = Html::li()->addContent(
                 Html::a()->class("dropdown-item")->href($url)->addContent('<i class="fa-sharp fa-solid fa-circle" ></i>&nbsp;&nbsp;' . $key)->encode(false),
             );
