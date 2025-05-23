@@ -255,7 +255,9 @@ export class ClassAutok extends ClassUtil {
             const dataSource = new kendo.data.DataSource({
                 pageSize: 100,
                 transport: transport,
-                schema: schema
+                schema: schema,
+                serverPaging: true,
+                serverFiltering: true,
             });
             const columns = autokColumns;
             jQuery(element).kendoGrid({

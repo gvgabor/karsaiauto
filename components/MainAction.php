@@ -4,6 +4,7 @@ namespace app\components;
 
 use Yii;
 use yii\base\Action;
+use yii\web\Application;
 use yii\web\Request;
 
 /**
@@ -13,20 +14,25 @@ use yii\web\Request;
  */
 class MainAction extends Action
 {
-
-    public function getRequest(): Request
+    public function getRequest(): ?Request
     {
-        return Yii::$app->request;
+        return Yii::$app instanceof Application ? Yii::$app->request : null;
     }
 
     public function baseStatus(MainActiveRecord $model)
     {
-        Yii::$app->response->statusCode = $model->isNewRecord ? 201 : 202;
+        if (Yii::$app instanceof Application) {
+            Yii::$app->response->statusCode = $model->isNewRecord ? 201 : 202;
+        }
+
     }
 
     public function errorStatus()
     {
-        Yii::$app->response->statusCode = 400;
+        if (Yii::$app instanceof Application) {
+            Yii::$app->response->statusCode = 400;
+        }
+
     }
 
 }

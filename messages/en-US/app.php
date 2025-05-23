@@ -76,7 +76,8 @@ return [
     'edit_text'             => '{name} has been successfully edited!',
     'logout'                => 'Logout',
     'save'                  => 'Save',
-    'Autok Kezelese'        => '',
-    'igen'                  => '',
-    'nem'                   => '',
+    'Autok Kezelese'        => 'Vehicle Management', // Az "Autók Kezelése" angol fordítása
+    'igen'                  => 'yes',               // Az "igen" angol fordítása
+    'nem'                   => 'no',                // A "nem" angol fordítása
+
 ];

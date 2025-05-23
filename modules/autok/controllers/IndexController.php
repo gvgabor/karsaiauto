@@ -15,7 +15,12 @@ class IndexController extends MainController
     public function actions()
     {
         return [
-            'autok' => AutokAction::class,
+            'autok' => [
+                'class'    => AutokAction::class,
+                'page'     => $this->request->post('page', 1),
+                'pageSize' => $this->request->post('pageSize', 1),
+                'filters'  => $this->request->post('filter')
+            ],
         ];
     }
 
@@ -24,7 +29,6 @@ class IndexController extends MainController
 
         return $this->render("index");
     }
-
 
     public function actionRemoveAuto()
     {
