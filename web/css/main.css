@@ -739,4 +739,13 @@ input[type=checkbox]:checked ~ .checkbox__text .checkbox__text--options span.on 
   font-weight: 800;
 }
 
+div.loader {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /*# sourceMappingURL=main.css.map */

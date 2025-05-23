@@ -11,6 +11,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\Application;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -26,7 +27,6 @@ class AutokAction extends MainAction
             ->orderBy(["id" => SORT_DESC])
             ->limit($this->pageSize)
             ->offset(($this->page - 1) * $this->pageSize);
-
 
         $result = [
             "total" => $query->count(),
@@ -70,10 +70,15 @@ class AutokAction extends MainAction
                         $currentImage = $model->image[$index];
                         $name         = uniqid('auto-') . "." . $currentImage->getExtension();
                         $currentImage->saveAs($directory . DIRECTORY_SEPARATOR . $name);
+                        $source      = $directory . DIRECTORY_SEPARATOR . $name;
+                        $destination = $directory . DIRECTORY_SEPARATOR . $name . ".webp";
+                        $this->convertToWebP($source, $destination);
+                        unlink($source);
+
                         $autokImage = new AutokImage([
                             "sorrend"  => $item["index"],
                             "autok_id" => $model->id,
-                            "name"     => $name
+                            "name"     => Url::to(["@web/uploads/autok/" . $model->longId . "/" . $name . ".webp",], true)
                         ]);
                         $autokImage->save() ?: throw new BadRequestHttpException(Json::encode($autokImage->errors));
                     }
@@ -98,7 +103,7 @@ class AutokAction extends MainAction
                 $autokImage = new AutokImage([
                     "sorrend"  => $counter++,
                     "autok_id" => $model->id,
-                    "name"     => $name
+                    "name"     => "http://localhost:8080/uploads/autok/" . $model->longId . "/" . $name
                 ]);
                 $autokImage->save() ?: throw new BadRequestHttpException(Json::encode($autokImage->errors));
             }
@@ -117,6 +122,30 @@ class AutokAction extends MainAction
         return $result;
     }
 
+    public function convertToWebP(string $sourcePath, string $destinationPath, int $quality = 80): bool
+    {
+        $info = getimagesize($sourcePath);
+        $mime = $info['mime'];
 
+        switch ($mime) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($sourcePath);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($sourcePath);
+                // transzparencia támogatás
+                imagepalettetotruecolor($image);
+                imagealphablending($image, true);
+                imagesavealpha($image, true);
+                break;
+            default:
+                return false; // nem támogatott formátum
+        }
+
+        // WebP mentés
+        $result = imagewebp($image, $destinationPath, $quality);
+        imagedestroy($image);
+        return $result;
+    }
 
 }

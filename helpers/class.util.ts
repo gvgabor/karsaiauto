@@ -156,6 +156,16 @@ export class ClassUtil {
 
         return new Promise(resolve => {
 
+            const formPopup: HTMLDivElement | null = document.querySelector(`div.form-popup`);
+            if (formPopup) {
+                const loader = document.createElement("div");
+                loader.classList.add("loader");
+                loader.style.zIndex = (this.maxZIndex + 1).toString();
+                loader.innerHTML = `˛<img alt="nincs" src="/images/YTup.gif">`;
+                formPopup.appendChild(loader);
+            }
+
+
             const success = [200, 201, 202];
             const layer = document.createElement("div");
             if (addlayer) {
@@ -173,6 +183,7 @@ export class ClassUtil {
             }).then(response => {
                 if (layer) {
                     layer.remove();
+                    document.querySelectorAll(`div.loader`).forEach(item => item.remove());
                 }
                 status = response.status;
                 const contentType = response.headers.get("Content-Type") || "";

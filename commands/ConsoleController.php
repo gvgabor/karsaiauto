@@ -140,6 +140,37 @@ class ConsoleController extends Controller
 
     /**
      * @return void
+     * php yii console/convert-web-p
+     */
+    public function actionConvertWebP()
+    {
+        $path    = "C:/Users/Vince/Desktop/tmp/osszes_auto";
+        $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+        $this->writeOut("Memóriahasználat: " . $memoria);
+
+        $files = FileHelper::findFiles($path, [
+            'filter' => function ($path) {
+                return pathinfo($path, PATHINFO_EXTENSION) !== 'webp';
+            }
+        ]);
+        $total = count($files);
+        Console::startProgress(0, $total);
+        $counter = 1;
+
+        foreach ($files as $file) {
+            $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+            Yii::$container->get(AutokAction::class)->convertToWebP($file, $file . ".webp");
+            unlink($file);
+            Console::updateProgress($counter + 1, $total, "Memória: " . $memoria);
+            $counter++;
+        }
+
+        Console::endProgress();
+        Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+    }
+
+    /**
+     * @return void
      * php yii console/fill-autok-data
      */
     public function actionFillAutokData()
@@ -149,11 +180,16 @@ class ConsoleController extends Controller
         $this->writeOut("Memóriahasználat: " . $memoria);
         $total = 10000;
         Console::startProgress(0, $total);
-        $path  = "C:/Users/Vince/Desktop/tmp/osszes_auto";
-        $files = FileHelper::findFiles($path);
-
+        $path        = "C:/Users/Vince/Desktop/tmp/osszes_auto";
+        $files       = FileHelper::findFiles($path);
+        $autokAction = Yii::$container->get(AutokAction::class);
         for ($i = 0; $i < $total; $i++) {
-            $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+            $memoria = sprintf(
+                'Iteráció: %d | Használat: %.2f MB | Csúcs: %.2f MB',
+                $i,
+                memory_get_usage()      / 1024 / 1024,
+                memory_get_peak_usage() / 1024 / 1024
+            );
             Console::updateProgress($i + 1, $total, "Memória: " . $memoria);
             $model    = $this->actionRandomAuto();
             $images   = $factory->randomElements($files, random_int(2, 45));
@@ -172,13 +208,16 @@ class ConsoleController extends Controller
                 "valto_id"         => $model->valto_id,
             ];
 
-            $result = Yii::$container->get(AutokAction::class)->save($formData, $images);
+            $result = $autokAction->save($formData, $images);
             if ($result["success"] === false) {
                 throw new Exception($result['message']);
             }
+            unset($model, $images, $formData, $result);
+            gc_collect_cycles();
         }
         Console::endProgress();
         Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+
     }
 
     public function actionRandomAuto()
@@ -197,6 +236,7 @@ class ConsoleController extends Controller
         $model->jarmutipus_id    = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
         $model->gyartasi_ev      = random_int(1990, 2025);
         $model->valto_id         = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));
+        $model->publikalva       = 1;
         return $model;
     }
 
@@ -211,7 +251,12 @@ class ConsoleController extends Controller
         $total = 1000;
         Console::startProgress(0, $total);
         for ($i = 0; $i < $total; $i++) {
-            $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+            $memoria = sprintf(
+                'Iteráció: %d | Használat: %.2f MB | Csúcs: %.2f MB',
+                $i,
+                memory_get_usage()      / 1024 / 1024,
+                memory_get_peak_usage() / 1024 / 1024
+            );
             Console::updateProgress($i + 1, $total, "Memória: " . $memoria);
             $model = $this->actionRandomUgyfel();
             $model->save();

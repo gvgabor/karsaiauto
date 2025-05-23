@@ -21,11 +21,7 @@ class AutokImage extends \app\models\AutokImage
     public function fields()
     {
         $fields          = parent::fields();
-        $fields["image"] = function () {
-            $path = Yii::getAlias("@webroot/uploads/autok/" . $this->autok->longId . "/" . $this->name);
-            $url  = is_file($path) ? Url::to("@web/uploads/autok/" . $this->autok->longId . "/" . $this->name) : "https://placehold.co/200x160";
-            return $url;
-        };
+        $fields["image"] = fn () => $this->name;
         return $fields;
     }
 
