@@ -2,7 +2,7 @@
 
 return [
     'sourcePath'   => __DIR__,    // a gyökér könyvtár, ahonnan összegyűjti a script a fordításokat
-    'languages'    => ['en-US', 'hu-HU'],   // a nyelvek listája, amire fordítani szeretnél
+    'languages'    => ['en-US', 'hu-HU', 'fr-FR'],   // a nyelvek listája, amire fordítani szeretnél
     'translator'   => 'Yii::t',   // a használt fordító függvény
     'sort'         => false,            // rendezze-e az üzeneteket
     'removeUnused' => true,    // törölni szeretnéd-e a használaton kívüli fordításokat

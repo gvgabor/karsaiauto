@@ -19,6 +19,7 @@
  */
 return [
     'Akcios'                => 'Akciós',
+    'Autok Kezelese'        => 'Autók kezelése',
     'Eladva'                => 'Eladva',
     'Email'                 => 'E-mail',
     'Felhasznaloi Jog'      => 'Felhasználói jog',
@@ -75,5 +76,7 @@ return [
     'Teszt'                 => '',
     'Updated At'            => '',
     'Updated By'            => '',
+    'igen'                  => '',
     'logout'                => '',
+    'nem'                   => '',
 ];

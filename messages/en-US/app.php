@@ -19,8 +19,10 @@
  */
 return [
     'Active'                => 'Active',
+    'Admin'                 => 'Admin',
     'Akcios'                => 'Promotional',
     'Autok ID'              => 'Vehicle ID',
+    'Automata'              => 'Automatic',
     'Benzines'              => 'Petrol',
     'Create By'             => 'Created By',
     'Created At'            => 'Created At',
@@ -46,6 +48,8 @@ return [
     'Kepek Szama'           => 'Number of Images',
     'Kezdo Osszeg'          => 'Starting Amount',
     'Kilometer'             => 'Kilometers',
+    'Kisteherautó'          => 'Light Commercial Vehicle',
+    'Manuális'              => 'Manual',
     'Marka ID'              => 'Brand',
     'Megnevezes'            => 'Name',
     'Menu ID'               => 'Menu ID',
@@ -59,7 +63,9 @@ return [
     'Please Select'         => 'Please Select',
     'Publikalva'            => 'Published',
     'Sorrend'               => 'Order',
+    'Szuperadmin'           => 'Superadmin',
     'Teljesitmeny'          => 'Performance',
+    'Teszt'                 => 'Test',
     'Updated At'            => 'Updated At',
     'Updated By'            => 'Updated By',
     'Valto ID'              => 'Gearbox',
@@ -70,10 +76,8 @@ return [
     'edit_text'             => '{name} has been successfully edited!',
     'logout'                => 'Logout',
     'save'                  => 'Save',
-    'Admin'                 => 'Admin',
-    'Automata'              => 'Automatic',
-    'Kisteherautó'          => 'Light Commercial Vehicle',
-    'Manuális'              => 'Manual',
-    'Szuperadmin'           => 'Superadmin',
-    'Teszt'                 => 'Test',
+    'Autok Kezelese'        => 'Vehicle Management', // Az "Autók Kezelése" angol fordítása
+    'igen'                  => 'yes',               // Az "igen" angol fordítása
+    'nem'                   => 'no',                // A "nem" angol fordítása
+
 ];

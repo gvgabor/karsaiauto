@@ -7,11 +7,15 @@ use app\models\base\Autok;
 use app\models\base\FelhasznaloiJogok;
 use app\models\base\Felhasznalok;
 use app\models\base\Menu;
+use app\modules\autok\actions\AutokAction;
+use Exception;
 use Faker\Factory;
 use Yii;
 use yii\console\Controller;
 use yii\gii\generators\model\Generator as ModelGenerator;
 use yii\helpers\BaseConsole;
+use yii\helpers\Console;
+use yii\helpers\FileHelper;
 use yii\helpers\Inflector;
 
 class ConsoleController extends Controller
@@ -132,13 +136,56 @@ class ConsoleController extends Controller
         return 0;
     }
 
+    /**
+     * @return void
+     * php yii console/fill-autok-data
+     */
+    public function actionFillAutokData()
+    {
+        $factory = Factory::create('hu_HU');
+        $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+        $this->writeOut("Memóriahasználat: " . $memoria);
+        $total = 10000;
+        Console::startProgress(0, $total);
+        $path  = "C:/Users/Vince/Desktop/tmp/osszes_auto";
+        $files = FileHelper::findFiles($path);
+
+        for ($i = 0; $i < $total; $i++) {
+            $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+            Console::updateProgress($i + 1, $total, "Memória: " . $memoria);
+            $model    = $this->actionRandomAuto();
+            $images   = $factory->randomElements($files, random_int(2, 45));
+            $formData = [
+                "hirdetes_leirasa" => $model->hirdetes_leirasa,
+                "hirdetes_cime"    => $model->hirdetes_cime,
+                "teljesitmeny"     => $model->teljesitmeny,
+                "kilometer"        => $model->kilometer,
+                "vetelar"          => $model->vetelar,
+                "muszaki_ervenyes" => $model->muszaki_ervenyes,
+                "motortipus_id"    => $model->motortipus_id,
+                "marka_id"         => $model->marka_id,
+                "model"            => $model->model,
+                "jarmutipus_id"    => $model->jarmutipus_id,
+                "gyartasi_ev"      => $model->gyartasi_ev,
+                "valto_id"         => $model->valto_id,
+            ];
+
+            $result = Yii::$container->get(AutokAction::class)->save($formData, $images);
+            if ($result["success"] === false) {
+                throw new Exception($result['message']);
+            }
+        }
+        Console::endProgress();
+        Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+    }
+
     public function actionRandomAuto()
     {
         $factory                 = Factory::create('hu_HU');
         $model                   = new Autok();
         $model->hirdetes_leirasa = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
         $model->hirdetes_cime    = mb_strtoupper($factory->randomElement(array_values(OptionsHelper::markakOptions()))) . " 2.3 Mjet LWB 3.5 t";
-        $model->teljesitmeny     = $factory->numberBetween(1000, 6000);
+        $model->teljesitmeny     = (string)$factory->numberBetween(1000, 6000);
         $model->kilometer        = round($factory->numberBetween(100000, 800000), -3);
         $model->vetelar          = round($factory->numberBetween(1000000, 8000000), -3);
         $model->muszaki_ervenyes = $factory->dateTimeBetween("now", "+3 years")->format("Y-m");
@@ -147,6 +194,7 @@ class ConsoleController extends Controller
         $model->model            = $factory->randomElement(array_values(OptionsHelper::markakOptions()));
         $model->jarmutipus_id    = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
         $model->gyartasi_ev      = random_int(1990, 2025);
+        $model->valto_id         = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));
         return $model;
     }
 

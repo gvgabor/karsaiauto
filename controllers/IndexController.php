@@ -12,7 +12,6 @@ use yii\web\Controller;
 
 class IndexController extends Controller
 {
-
     public $layout = "index";
 
     public function actionIndex()
@@ -26,10 +25,22 @@ class IndexController extends Controller
         $this->redirect(Yii::$app->homeUrl);
     }
 
+    public function actionChangeLanguage()
+    {
+        if ($lang = Yii::$app->request->get('lang')) {
+            Yii::$app->language = $lang;
+            Yii::$app->session->set('language', $lang);
+        } elseif (Yii::$app->session->has('language')) {
+            Yii::$app->language = Yii::$app->session->get('language');
+        }
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
     public function actionLogin()
     {
         $this->layout = "login";
-        $model = new Felhasznalok();
+        $model        = new Felhasznalok();
         $model->setScenario(Felhasznalok::SCENARIO_LOGIN);
 
         if ($formData = $this->request->post("Felhasznalok")) {

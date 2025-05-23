@@ -92,10 +92,6 @@ if ($model->isNewRecord === false) {
                                 "template" => HtmlHelper::formCheckBox($model->getAttributeLabel("publikalva"), \yii\helpers\Html::getInputId($model, "publikalva")),
                             ]) ?>
 
-                            <?= $form->field($model, "eladva")->checkbox([
-                                "template" => HtmlHelper::formCheckBox($model->getAttributeLabel("eladva"), \yii\helpers\Html::getInputId($model, "eladva")),
-                            ]) ?>
-
                             <?= $form->field($model, "akcios")->checkbox([
                                 "template" => HtmlHelper::formCheckBox($model->getAttributeLabel("akcios"), \yii\helpers\Html::getInputId($model, "akcios")),
                             ]) ?>
