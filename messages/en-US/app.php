@@ -22,6 +22,7 @@ return [
     'Admin'                 => 'Admin',
     'Akcios'                => 'Promotional',
     'Autok ID'              => 'Vehicle ID',
+    'Autok Kezelese'        => 'Vehicle Management',
     'Automata'              => 'Automatic',
     'Benzines'              => 'Petrol',
     'Create By'             => 'Created By',
@@ -74,10 +75,18 @@ return [
     'confirm_text'          => 'Are you sure you want to delete {name}?',
     'delete_text'           => '{name} has been successfully deleted!',
     'edit_text'             => '{name} has been successfully edited!',
+    'igen'                  => 'yes',
     'logout'                => 'Logout',
+    'nem'                   => 'no',
     'save'                  => 'Save',
-    'Autok Kezelese'        => 'Vehicle Management', // Az "Autók Kezelése" angol fordítása
-    'igen'                  => 'yes',               // Az "igen" angol fordítása
-    'nem'                   => 'no',                // A "nem" angol fordítása
-
+    'Adoszam'               => '',
+    'Cegnev'                => '',
+    'Lakcim'                => '',
+    'Nev'                   => '',
+    'Szemelyi Szam'         => '',
+    'Szuletesi Datum'       => '',
+    'Telefon'               => '',
+    'Tipus'                 => '',
+    'Ugyfel Letrehozasa'    => '',
+    'Ugyfelek Kezelese'     => '',
 ];

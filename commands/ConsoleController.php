@@ -2,11 +2,13 @@
 
 namespace app\commands;
 
+use app\components\enums\UgyfelTipus;
 use app\helpers\OptionsHelper;
 use app\models\base\Autok;
 use app\models\base\FelhasznaloiJogok;
 use app\models\base\Felhasznalok;
 use app\models\base\Menu;
+use app\models\base\Ugyfelek;
 use app\modules\autok\actions\AutokAction;
 use Exception;
 use Faker\Factory;
@@ -195,6 +197,42 @@ class ConsoleController extends Controller
         $model->jarmutipus_id    = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
         $model->gyartasi_ev      = random_int(1990, 2025);
         $model->valto_id         = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));
+        return $model;
+    }
+
+    /**
+     * @return void
+     * php yii console/fill-ugyfelek
+     */
+    public function actionFillUgyfelek()
+    {
+        $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+        $this->writeOut("Memóriahasználat: " . $memoria);
+        $total = 1000;
+        Console::startProgress(0, $total);
+        for ($i = 0; $i < $total; $i++) {
+            $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+            Console::updateProgress($i + 1, $total, "Memória: " . $memoria);
+            $model = $this->actionRandomUgyfel();
+            $model->save();
+        }
+        Console::endProgress();
+        Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+    }
+
+    public function actionRandomUgyfel()
+    {
+        $factory                = Factory::create('hu_HU');
+        $model                  = new Ugyfelek();
+        $model->nev             = $factory->lastName() . " " . $factory->firstName();
+        $model->email           = $factory->email;
+        $model->telefon         = $factory->phoneNumber();
+        $model->lakcim          = $factory->address();
+        $model->szuletesi_datum = $factory->dateTimeBetween("-90 years", "-20 years")->format("Y-m-d");
+        $model->szemelyi_szam   = $factory->numerify('###########');
+        $model->adoszam         = $factory->numerify('########-#-##');
+        $model->cegnev          = $factory->company;
+        $model->tipus           = $factory->randomElement(array_keys(UgyfelTipus::list()));
         return $model;
     }
 

@@ -1,10 +1,10 @@
 import ObservableObject = kendo.data.ObservableObject;
 
 
-
 export interface ApiResponse<T = any> {
     success: boolean;
     errors: any[];
+    message: string;
     model: T;
 }
 
@@ -46,15 +46,13 @@ export class ClassUtil {
     }
 
 
-
-
     message(text: string) {
 
         const oldItems: HTMLDivElement[] = Array.from(document.querySelectorAll(`div.message-box`));
         const currentPosition = oldItems.reduce((carry) => {
             carry += 90;
             return carry;
-        },50);
+        }, 50);
 
 
         const messageBox = document.createElement("div");
@@ -74,7 +72,6 @@ export class ClassUtil {
         messageBox.ontransitionend = () => {
 
         }
-
 
 
         requestAnimationFrame(() => messageBox.classList.add("active"));

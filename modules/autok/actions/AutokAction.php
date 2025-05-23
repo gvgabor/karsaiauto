@@ -16,18 +16,8 @@ use yii\web\BadRequestHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
-/**
- *
- *
- * @property array $filters
- */
 class AutokAction extends MainAction
 {
-    public int $pageSize = 1;
-    public int $page     = 1;
-
-    protected array $_filters = [];
-
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -127,24 +117,6 @@ class AutokAction extends MainAction
         return $result;
     }
 
-    /**
-     * @return array
-     */
-    public function getFilters()
-    {
-        return $this->_filters;
-    }
 
-    /**
-     * @param array $filters
-     */
-    public function setFilters($filters)
-    {
-        if (is_array($filters) === false) {
-            $filters = [];
-        }
-        $filters        = array_key_exists("filters", $filters) === false ? [] : $filters["filters"];
-        $this->_filters = $filters;
-    }
 
 }
