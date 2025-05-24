@@ -32,7 +32,6 @@ export class ClassUtil {
             model: {
                 id: "id",
                 fields: {
-                    id: {type: "number"}
                 }
             },
             data: (response: any) => response.data || [],
@@ -279,7 +278,7 @@ export class ClassUtil {
         const def = jQuery.Deferred();
         const popover = jQuery(element).kendoPopover({
             body: () => {
-                return `<div class="confirm-body"><i class="fa fa-question-circle"></i><div>${text}</div><div><button class="btn btn-primary btn" data-name="no-btn">Nem</button><button class="btn btn-danger btn" data-name="yes-btn">Igen</button></div></div>`
+                return `<div class="confirm-body"><div>${text}</div><div><button class="btn btn-primary btn" data-name="no-btn">Nem</button><button class="btn btn-danger btn" data-name="yes-btn">Igen</button></div></div>`
             },
             position: "left",
             header: () => {

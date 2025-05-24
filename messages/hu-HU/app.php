@@ -89,5 +89,7 @@ return [
     'igen'                   => 'Igen',
     'logout'                 => 'Kilépés',
     'nem'                    => 'Nem',
+    'Kiterjesztes'           => 'Ext',
+    'Dokumentum Torlese'     => 'Biztosan törli a dokumentumot?',
     'Ugyfel Mentese Sikeres' => 'Ügyfél: {ugyfel} mentése sikeres!',
 ];

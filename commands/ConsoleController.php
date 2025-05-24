@@ -3,13 +3,14 @@
 namespace app\commands;
 
 use app\components\enums\UgyfelTipus;
+use app\helpers\DirectoryHelper;
 use app\helpers\OptionsHelper;
-use app\models\base\Autok;
 use app\models\base\FelhasznaloiJogok;
 use app\models\base\Felhasznalok;
 use app\models\base\Menu;
 use app\models\base\Ugyfelek;
 use app\modules\autok\actions\AutokAction;
+use app\modules\autok\models\AutokModel;
 use Exception;
 use Faker\Factory;
 use Yii;
@@ -183,6 +184,10 @@ class ConsoleController extends Controller
         $path        = "C:/Users/Vince/Desktop/tmp/osszes_auto";
         $files       = FileHelper::findFiles($path);
         $autokAction = Yii::$container->get(AutokAction::class);
+        $limitBytes  = 10 * 1024 * 1024 * 1024;
+        $bytesSize   = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
+        $formatSize  = DirectoryHelper::formatBytes($bytesSize);
+
         for ($i = 0; $i < $total; $i++) {
             $memoria = sprintf(
                 'Iteráció: %d | Használat: %.2f MB | Csúcs: %.2f MB',
@@ -190,9 +195,24 @@ class ConsoleController extends Controller
                 memory_get_usage()      / 1024 / 1024,
                 memory_get_peak_usage() / 1024 / 1024
             );
-            Console::updateProgress($i + 1, $total, "Memória: " . $memoria);
+
+
+
+            if ($i % 100 === 0) {
+                $bytesSize  = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
+                $formatSize = DirectoryHelper::formatBytes($bytesSize);
+                if ($bytesSize !== false && $bytesSize >= $limitBytes) {
+                    Console::updateProgress($i + 1, $total, "MEGÁLLÍTVA! Könyvtár mérete elérte a limitet: " . $formatSize);
+                    Console::endProgress();
+                    Console::output('A fájlgenerálás leállt, mert az "uploads" könyvtár mérete meghaladta a 10 GB-ot.');
+                    Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+                    return; // Kilépés a metódusból
+                }
+            }
+
+            Console::updateProgress($i + 1, $total, "Memória: " . $memoria . " Size: " . $formatSize);
             $model    = $this->actionRandomAuto();
-            $images   = $factory->randomElements($files, random_int(2, 45));
+            $images   = $factory->randomElements($files, random_int(2, 21));
             $formData = [
                 "hirdetes_leirasa" => $model->hirdetes_leirasa,
                 "hirdetes_cime"    => $model->hirdetes_cime,
@@ -223,7 +243,7 @@ class ConsoleController extends Controller
     public function actionRandomAuto()
     {
         $factory                 = Factory::create('hu_HU');
-        $model                   = new Autok();
+        $model                   = new AutokModel();
         $model->hirdetes_leirasa = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
         $model->hirdetes_cime    = mb_strtoupper($factory->randomElement(array_values(OptionsHelper::markakOptions()))) . " 2.3 Mjet LWB 3.5 t";
         $model->teljesitmeny     = (string)$factory->numberBetween(1000, 6000);

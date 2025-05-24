@@ -9,9 +9,11 @@ use yii\web\JqueryAsset;
 use yii\web\View;
 
 $this->registerJsVar("autokColumns", ColumnsHelper::autokColumns());
+$this->registerJsVar("dokumentumokColumns", ColumnsHelper::dokumentumokColumns());
 $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class]]);
 
 ?>
+
 
 <div class="card main-card">
     <div class="card-header">

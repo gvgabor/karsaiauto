@@ -53,6 +53,7 @@ abstract class MainActiveRecord extends ActiveRecord
             throw new LogicException('A softDelete() használatához "deleted" mező kell.');
         }
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->deleted = true;
 
         return $this->save(false);

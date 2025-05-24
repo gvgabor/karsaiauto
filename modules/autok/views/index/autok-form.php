@@ -2,13 +2,13 @@
 /***
  * @var View $this
  * @var MainForm $form
- * @var Autok $model
+ * @var AutokModel $model
  */
 
 use app\components\MainForm;
 use app\helpers\HtmlHelper;
 use app\helpers\OptionsHelper;
-use app\models\base\Autok;
+use app\modules\autok\models\AutokModel;
 use yii\helpers\Json;
 use yii\web\View;
 use Yiisoft\Html\Html;
@@ -46,7 +46,8 @@ if ($model->isNewRecord === false) {
 
                 <div id="form-tab">
                     <ul>
-                        <li>Alapadatok</li>
+                        <li><?= Yii::t("app", "Alapadatok") ?></li>
+                        <li><?= Yii::t("app", "Dokumentumok") ?></li>
                     </ul>
                     <div>
 
@@ -99,6 +100,16 @@ if ($model->isNewRecord === false) {
 
                         </div>
 
+                    </div>
+                    <div>
+                        <div>
+                            <?= $form->field($model, "dokumentumok[]")->fileInput([
+                                "multiple" => true,
+                            ])->label(false) ?>
+                        </div>
+                        <div>
+                            <div data-autok-id="<?= $model->id ?>" id="dokumentumok-grid"></div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -4,12 +4,15 @@ import ObservableObject = kendo.data.ObservableObject;
 
 
 declare const autokColumns: kendo.ui.GridColumn[];
+declare const dokumentumokColumns: kendo.ui.GridColumn[];
 
 export enum AutokEndPoints {
     AUTOK_FORM = "AutokForm",
     AUTOK = "Autok",
     REMOVE_AUTO = "RemoveAuto",
     TIPUS_UPLOAD = "upload",
+    ELADVA_FORM = "EladvaForm",
+    DOKUMENTUMOK_DATASOURCE = "DokumentumokDatasource",
 }
 
 export class ClassAutok extends ClassUtil {
@@ -46,6 +49,12 @@ export class ClassAutok extends ClassUtil {
                     this.message(dataItem.edit_text)
                 }
             });
+            this.gridButtonList(grid, "eladva-btn").forEach(item => {
+                const dataItem = item.data as ObservableObject & { id: number };
+                item.button.onclick = () => {
+                    this.eladvaForm({id: dataItem.id});
+                }
+            })
         })
 
         const createAutoBtn = this.button("create-auto-btn");
@@ -54,6 +63,12 @@ export class ClassAutok extends ClassUtil {
             autokGrid.dataSource.pushInsert(0, response.model);
 
         }
+    }
+
+    async eladvaForm(data = {}) {
+        const url = this.url(AutokEndPoints.ELADVA_FORM);
+        const popup = new ClassFormpopup();
+        popup.root.innerHTML = await this.fetchData(url, data);
     }
 
     async autoForm(data = {}): Promise<ApiResponse> {
@@ -65,12 +80,11 @@ export class ClassAutok extends ClassUtil {
             animation: false
         }).data("kendoTabStrip") as kendo.ui.TabStrip;
 
-
         [
-            "autok-jarmutipus_id",
-            "autok-marka_id",
-            "autok-motortipus_id",
-            "autok-valto_id",
+            "autokmodel-jarmutipus_id",
+            "autokmodel-marka_id",
+            "autokmodel-motortipus_id",
+            "autokmodel-valto_id",
         ].forEach(id => {
             const element = document.getElementById(id)!;
             jQuery(element).kendoDropDownList({
@@ -79,10 +93,10 @@ export class ClassAutok extends ClassUtil {
         });
 
         [
-            "autok-kilometer",
-            "autok-teljesitmeny",
-            "autok-vetelar",
-            "autok-gyartasi_ev",
+            "autokmodel-kilometer",
+            "autokmodel-teljesitmeny",
+            "autokmodel-vetelar",
+            "autokmodel-gyartasi_ev",
         ].forEach(id => {
             const element = document.getElementById(id)!;
             jQuery(element).kendoNumericTextBox({
@@ -92,7 +106,7 @@ export class ClassAutok extends ClassUtil {
         });
 
         [
-            "autok-muszaki_ervenyes"
+            "autokmodel-muszaki_ervenyes"
         ].forEach(id => {
             const element = document.getElementById(id)!;
             jQuery(element).kendoDatePicker({
@@ -103,16 +117,54 @@ export class ClassAutok extends ClassUtil {
         })
 
         formTab.select(0);
-        const kTabstripContent: HTMLDivElement = formTab.wrapper[0].querySelector(`div.k-tabstrip-content`)!;
+        const dokumentumokGrid = await this.dokumentumokGrid(this.div("dokumentumok-grid"));
+        this.dataBound(dokumentumokGrid, () => {
+            const grid = dokumentumokGrid;
+            this.gridButtonList(grid, "remove-btn").forEach(item => {
+                const dataItem = item.data as ObservableObject;
+                item.button.onclick = async () => {
+                    await this.confirm(item.button.parentElement!.dataset.deleteText || "", item.button);
+                    grid.dataSource.remove(dataItem);
+                }
+            });
+            this.gridButtonList(grid, "view-btn").forEach(item => {
+                const dataItem = item.data as ObservableObject & { dokumentumUrl: string, id: number };
+                item.button.disabled = !dataItem.id;
+                item.button.onclick = () => {
+                    this.navigate(dataItem.dokumentumUrl, "_blank");
+                }
+            })
+        });
+
+        let kTabstripContent: HTMLDivElement = formTab.wrapper[0].querySelector(`div.k-tabstrip-content.k-active`)!;
         const uploadKepekBox = this.div("upload-kepek-box");
         const resizeObserver = new ResizeObserver(() => {
+            kTabstripContent = formTab.wrapper[0].querySelector(`div.k-tabstrip-content.k-active`)!;
             uploadKepekBox.style.height = `${kTabstripContent.offsetHeight}px`;
         });
 
         resizeObserver.observe(kTabstripContent);
 
 
-        const autokImage = this.input("autok-image") as HTMLFormElement;
+        const autokmodelDokumentumok = this.input("autokmodel-dokumentumok") as HTMLFormElement;
+
+        autokmodelDokumentumok.onchange = () => {
+            const files: File[] = autokmodelDokumentumok.files;
+            Array.from(files).forEach(item => {
+                const name = item.name.substring(0, item.name.lastIndexOf("."));
+                const extension = item.name.substring(item.name.lastIndexOf(".") + 1);
+                const dataItem = {
+                    extension: extension,
+                    name: name,
+                    uploadName: item.name,
+                    file: item,
+                }
+                dokumentumokGrid.dataSource.insert(0, dataItem);
+            });
+            autokmodelDokumentumok.value = "";
+        }
+
+        const autokImage = this.input("autokmodel-image") as HTMLFormElement;
 
         if (uploadKepekBox.dataset.images) {
             const images: Array<{
@@ -170,10 +222,56 @@ export class ClassAutok extends ClassUtil {
                     id: item.dataset.id,
                 }));
                 formData.append("sorrend", JSON.stringify(sorrend));
-                const response = await this.fetchForm(url, formData, popup.form, "autok") as ApiResponse;
+                const dokumentumok = dokumentumokGrid.dataSource.data().toJSON();
+                formData.append("dokumentumok", JSON.stringify(dokumentumok));
+
+                const dokumetumokFiles: File[] = dokumentumokGrid.dataSource.data().map((item: any) => (item as {
+                    file: File
+                }).file);
+
+                dokumetumokFiles.forEach((file, index) => {
+                    formData.append(`dokumetumokFiles[${index}]`, file);
+                });
+
+                const response = await this.fetchForm(url, formData, popup.form, "autokmodel") as ApiResponse;
                 resolve(response)
                 popup.close();
             }
+        });
+    }
+
+
+    dokumentumokGrid(element: HTMLDivElement): Promise<kendo.ui.Grid> {
+        return new Promise((resolve) => {
+            const url = this.url(AutokEndPoints.DOKUMENTUMOK_DATASOURCE);
+            const schema = this.schema;
+            schema.model = {
+                id: "id",
+                fields: {
+                    extension: {editable: false}
+                }
+            }
+            const transport = this.transport;
+            transport.read.url = url;
+            transport.read.data.autokId = element.dataset.autokId;
+            const dataSource = new kendo.data.DataSource({
+                pageSize: 100,
+                transport: transport,
+                schema: schema
+            });
+            const columns = dokumentumokColumns;
+            jQuery(element).kendoGrid({
+                columns: columns,
+                dataSource: dataSource,
+                filterable: this.filterable,
+                height: 800,
+                pageable: {
+                    refresh: false
+                },
+                editable: true,
+                dataBound: event => resolve(event.sender),
+                navigatable: true
+            })
         });
     }
 
@@ -260,6 +358,9 @@ export class ClassAutok extends ClassUtil {
                 serverFiltering: true,
             });
             const columns = autokColumns;
+            columns.find(item => item.field == "vetelar")!.template = (data: {
+                vetelar: string
+            }) => `${kendo.toString(parseInt(data.vetelar), "n0")} Ft`
             jQuery(element).kendoGrid({
                 columns: columns,
                 dataSource: dataSource,

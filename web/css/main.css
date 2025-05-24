@@ -288,7 +288,7 @@ div.hozzarendeles-grid-box > div:nth-child(2) i {
   font-size: 0.8rem;
 }
 
-#autok-hirdetes_leirasa {
+#autokmodel-hirdetes_leirasa {
   height: 200px;
   resize: none;
 }
@@ -507,6 +507,7 @@ div.error-box:after {
   color: #212529;
   background-color: #ffffff;
   box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3);
+  width: 300px;
 }
 
 .ping {
@@ -593,7 +594,7 @@ div.error-box:after {
   padding-inline: 1rem;
   border-width: 0 0 1px;
   border-style: solid;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-color: inherit;
   font-weight: 700;
   text-transform: uppercase;
@@ -610,14 +611,14 @@ div.error-box:after {
   animation: ping 1s ease-in-out infinite both;
   animation-iteration-count: infinite;
 }
-.confirm-body div:nth-child(2) {
+.confirm-body div:nth-child(1) {
   text-align: center;
   font-family: Poppins, serif;
   font-size: 1.2rem;
   font-weight: 500;
   margin-bottom: 50px;
 }
-.confirm-body div:nth-child(3) {
+.confirm-body div:nth-child(2) {
   display: flex;
   justify-content: flex-end;
   width: 100%;

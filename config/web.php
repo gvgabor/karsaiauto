@@ -14,21 +14,25 @@ $params = require __DIR__ . '/params.php';
 $db     = require __DIR__ . '/db.php';
 
 $config = [
-    'id'           => 'basic',
-    'basePath'     => dirname(__DIR__),
-    'bootstrap'    => ['log'],
-    'defaultRoute' => 'index',
-    // A forrásnyelv (a kódban szereplő kulcsok “alapja”) legyen magyar
+    'id'             => 'basic',
+    'basePath'       => dirname(__DIR__),
+    'bootstrap'      => ['log'],
+    'defaultRoute'   => 'index',
     'sourceLanguage' => 'hu-HU',
-    // Az induló alkalmazásnyelv (ha a felhasználó nem választ) legyen hu-HU
-    'language' => 'hu-HU',
-    'aliases'  => [
+    'language'       => 'hu-HU',
+    'aliases'        => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-//    'language'     => "hu-HU",
     'name'       => mb_strtoupper('karsai autó'),
     'components' => [
+        'r2' => [
+            'class'     => 'app\components\R2Uploader',
+            'accessKey' => $_ENV['CLOUDFLARE_ACCESS'],
+            'secretKey' => $_ENV['CLOUDFLARE_SECRET'],
+            'bucket'    => $_ENV['CLOUDFLARE_BUCKET'],
+            'endpoint'  => 'https://' . $_ENV['CLOUDFLARE_ACCOUNT'] . '.r2.cloudflarestorage.com',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'ETQkYIG7hliyy-ddOORg4n6WbRU7RkhR',

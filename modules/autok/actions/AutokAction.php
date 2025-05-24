@@ -3,8 +3,10 @@
 namespace app\modules\autok\actions;
 
 use app\components\MainAction;
-use app\models\base\Autok;
+use app\helpers\R2Helper;
+use app\models\base\AutokDokumentumok;
 use app\models\base\AutokImage;
+use app\modules\autok\models\AutokModel;
 use SplFileInfo;
 use Throwable;
 use Yii;
@@ -22,8 +24,8 @@ class AutokAction extends MainAction
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $query                      = Autok::find()
-            ->with("autokImage")
+        $query                      = AutokModel::find()
+            ->with(["autokImage", "autokDokumentumok"])
             ->orderBy(["id" => SORT_DESC])
             ->limit($this->pageSize)
             ->offset(($this->page - 1) * $this->pageSize);
@@ -39,7 +41,7 @@ class AutokAction extends MainAction
     {
         $transaction = Yii::$app->db->beginTransaction();
         $result      = [];
-        $model       = empty($formData["id"]) ? new Autok() : Autok::findOne($formData["id"]);
+        $model       = empty($formData["id"]) ? new AutokModel() : AutokModel::findOne($formData["id"]);
         $this->baseStatus($model);
         try {
             $imageIdList = $model->getAutokImage()->select(["id"])->column();
@@ -58,6 +60,8 @@ class AutokAction extends MainAction
             }
 
             if (count($images) === 0) {
+
+
                 $sorrend   = Json::decode($this->request->post("sorrend"));
                 $oldImages = [];
                 foreach ($sorrend as $item) {
@@ -80,6 +84,20 @@ class AutokAction extends MainAction
                             "autok_id" => $model->id,
                             "name"     => Url::to(["@web/uploads/autok/" . $model->longId . "/" . $name . ".webp",], true)
                         ]);
+
+                        $sourcePath = $directory . DIRECTORY_SEPARATOR . $name . ".webp";
+
+                        try {
+                            Yii::$app->r2->upload($sourcePath, "autok/" . $name . ".webp");
+                            $url                    = R2Helper::getUrl($name . ".webp");
+                            $autokImage->name       = $name;
+                            $autokImage->url        = $url;
+                            $autokImage->remote_key = "autok/" . $name . ".webp";
+                            unlink($sourcePath);
+                        } catch (Throwable $exception) {
+                            Yii::error("Sikertelen feltöltés: " . $exception->getMessage());
+                        }
+
                         $autokImage->save() ?: throw new BadRequestHttpException(Json::encode($autokImage->errors));
                     }
                 }
@@ -91,6 +109,13 @@ class AutokAction extends MainAction
                 $difference = array_diff($imageIdList, ArrayHelper::getColumn($oldImages, "id"));
                 foreach ($difference as $item) {
                     $autokImage = AutokImage::findOne($item);
+
+                    if (empty($autokImage->remote_key)) {
+                        unlink($autokImage->imagePath);
+                    } else {
+                        Yii::$app->r2->delete($autokImage->remote_key);
+                    }
+
                     $autokImage->softDelete();
                 }
             }
@@ -103,9 +128,49 @@ class AutokAction extends MainAction
                 $autokImage = new AutokImage([
                     "sorrend"  => $counter++,
                     "autok_id" => $model->id,
-                    "name"     => "http://localhost:8080/uploads/autok/" . $model->longId . "/" . $name
+                    "name"     => $name
                 ]);
                 $autokImage->save() ?: throw new BadRequestHttpException(Json::encode($autokImage->errors));
+            }
+
+            $path = Yii::getAlias("@app/dokumentumok/" . $model->longId);
+            FileHelper::createDirectory($path);
+
+            if (Yii::$app instanceof Application) {
+                $dokumentumok      = Json::decode($this->request->post("dokumentumok"));
+                $dokumentumokFiles = UploadedFile::getInstancesByName("dokumetumokFiles");
+
+                $oldDokumentumok     = ArrayHelper::getColumn($model->autokDokumentumok, "id");
+                $currentDokumentumok = ArrayHelper::getColumn(array_filter($dokumentumok, fn ($item) => !empty($item["id"])), "id");
+                $difference          = array_diff($oldDokumentumok, $currentDokumentumok);
+
+                foreach ($dokumentumok as $item) {
+                    if (!empty($item["id"])) {
+                        $autokDokumentumok       = AutokDokumentumok::findOne($item["id"]);
+                        $autokDokumentumok->name = $item["name"];
+                        $autokDokumentumok->save();
+                    }
+                }
+
+                foreach ($difference as $item) {
+                    $autokDokumentumok = AutokDokumentumok::findOne($item);
+                    $autokDokumentumok->softDelete();
+                }
+
+                foreach ($dokumentumokFiles as $item) {
+                    $name              = $item->name;
+                    $index             = array_search($name, ArrayHelper::getColumn($dokumentumok, "uploadName"));
+                    $current           = $dokumentumok[$index];
+                    $uniquename        = uniqid("doc-") . "." . $item->getExtension();
+                    $autokDokumentumok = new AutokDokumentumok([
+                        "name"      => $current["name"],
+                        "extension" => $current["extension"],
+                        "filename"  => $uniquename,
+                        "autok_id"  => $model->id,
+                    ]);
+                    $item->saveAs($path . DIRECTORY_SEPARATOR . $uniquename);
+                    $autokDokumentumok->save() ?: throw new BadRequestHttpException(Json::encode($autokDokumentumok->errors));
+                }
             }
 
             $result["success"] = true;

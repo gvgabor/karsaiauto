@@ -40,3 +40,4 @@ tests/_support/_generated
 *.log
 .php-cs-fixer.cache
 /web/uploads/
+/dokumentumok/

@@ -16,10 +16,16 @@ use yii\widgets\ActiveForm;
 
 
 
-<?PHP $form = ActiveForm::begin(["id" => "login-form", 'validateOnType' => false]) ?>
-<?= $form->field($model, "felhasznaloi_nev") ?>
-<?= $form->field($model, "jelszo") ?>
-<button id="login-btn" class="w-100 btn btn-lg btn-primary" type="submit">Bejelentkezés</button>
-<?PHP ActiveForm::end() ?>
+<?php $form = ActiveForm::begin(["id" => "login-form", 'validateOnType' => false]) ?>
+
+
+<div class="d-flex flex-column gap-2">
+    <?= $form->field($model, "felhasznaloi_nev") ?>
+    <?= $form->field($model, "jelszo") ?>
+    <button id="login-btn" class="w-100 btn btn-lg btn-primary" type="submit">Bejelentkezés</button>
+    <?php ActiveForm::end() ?>
+</div>
+
+
 
 

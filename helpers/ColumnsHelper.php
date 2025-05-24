@@ -55,9 +55,43 @@ class ColumnsHelper
         return $columns;
     }
 
+    public static function dokumentumokColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "name", "title" => Yii::t("app", "Megnevezes")];
+        $columns[] = [
+            "field"      => "extension",
+            "title"      => Yii::t("app", "Kiterjesztes"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 120,
+        ];
+        $columns[] = [
+            "command"    => ["template" => "<button data-name='remove-btn' class='btn btn-danger  remove-btn rounded-0'><i class='fa fa-trash-alt'></i></button>"],
+            "attributes" => ["style" => "text-align:center", "data-delete-text" => Yii::t("app", "Dokumentum Torlese")],
+            "width"      => 60,
+        ];
+        $columns[] = [
+            "command"    => ["template" => "<button data-name='view-btn' class='btn btn-primary  view-btn rounded-0'><i class=\"fa-solid fa-up-right-from-square\"></i></button>"],
+            "attributes" => ["style" => "text-align:center", "data-delete-text" => Yii::t("app", "Dokumentum Torlese")],
+            "width"      => 60,
+        ];
+        return $columns;
+    }
+
     public static function autokColumns(): array
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+
+        $columns[] = [
+            "command" => [
+                "template" => sprintf("<button class='btn btn-primary eladva-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Eladva"))
+            ],
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 120,
+            "locked"     => true,
+            "encoded"    => false,
+        ];
+
         $columns[] = [
             "field"  => "hirdetes_cime",
             "title"  => Yii::t("app", "Hirdetes Cime"),
@@ -77,7 +111,7 @@ class ColumnsHelper
             "width"  => 230
         ];
         $columns[] = [
-            "field"      => "vetelar_format",
+            "field"      => "vetelar",
             "title"      => Yii::t("app", "Vetelar"),
             "attributes" => ["style" => "text-align:right"],
             "locked"     => true,
@@ -94,7 +128,12 @@ class ColumnsHelper
             "title"      => Yii::t("app", "Kepek Szama"),
             "attributes" => ["style" => "text-align:center"],
             "width"      => 160,
-            "locked"     => true,
+        ];
+        $columns[] = [
+            "field"      => "dokumentumok_szama",
+            "title"      => Yii::t("app", "Dokumentumok Szama"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 200,
         ];
         $columns[] = [
             "field"      => "eladva",
