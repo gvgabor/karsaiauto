@@ -12,7 +12,8 @@ use app\models\query\AutokQuery;
  * @property-read string $formatKilometer
  * @property-read string $motortipus
  * @property-read string $formatVetelar
- * @property-read AutokImage[] $firstImage
+ * @property-read AutokImage $firstImage
+ * @property-read string $formatAkciosar
  * @property-read Markak $marka
  */
 class Autok extends \app\models\Autok
@@ -42,9 +43,14 @@ class Autok extends \app\models\Autok
         return number_format($this->vetelar, 0, "", " ");
     }
 
+    public function getFormatAkciosar(): string
+    {
+        return number_format($this->akcios_ar ?? 0, 0, "", " ");
+    }
+
     public function getFirstImage()
     {
-        return $this->hasMany(AutokImage::class, ['autok_id' => 'id'])->orderBy(["{{%autok_image}}.sorrend" => SORT_ASC])->limit(1);
+        return $this->hasOne(AutokImage::class, ['autok_id' => 'id'])->orderBy(["{{%autok_image}}.sorrend" => SORT_ASC]);
     }
 
     public function getAutokImage()

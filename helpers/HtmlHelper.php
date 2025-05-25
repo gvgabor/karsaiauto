@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 
+use app\models\base\Autok;
 use Yii;
 use yii\helpers\Url;
 use Yiisoft\Html\Html;
@@ -76,6 +77,23 @@ class HtmlHelper
             ->encode(false);
 
         return $chekboxMain->render();
+    }
+
+    public static function vetelarBox(Autok $model)
+    {
+        $box     = Html::div()->class("vetelar-box");
+        $vetelar = Html::span()->class("h5 text-primary")->addContent($model->formatVetelar . " Ft");
+
+        if ($model->akcios) {
+            $vetelar  = $vetelar->addClass("athuzott");
+            $akciosar = Html::span()->class("h5 text-primary")->addContent($model->formatAkciosar . " Ft");
+            $box      = $box->addContent($vetelar, $akciosar);
+        } else {
+            $box = $box->addContent($vetelar);
+        }
+
+        return $box->render();
+
     }
 
 }

@@ -938,6 +938,16 @@ div.loader {
         }
       }
 
+      div.vetelar-box {
+        display: flex;
+        justify-content: space-between;
+
+        span.athuzott {
+          text-decoration: line-through;
+          color: rgba(0, 0, 0, 0.2) !important;
+        }
+      }
+
       div.image-box {
         height: 265px;
         width: 100%;
@@ -962,7 +972,6 @@ div.loader {
           transform: perspective(600px) rotateX(90deg);
           transition: all 0.5s ease;
           transform-origin: bottom;
-
 
 
           span {

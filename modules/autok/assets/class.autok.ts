@@ -1,6 +1,8 @@
 import {ApiResponse, ClassUtil} from "../../../helpers/class.util";
 import {ClassFormpopup} from "../../../helpers/class.formpopup";
 import ObservableObject = kendo.data.ObservableObject;
+import Cleave from "cleave.js";
+
 
 
 declare const autokColumns: kendo.ui.GridColumn[];
@@ -98,12 +100,16 @@ export class ClassAutok extends ClassUtil {
             "autokmodel-teljesitmeny",
             "autokmodel-vetelar",
             "autokmodel-gyartasi_ev",
+            "autokmodel-akcios_ar",
         ].forEach(id => {
             const element = document.getElementById(id)!;
-            jQuery(element).kendoNumericTextBox({
-                decimals: 0,
-                format: "n0",
-            })
+            new Cleave(element, {
+                numeral: true,
+                numeralThousandsGroupStyle: 'thousand',
+                delimiter: ' ',              // szóköz a tagoláshoz (pl. 1 000 000)
+                numeralDecimalMark: ',',     // opcionális, ha vesszős tizedes kell
+                numeralDecimalScale: 0       // nulla tizedesjegy, ha csak egész szám kell
+            });
         });
 
         [
@@ -145,6 +151,12 @@ export class ClassAutok extends ClassUtil {
         });
 
         resizeObserver.observe(kTabstripContent);
+
+
+        const akciosArBox = this.div("akcios-ar-box");
+        const akciosChk = this.input("autokmodel-akcios") as HTMLInputElement
+        akciosChk.onchange = () => akciosChk.checked ? akciosArBox.classList.remove("d-none") : akciosArBox.classList.add("d-none");
+        akciosChk.dispatchEvent(new Event("change"));
 
 
         const autokmodelDokumentumok = this.input("autokmodel-dokumentumok") as HTMLFormElement;

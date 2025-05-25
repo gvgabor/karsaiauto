@@ -21,6 +21,7 @@
   "include": [
     "./modules/**/*.ts",
     "./helpers/**/*.ts",
-    "yii.d.ts"
+    "yii.d.ts",
+    "src"
   ]
 }

@@ -2,6 +2,7 @@
 
 namespace app\modules\autok\models;
 
+use app\components\behaviors\NumericSanitizeBehavior;
 use app\models\base\Autok;
 use Throwable;
 use Yii;
@@ -39,6 +40,33 @@ class AutokModel extends Autok
         return $fields;
     }
 
+    public function beforeValidate()
+    {
+        $numbers = ['kilometer', 'vetelar', 'gyartasi_ev', 'akcios_ar'];
+        foreach ($numbers as $value) {
+            if (isset($this->$value)) {
+                $this->$value = preg_replace('/\D/', '', $this->$value);
+            }
+        }
+
+        return parent::beforeValidate();
+    }
+
+    public function behaviors()
+    {
+        $behaviors                    = parent::behaviors();
+        $behaviors["numericSanitize"] = [
+            "class"      => NumericSanitizeBehavior::class,
+            'attributes' => [
+                'kilometer',
+                'vetelar',
+                'gyartasi_ev',
+                'akcios_ar',
+            ],
+        ];
+        return $behaviors;
+    }
+
     public function rules()
     {
         return array_merge_recursive(parent::rules(), [
@@ -68,6 +96,13 @@ class AutokModel extends Autok
                 'file',
                 'maxFiles' => 30
             ],
+            [
+                ['akcios_ar'],
+                'required',
+                'when' => function () {
+                    return !empty($this->akcios);
+                }
+            ]
         ]);
     }
 

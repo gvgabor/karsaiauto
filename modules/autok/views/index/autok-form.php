@@ -83,6 +83,10 @@ if ($model->isNewRecord === false) {
                         <?= $form->field($model, "muszaki_ervenyes") ?>
                         <?= $form->field($model, "vetelar") ?>
 
+                        <div id="akcios-ar-box">
+                            <?= $form->field($model, "akcios_ar") ?>
+                        </div>
+
                         <div class="grid-col-3">
 
                             <?= $form->field($model, "fooldalra")->checkbox([
