@@ -10,6 +10,7 @@ use yii\helpers\Url;
  *
  *
  * @property-read mixed $imagePath
+ * @property-read string $imageUrl
  * @property-read Autok $autok
  */
 class AutokImage extends \app\models\AutokImage
@@ -25,21 +26,24 @@ class AutokImage extends \app\models\AutokImage
         return $path;
     }
 
+    public function getImageUrl(): string
+    {
+        $url = "https://placehold.co/200x160";
+        if (empty($this->remote_key)) {
+            $path = $this->imagePath;
+            if (is_file($path)) {
+                $url = Url::to(["@web/uploads/autok/" . $this->autok->longId . "/" . $this->name]);
+            }
+        } else {
+            $url = $this->url;
+        }
+        return $url;
+    }
+
     public function fields()
     {
         $fields          = parent::fields();
-        $fields["image"] = function () {
-            $url = "https://placehold.co/200x160";
-            if (empty($this->remote_key)) {
-                $path = $this->imagePath;
-                if (is_file($path)) {
-                    $url = Url::to(["@web/uploads/autok/" . $this->autok->longId . "/" . $this->name]);
-                }
-            } else {
-                $url = $this->url;
-            }
-            return $url;
-        };
+        $fields["image"] = fn () => $this->imageUrl;
         return $fields;
     }
 

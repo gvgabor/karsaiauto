@@ -196,8 +196,6 @@ class ConsoleController extends Controller
                 memory_get_peak_usage() / 1024 / 1024
             );
 
-
-
             if ($i % 100 === 0) {
                 $bytesSize  = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
                 $formatSize = DirectoryHelper::formatBytes($bytesSize);
@@ -226,6 +224,7 @@ class ConsoleController extends Controller
                 "jarmutipus_id"    => $model->jarmutipus_id,
                 "gyartasi_ev"      => $model->gyartasi_ev,
                 "valto_id"         => $model->valto_id,
+                "publikalva"       => 1,
             ];
 
             $result = $autokAction->save($formData, $images);

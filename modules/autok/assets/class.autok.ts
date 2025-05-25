@@ -46,6 +46,7 @@ export class ClassAutok extends ClassUtil {
                 item.button.onclick = async () => {
                     const response = await this.autoForm({id: dataItem.id});
                     grid.dataSource.pushUpdate(response.model);
+                    grid.dataSource.fetch();
                     this.message(dataItem.edit_text)
                 }
             });

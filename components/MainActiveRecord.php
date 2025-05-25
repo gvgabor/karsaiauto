@@ -2,6 +2,7 @@
 
 namespace app\components;
 
+use app\components\behaviors\ActiveRecordBehavior;
 use LogicException;
 use ReflectionClass;
 use yii\db\ActiveRecord;
@@ -67,6 +68,12 @@ abstract class MainActiveRecord extends ActiveRecord
     public function getLongId()
     {
         return str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
+
+
+    public function behaviors()
+    {
+        return [ActiveRecordBehavior::class];
     }
 
 

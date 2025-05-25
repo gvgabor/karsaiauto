@@ -11,6 +11,7 @@ module.exports = {
         markak   : './modules/karbantartas/assets/markak.ts',
         autok    : './modules/autok/assets/autok.ts',
         ugyfelek : './modules/autok/assets/ugyfelek.ts',
+        landing  : './src/index/landing.ts',
         // login    : './views/assets/login.ts',
     },
     output : {

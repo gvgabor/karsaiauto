@@ -749,4 +749,84 @@ div.loader {
   align-items: center;
 }
 
+#akcios-autok-list div.k-listview-content,
+#kiemelt-autok-list div.k-listview-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  transition: 0.5s;
+}
+@media (max-width: 1200px) {
+  #akcios-autok-list div.k-listview-content,
+  #kiemelt-autok-list div.k-listview-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  #akcios-autok-list div.k-listview-content,
+  #kiemelt-autok-list div.k-listview-content {
+    grid-template-columns: 1fr;
+  }
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item {
+  position: relative;
+  overflow: hidden;
+  transition: 0.5s;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item:hover,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover {
+  cursor: pointer;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img {
+  filter: grayscale(1);
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer {
+  opacity: 1;
+  transform: perspective(600px) rotateX(0deg);
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box {
+  height: 265px;
+  width: 100%;
+  overflow: hidden;
+  transition: 0.5s;
+  position: relative;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer {
+  position: absolute;
+  inset: 100px 50px 0 50px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px 10px 0 0;
+  opacity: 0;
+  transform: perspective(600px) rotateX(90deg);
+  transition: all 0.5s ease;
+  transform-origin: bottom;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer span,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer span {
+  color: white;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer i,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer i {
+  font-size: 3rem;
+  color: white;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box img,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box img {
+  transition: 0.5s;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /*# sourceMappingURL=main.css.map */

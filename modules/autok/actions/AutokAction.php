@@ -21,14 +21,43 @@ use yii\web\UploadedFile;
 
 class AutokAction extends MainAction
 {
+    protected array $_filters = [];
+
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $query                      = AutokModel::find()
+            ->joinWith(["marka"])
             ->with(["autokImage", "autokDokumentumok"])
             ->orderBy(["id" => SORT_DESC])
             ->limit($this->pageSize)
             ->offset(($this->page - 1) * $this->pageSize);
+
+        foreach ($this->filters as $item) {
+            switch ($item["field"]) {
+                case "hirdetes_cime":
+                    $query->andFilterWhere(['like', 'hirdetes_cime', trim($item['value'])]);
+                    break;
+                case "marka":
+                    $query->andFilterWhere(['like', 'markak.name', trim($item['value'])]);
+                    break;
+                case "model":
+                    $query->andFilterWhere(['like', 'model', trim($item['value'])]);
+                    break;
+                case "eladva":
+                    $query->andFilterWhere(['=', 'eladva', boolval($item["value"])]);
+                    break;
+                case "publikalva":
+                    $query->andFilterWhere(['=', 'publikalva', boolval($item["value"])]);
+                    break;
+                case "akcios":
+                    $query->andFilterWhere(['=', 'akcios', boolval($item["value"])]);
+                    break;
+                case "fooldalra":
+                    $query->andFilterWhere(['=', 'fooldalra', boolval($item["value"])]);
+                    break;
+            }
+        }
 
         $result = [
             "total" => $query->count(),
@@ -211,6 +240,30 @@ class AutokAction extends MainAction
         $result = imagewebp($image, $destinationPath, $quality);
         imagedestroy($image);
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilters()
+    {
+        return $this->_filters;
+    }
+
+    /**
+     * @param array $filters
+     */
+    public function setFilters($filters)
+    {
+        if (is_array($filters) === false) {
+            $filters = [];
+        }
+
+        if (array_key_exists("filters", $filters) === false) {
+            $this->_filters = [];
+        } else {
+            $this->_filters = $filters['filters'];
+        }
     }
 
 }

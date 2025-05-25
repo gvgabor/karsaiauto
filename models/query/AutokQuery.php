@@ -31,4 +31,29 @@ class AutokQuery extends \app\components\MainActiveQuery
     {
         return parent::one($db);
     }
+
+    public function akciosAutok(): AutokQuery
+    {
+        $this->andWhere([
+            "akcios"     => 1,
+            "eladva"     => 0,
+            "publikalva" => 1,
+        ])
+            ->orderBy(["updated_at" => SORT_DESC])
+            ->limit($_ENV['AKCIOS_AUTOK_LIMIT']);
+        return $this;
+    }
+
+    public function kiemeltAutok()
+    {
+        $this->andWhere([
+            "fooldalra"  => 1,
+            "eladva"     => 0,
+            "publikalva" => 1,
+        ])
+            ->orderBy(["updated_at" => SORT_DESC])
+            ->limit($_ENV['KIEMELT_AUTOK_LIMIT']);
+        return $this;
+    }
+
 }
