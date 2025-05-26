@@ -84,7 +84,7 @@ class ColumnsHelper
 
         $columns[] = [
             "command" => [
-                "template" => sprintf("<button class='btn btn-primary eladva-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Eladva"))
+                "template" => sprintf("<button class='btn btn-primary eladva-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Eladas"))
             ],
             "attributes" => ["style" => "text-align:center"],
             "width"      => 120,

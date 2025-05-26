@@ -1,8 +1,8 @@
 import {ApiResponse, ClassUtil} from "../../../helpers/class.util";
 import {ClassFormpopup} from "../../../helpers/class.formpopup";
-import ObservableObject = kendo.data.ObservableObject;
 import Cleave from "cleave.js";
-
+import {ClassUgyfelek, UgyfelekEndPoint} from "./class.ugyfelek";
+import ObservableObject = kendo.data.ObservableObject;
 
 
 declare const autokColumns: kendo.ui.GridColumn[];
@@ -24,12 +24,15 @@ export class ClassAutok extends ClassUtil {
         this.dataBound(autokGrid, () => {
             const grid = autokGrid;
             this.gridButtonList(grid, "remove-btn").forEach(item => {
+
                 const dataItem = item.data as ObservableObject & {
                     id: number,
                     hirdetes_cime: string,
                     delete_text: string,
                     confirm_text: string,
+                    eladva_int: number
                 };
+                item.button.disabled = dataItem.eladva_int == 1;
                 item.button.onclick = async () => {
                     await this.confirm(dataItem.confirm_text, item.button);
                     const response = await this.fetchData(this.url(AutokEndPoints.REMOVE_AUTO), {id: dataItem.id});
@@ -43,19 +46,34 @@ export class ClassAutok extends ClassUtil {
                 const dataItem = item.data as ObservableObject & {
                     id: number,
                     hirdetes_cime: string,
-                    edit_text: string
+                    edit_text: string,
+                    eladva_int: number
                 };
-                item.button.onclick = async () => {
-                    const response = await this.autoForm({id: dataItem.id});
-                    grid.dataSource.pushUpdate(response.model);
-                    grid.dataSource.fetch();
-                    this.message(dataItem.edit_text)
+
+                if (dataItem.eladva_int) {
+                    const icon = item.button.querySelector(`i`)!;
+                    const newIcon = document.createElement(`i`);
+                    newIcon.classList.add("fa-solid", "fa-database");
+                    icon.replaceWith(newIcon);
+                    item.row.classList.add("eladva")
+                } else {
+                    item.button.onclick = async () => {
+                        const response = await this.autoForm({id: dataItem.id});
+                        grid.dataSource.pushUpdate(response.model);
+                        grid.dataSource.fetch();
+                        this.message(dataItem.edit_text)
+                    }
                 }
+
+
             });
             this.gridButtonList(grid, "eladva-btn").forEach(item => {
-                const dataItem = item.data as ObservableObject & { id: number };
-                item.button.onclick = () => {
-                    this.eladvaForm({id: dataItem.id});
+                const dataItem = item.data as ObservableObject & { id: number, eladva_int: number };
+                item.button.disabled = dataItem.eladva_int == 1;
+                item.button.onclick = async () => {
+                    const response = await this.eladvaForm({id: dataItem.id}) as ApiResponse;
+                    this.message(response.message);
+                    grid.dataSource.pushUpdate(response.model);
                 }
             })
         })
@@ -72,6 +90,66 @@ export class ClassAutok extends ClassUtil {
         const url = this.url(AutokEndPoints.ELADVA_FORM);
         const popup = new ClassFormpopup();
         popup.root.innerHTML = await this.fetchData(url, data);
+        ["eladasmodel-eladas_datuma"].forEach(id => {
+            const element = document.getElementById(id)!;
+            jQuery(element).kendoDatePicker({
+                format: "yyyy-MM-dd",
+            });
+        });
+
+        const ugyfelekDataSource = this.ugyfelekDataSource();
+        const eladasmodelEladasUgyfelId = jQuery(this.input("eladasmodel-eladas_ugyfel_id")).kendoDropDownList({
+            filter: "contains",
+            height: 400,
+            dataSource: ugyfelekDataSource,
+            dataTextField: "nev",
+            dataValueField: "id",
+            optionLabel: "Kérem válasszon",
+            autoBind: false
+        }).data("kendoDropDownList") as kendo.ui.DropDownList;
+        const ugyfelId = eladasmodelEladasUgyfelId.element[0].dataset.ugyfelId;
+        if (ugyfelId) {
+            // @ts-ignore
+            eladasmodelEladasUgyfelId.dataSource.transport.options.read.data.ugyfelId = ugyfelId;
+            eladasmodelEladasUgyfelId.value(ugyfelId);
+        }
+        eladasmodelEladasUgyfelId.dataSource.read();
+
+        const ugyfelLetrehozasaBtn = this.button("ugyfel-letrehozasa-btn");
+        ugyfelLetrehozasaBtn.onclick = async () => {
+            const ugyfelek = new ClassUgyfelek();
+            const response = await ugyfelek.ugyfelekForm();
+            eladasmodelEladasUgyfelId.dataSource.pushInsert(0, response.model);
+            const model = response.model;
+            eladasmodelEladasUgyfelId.value(model.id);
+        }
+
+        const saveBtn = popup.root.querySelector(`button.save-btn`) as HTMLButtonElement;
+        return new Promise((resolve) => {
+            saveBtn.onclick = async () => {
+                const formData = new FormData(popup.form);
+                const response = await this.fetchForm(url, formData, popup.form, "eladasmodel") as ApiResponse;
+                resolve(response)
+                popup.close();
+            }
+        });
+
+
+    }
+
+    ugyfelekDataSource() {
+        const url = this.url(UgyfelekEndPoint.UGYFELEK);
+        const schema = this.schema;
+        const transport = this.transport;
+        transport.read.url = url;
+        const dataSource = new kendo.data.DataSource({
+            pageSize: 100,
+            transport: transport,
+            schema: schema,
+            serverPaging: true,
+            serverFiltering: true,
+        });
+        return dataSource;
     }
 
     async autoForm(data = {}): Promise<ApiResponse> {

@@ -288,7 +288,7 @@ div.hozzarendeles-grid-box > div:nth-child(2) i {
   font-size: 0.8rem;
 }
 
-#autokmodel-hirdetes_leirasa {
+#autokmodel-hirdetes_leirasa, #eladasmodel-eladas_megjegyzes {
   height: 200px;
   resize: none;
 }
@@ -458,38 +458,47 @@ div.image-item-box img {
   font-size: 0.8rem;
 }
 
+.navbar-nav .lang-item:nth-child(3) {
+  margin-right: 20px !important;
+}
+
+.current-lang {
+  background: white !important;
+  border-radius: 2px !important;
+}
+.current-lang a {
+  color: black !important;
+}
+
+.mb-3 {
+  position: relative;
+}
+
 div.error-box {
-  font-size: 1rem;
-  color: yellow;
-  background: red;
+  font-size: 0.8rem;
+  color: white;
   padding: 10px 10px;
   border-radius: 5px;
   font-weight: 600;
   transition: 0.5s;
-  transform: translateY(-40px);
+  transform: translateX(-40px);
   transition-delay: 0.5s;
-  position: relative;
   font-family: Poppins, serif;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 div.error-box.show {
-  transform: translateY(0);
+  transform: translateX(0);
   background: transparent;
   color: red;
   padding: 10px 0;
 }
-div.error-box:after {
-  content: "\f071";
-  font-family: "Font Awesome 5 Free", serif;
-  font-weight: 600;
-  position: absolute;
-  right: 0;
-  top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 40px;
-  font-size: 1.5rem;
+
+tr.eladva td {
+  transition: 0.5s;
+  text-decoration: line-through;
+  color: rgba(0, 0, 0, 0.2);
 }
 
 #form-tab {
@@ -837,6 +846,18 @@ div.loader {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.hozzad-row {
+  display: flex;
+  background: white;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+.hozzad-row div:first-child {
+  flex-grow: 1;
+  padding: 0;
+  margin: 0 !important;
 }
 
 /*# sourceMappingURL=main.css.map */

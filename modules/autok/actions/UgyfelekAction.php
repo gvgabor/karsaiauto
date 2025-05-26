@@ -6,6 +6,7 @@ use app\components\MainAction;
 use app\models\base\Ugyfelek;
 use Throwable;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -17,10 +18,25 @@ class UgyfelekAction extends MainAction
         Yii::$app->response->format = Response::FORMAT_JSON;
         $query                      = Ugyfelek::find()->limit($this->pageSize)->offset(($this->page - 1) * $this->pageSize)->orderBy(["nev" => SORT_ASC]);
 
-        return [
-            "total" => $query->count(),
-            "data"  => $query->all(),
-        ];
+        foreach ($this->filters as $item) {
+            if ($item["field"] == "nev") {
+                $query->andFilterWhere(["LIKE", "nev", $item["value"]]);
+            }
+        }
+
+        $result          = [];
+        $result["total"] = $query->count();
+        $result["data"]  = $query->all();
+
+        if ($ugyfelId = $this->request->post("ugyfelId")) {
+            if (in_array($ugyfelId, ArrayHelper::getColumn($result['data'], "id")) === false) {
+                $current = Ugyfelek::findOne($ugyfelId);
+                array_pop($result['data']);
+                $result['data'][] = $current;
+            }
+        }
+
+        return $result;
     }
 
     public function save($formData)

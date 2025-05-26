@@ -31,8 +31,7 @@ export class ClassUtil {
         return {
             model: {
                 id: "id",
-                fields: {
-                }
+                fields: {}
             },
             data: (response: any) => response.data || [],
             total: (response: any) => response.total || 0
@@ -227,6 +226,19 @@ export class ClassUtil {
             body: formData,
             method: "POST"
         });
+        const status = response.status;
+
+        if (status == 403) {
+            alert(await response.text());
+            document.querySelectorAll(`div.form-popup-layer`).forEach(item => item.remove());
+            document.querySelectorAll(`div.form-popup`).forEach(item => item.remove());
+            if (layer) {
+                layer.remove();
+            }
+            return false;
+        }
+
+
         let responseData;
         const contentType = response.headers.get("content-type");
 

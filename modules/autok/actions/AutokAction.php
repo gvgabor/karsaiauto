@@ -7,6 +7,7 @@ use app\helpers\R2Helper;
 use app\models\base\AutokDokumentumok;
 use app\models\base\AutokImage;
 use app\modules\autok\models\AutokModel;
+use app\modules\autok\models\EladasModel;
 use SplFileInfo;
 use Throwable;
 use Yii;
@@ -63,6 +64,31 @@ class AutokAction extends MainAction
             "total" => $query->count(),
             "data"  => $query->all(),
         ];
+        return $result;
+    }
+
+    public function eladas($formData): array
+    {
+        $result      = [];
+        $transaction = Yii::$app->db->beginTransaction();
+        $model       = empty($formData["id"]) ? new EladasModel() : EladasModel::findOne($formData["id"]);
+        $this->baseStatus($model);
+        try {
+            $model->setAttributes($formData);
+            $model->eladva = 1;
+            $model->save() ?: throw new BadRequestHttpException(Json::encode($model->errors));
+            $result["success"] = true;
+            $result["model"]   = AutokModel::findOne($model->id);
+            $result["message"] = Yii::t("app", "Eladasa sikeres", ["auto" => $model->hirdetes_cime]);
+            $transaction->commit();
+        } catch (Throwable $exception) {
+            Yii::error($exception->getMessage());
+            $transaction->rollBack();
+            $result["errors"]  = $model->errors;
+            $result["success"] = false;
+            $result["message"] = $exception->getMessage();
+            $this->errorStatus();
+        }
         return $result;
     }
 

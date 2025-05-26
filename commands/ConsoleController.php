@@ -11,6 +11,7 @@ use app\models\base\Menu;
 use app\models\base\Ugyfelek;
 use app\modules\autok\actions\AutokAction;
 use app\modules\autok\models\AutokModel;
+use app\modules\autok\models\EladasModel;
 use Exception;
 use Faker\Factory;
 use Yii;
@@ -267,7 +268,7 @@ class ConsoleController extends Controller
     {
         $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
         $this->writeOut("Memóriahasználat: " . $memoria);
-        $total = 1000;
+        $total = 5000;
         Console::startProgress(0, $total);
         for ($i = 0; $i < $total; $i++) {
             $memoria = sprintf(
@@ -297,6 +298,16 @@ class ConsoleController extends Controller
         $model->adoszam         = $factory->numerify('########-#-##');
         $model->cegnev          = $factory->company;
         $model->tipus           = $factory->randomElement(array_keys(UgyfelTipus::list()));
+        return $model;
+    }
+
+    public function actionRandomEladasModel($modelId)
+    {
+        $factory                  = Factory::create('hu_HU');
+        $model                    = EladasModel::findOne($modelId);
+        $model->eladas_datuma     = date("Y-m-d");
+        $model->eladas_megjegyzes = $factory->realText(200);
+        $model->eladas_ugyfel_id  = $factory->randomElement(array_keys(OptionsHelper::ugyfelOptions()));
         return $model;
     }
 

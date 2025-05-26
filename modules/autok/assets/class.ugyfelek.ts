@@ -12,6 +12,11 @@ export enum UgyfelekEndPoint {
 }
 
 export class ClassUgyfelek extends ClassUtil {
+
+    url(action: string): string {
+        return `/autok/ugyfelek/${action}`;
+    }
+
     async init() {
         const ugyfelekGrid = await this.ugyfelekGrid(this.div("ugyfelek-grid"));
         this.dataBound(ugyfelekGrid, () => {

@@ -14,7 +14,6 @@ $this->registerJsVar("menuColumns", ColumnsHelper::menuColumns());
 $this->registerJsVar("hozzarendelesMenuColumns", ColumnsHelper::hozzarendelesMenuColumns());
 $this->registerJsVar("hozzarendelveMenuColumns", ColumnsHelper::hozzarendelveMenuColumns());
 
-
 ?>
 
 <div class="card main-card border-0">

@@ -11,7 +11,7 @@ use yii\web\UploadedFile;
 /**
  *
  */
-class AutokModel extends Autok
+final class AutokModel extends Autok
 {
     /**
      * @var UploadedFile[]
@@ -33,6 +33,7 @@ class AutokModel extends Autok
         $fields['fooldalra']          = fn () => $this->fooldalra ? "IGEN" : "NEM";
         $fields['akcios']             = fn () => $this->akcios ? "IGEN" : "NEM";
         $fields['eladva']             = fn () => $this->eladva ? "IGEN" : "NEM";
+        $fields['eladva_int']         = fn () => $this->eladva;
         $fields['publikalva']         = fn () => $this->publikalva ? "IGEN" : "NEM";
         $fields["edit_text"]          = fn () => Yii::t("app", "edit_text", ["name" => $this->hirdetes_cime]);
         $fields["delete_text"]        = fn () => Yii::t("app", "delete_text", ["name" => $this->hirdetes_cime]);

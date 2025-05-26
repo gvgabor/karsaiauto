@@ -16,7 +16,10 @@ class Ugyfelek extends \app\models\Ugyfelek
     {
         $fields = parent::fields();
 
-        $fields["tipus"] = fn () => UgyfelTipus::tryFrom($this->tipus)->label();
+        if ($this->tipus) {
+            $fields["tipus"] = fn () => UgyfelTipus::tryFrom($this->tipus)->label();
+        }
+
 
         $fields["szemelyi_szam"] = fn () => $this->tipus === UgyfelTipus::CEG->value ? null : $this->szemelyi_szam;
 
