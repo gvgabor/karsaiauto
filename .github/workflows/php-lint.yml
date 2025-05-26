@@ -1,4 +1,4 @@
-name: PHP Lint
+name: PHP Lint & Code Style
 
 on:
   push:
@@ -27,5 +27,11 @@ jobs:
           # noinspection UndefinedParamsPresent
           php-version: '8.2'
 
+      - name: Composer install (dev csomagokkal)
+        run: composer install --prefer-dist
+
       - name: PHP Lint futtatása
         run: find . -type f -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+
+      - name: PHP-CS-Fixer ellenőrzés
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no
