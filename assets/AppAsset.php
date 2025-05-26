@@ -23,11 +23,6 @@ class AppAsset extends AssetBundle
     public $basePath  = '@webroot';
     public $baseUrl   = '@web';
 
-
-
-
-
-
     public $css = [
         'css/fontawesome.min.css',
         'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
