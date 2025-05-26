@@ -1,0 +1,26 @@
+name: PHP Lint
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kód letöltése
+        # noinspection UndefinedAction
+        uses: actions/checkout@v4
+
+      - name: PHP beállítása
+        # noinspection UndefinedAction
+        uses: shivammathur/setup-php@v2
+        with:
+          # noinspection UndefinedParamsPresent
+          php-version: '8.2'
+
+      - name: PHP Lint futtatása
+        run: find . -type f -name "*.php" -exec php -l {} \;
