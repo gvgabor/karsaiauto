@@ -268,7 +268,7 @@ class ConsoleController extends Controller
     {
         $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
         $this->writeOut("Memóriahasználat: " . $memoria);
-        $total = 5000;
+        $total = 15000;
         Console::startProgress(0, $total);
         for ($i = 0; $i < $total; $i++) {
             $memoria = sprintf(
