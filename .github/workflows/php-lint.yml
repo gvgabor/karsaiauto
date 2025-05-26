@@ -35,3 +35,21 @@ jobs:
 
       - name: PHP-CS-Fixer ellenőrzés
         run: vendor/bin/php-cs-fixer fix --using-cache=no
+               - name: Build mappa előkészítése
+                 run: |
+                   mkdir build
+                   rsync -av --exclude=.git --exclude=build ./ ./build/
+
+      - name: Build kicsomagolása ZIP-be
+        run: |
+          cd build
+          zip -r ../build.zip .
+
+      - name: Artifact feltöltése
+        # noinspection UndefinedAction
+        uses: actions/upload-artifact@v4
+        with:
+          # noinspection UndefinedParamsPresent
+          name: php-build
+          # noinspection UndefinedParamsPresent
+          path: build.zip
