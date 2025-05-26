@@ -22,7 +22,7 @@ use yii\web\View;
         </div>
     </div>
     <div class="card-body">
-        <?PHP $form = MainForm::begin() ?>
+        <?php $form = MainForm::begin() ?>
 
         <div style="display:none;">
             <?= $form->field($model, 'id') ?>
@@ -31,10 +31,10 @@ use yii\web\View;
         <?= $form->field($model, 'felhasznaloi_nev') ?>
         <?= $form->field($model, 'felhasznaloi_jog')->dropDownList(OptionsHelper::felhasznaloiJogokOptions(), ["prompt" => Yii::t("app", "Please Select")]) ?>
         <?= $form->field($model, 'email') ?>
-        <?PHP if ($model->isNewRecord): ?>
+        <?php if ($model->isNewRecord): ?>
             <?= $form->field($model, 'jelszo') ?>
-        <?PHP endif; ?>
-        <?PHP MainForm::end() ?>
+        <?php endif; ?>
+        <?php MainForm::end() ?>
     </div>
     <div class="card-footer">
         <button class="btn btn-danger save-btn">

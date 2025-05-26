@@ -13,7 +13,6 @@ use yii\web\Response;
 
 class FelhasznalokController extends ActiveController
 {
-
     public $modelClass = 'app\\models\\base\\Felhasznalok';
 
     public function actions()
@@ -28,27 +27,27 @@ class FelhasznalokController extends ActiveController
     public function actionSave()
     {
         $transaction = Yii::$app->db->beginTransaction();
-        $result = [];
+        $result      = [];
         try {
             $formData = Yii::$app->request->post("Felhasznalok");
             if (empty($formData["id"])) {
-                $model = new Felhasznalok();
+                $model                          = new Felhasznalok();
                 Yii::$app->response->statusCode = 201;
             } else {
-                $model = Felhasznalok::findOne($formData["id"]);
+                $model                          = Felhasznalok::findOne($formData["id"]);
                 Yii::$app->response->statusCode = 200;
             }
             $model->setAttributes($formData);
             $model->save() ?: throw new BadRequestHttpException(Json::encode($model->errors));
 
             $result["success"] = true;
-            $result["model"] = $model;
+            $result["model"]   = $model;
             $transaction->commit();
         } catch (Throwable $exception) {
             Yii::error($exception->getMessage());
             $transaction->rollBack();
-            $result["errors"] = $model->errors;
-            $result["success"] = false;
+            $result["errors"]               = $model->errors;
+            $result["success"]              = false;
             Yii::$app->response->statusCode = 422;
         }
         return $result;
@@ -56,7 +55,7 @@ class FelhasznalokController extends ActiveController
 
     public function actionJelszo()
     {
-        $result = [];
+        $result   = [];
         $formData = $this->request->post("Felhasznalok");
         if (empty($formData["id"])) {
             Yii::$app->response->statusCode = 400;
@@ -78,10 +77,10 @@ class FelhasznalokController extends ActiveController
             $model->save() ?: throw new BadRequestHttpException(Json::encode($model->errors));
             $result["success"] = true;
         } catch (Throwable $exception) {
-            $result["success"] = false;
+            $result["success"]              = false;
             Yii::$app->response->statusCode = 400;
-            $result["errors"] = $model->errors;
-            $result["message"] = $exception->getMessage();
+            $result["errors"]               = $model->errors;
+            $result["message"]              = $exception->getMessage();
         }
 
         return $result;
@@ -90,7 +89,7 @@ class FelhasznalokController extends ActiveController
     public function actionDelete($id)
     {
         $result = [];
-        $model = Felhasznalok::findOne($id);
+        $model  = Felhasznalok::findOne($id);
         if ($model->felhasznaloi_nev == "Vince") {
             throw new RuntimeException("Nem törölhető");
         }
@@ -110,7 +109,7 @@ class FelhasznalokController extends ActiveController
 
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
+        $behaviors                                 = parent::behaviors();
         $behaviors['contentNegotiator']['formats'] = [
             'application/json' => Response::FORMAT_JSON,
             'text/html'        => Response::FORMAT_JSON,

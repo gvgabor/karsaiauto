@@ -21,7 +21,7 @@ use yii\web\View;
         </div>
     </div>
     <div class="card-body">
-        <?PHP $form = MainForm::begin() ?>
+        <?php $form = MainForm::begin() ?>
         <div style="display: none">
             <?= $form->field($model, "id") ?>
         </div>
@@ -29,7 +29,7 @@ use yii\web\View;
         <?= $form->field($model, 'jelszo1') ?>
         <?= $form->field($model, 'jelszo2') ?>
 
-        <?PHP MainForm::end() ?>
+        <?php MainForm::end() ?>
     </div>
     <div class="card-footer">
         <button class="btn btn-danger save-btn">

@@ -6,8 +6,6 @@ use Yii;
 
 class UtilHelper
 {
-
-
     public static function isLocal()
     {
         $path = Yii::getAlias("@runtime/local.lock");

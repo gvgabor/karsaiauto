@@ -22,8 +22,6 @@ use Yii;
  */
 abstract class Menu extends MainActiveRecord
 {
-
-
     /**
      * {@inheritdoc}
      */
@@ -53,17 +51,17 @@ abstract class Menu extends MainActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'menu_name' => Yii::t('app', 'Menu Name'),
-            'menu_url' => Yii::t('app', 'Menu Url'),
-            'parent_id' => Yii::t('app', 'Parent ID'),
-            'sorrend' => Yii::t('app', 'Sorrend'),
-            'deleted' => Yii::t('app', 'Deleted'),
-            'active' => Yii::t('app', 'Active'),
+            'id'         => Yii::t('app', 'ID'),
+            'menu_name'  => Yii::t('app', 'Menu Name'),
+            'menu_url'   => Yii::t('app', 'Menu Url'),
+            'parent_id'  => Yii::t('app', 'Parent ID'),
+            'sorrend'    => Yii::t('app', 'Sorrend'),
+            'deleted'    => Yii::t('app', 'Deleted'),
+            'active'     => Yii::t('app', 'Active'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
             'updated_by' => Yii::t('app', 'Updated By'),
-            'create_by' => Yii::t('app', 'Create By'),
+            'create_by'  => Yii::t('app', 'Create By'),
         ];
     }
 

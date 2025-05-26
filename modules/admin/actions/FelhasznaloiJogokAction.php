@@ -15,11 +15,10 @@ use yii\web\Response;
 
 class FelhasznaloiJogokAction extends MainAction
 {
-
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $query = FelhasznaloiJogok::find()->orderBy(["{{%felhasznaloi_jogok}}.id" => SORT_DESC]);
+        $query                      = FelhasznaloiJogok::find()->orderBy(["{{%felhasznaloi_jogok}}.id" => SORT_DESC]);
 
         return [
             "total" => $query->count(),
@@ -30,8 +29,8 @@ class FelhasznaloiJogokAction extends MainAction
     public function hozzarendeles($felhasznaloiJogId, $menuIdList)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $result = [];
-        $transaction = Yii::$app->db->beginTransaction();
+        $result                     = [];
+        $transaction                = Yii::$app->db->beginTransaction();
         try {
             FelhasznaloiJogokMenu::updateAll(["deleted" => 1], ["felhasznaloi_jogok_id" => $felhasznaloiJogId]);
 
@@ -47,8 +46,8 @@ class FelhasznaloiJogokAction extends MainAction
             $transaction->commit();
         } catch (Throwable $exception) {
             Yii::$app->response->statusCode = 400;
-            $result["success"] = false;
-            $result["message"] = $exception->getMessage();
+            $result["success"]              = false;
+            $result["message"]              = $exception->getMessage();
             $transaction->rollBack();
         }
         return $result;
@@ -56,8 +55,8 @@ class FelhasznaloiJogokAction extends MainAction
 
     public function save($formData)
     {
-        $result = [];
-        $model = empty($formData["id"]) ? new FelhasznaloiJogok() : FelhasznaloiJogok::findOne($formData["id"]);
+        $result      = [];
+        $model       = empty($formData["id"]) ? new FelhasznaloiJogok() : FelhasznaloiJogok::findOne($formData["id"]);
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $model->setAttributes($formData);
@@ -68,23 +67,23 @@ class FelhasznaloiJogokAction extends MainAction
             $role = $auth->getRole($szerepkor);
 
             if ($role) {
-                $role->name = Inflector::slug($model->jogosultsag_neve, "_");
+                $role->name        = Inflector::slug($model->jogosultsag_neve, "_");
                 $role->description = $model->jogosultsag_neve;
                 $auth->update($szerepkor, $role);
             } else {
-                $role = $auth->createRole($szerepkor);
+                $role              = $auth->createRole($szerepkor);
                 $role->description = $model->jogosultsag_neve;
                 $auth->add($role);
             }
 
             $result["success"] = true;
-            $result["model"] = $model;
+            $result["model"]   = $model;
             $transaction->commit();
         } catch (Throwable $exception) {
             Yii::$app->response->statusCode = 400;
-            $result["success"] = false;
-            $result["message"] = $exception->getMessage();
-            $result["errors"] = $model->errors;
+            $result["success"]              = false;
+            $result["message"]              = $exception->getMessage();
+            $result["errors"]               = $model->errors;
             $transaction->rollBack();
         }
 

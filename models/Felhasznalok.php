@@ -22,9 +22,6 @@ use Yii;
  */
 abstract class Felhasznalok extends MainActiveRecord
 {
-
-
-
     /**
      * {@inheritdoc}
      */
@@ -67,17 +64,17 @@ abstract class Felhasznalok extends MainActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
+            'id'               => Yii::t('app', 'ID'),
             'felhasznaloi_nev' => Yii::t('app', 'Felhasznaloi Nev'),
-            'jelszo' => Yii::t('app', 'Jelszo'),
-            'email' => Yii::t('app', 'Email'),
+            'jelszo'           => Yii::t('app', 'Jelszo'),
+            'email'            => Yii::t('app', 'Email'),
             'felhasznaloi_jog' => Yii::t('app', 'Felhasznaloi Jog'),
-            'deleted' => Yii::t('app', 'Deleted'),
-            'active' => Yii::t('app', 'Active'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
-            'updated_by' => Yii::t('app', 'Updated By'),
-            'create_by' => Yii::t('app', 'Create By'),
+            'deleted'          => Yii::t('app', 'Deleted'),
+            'active'           => Yii::t('app', 'Active'),
+            'created_at'       => Yii::t('app', 'Created At'),
+            'updated_at'       => Yii::t('app', 'Updated At'),
+            'updated_by'       => Yii::t('app', 'Updated By'),
+            'create_by'        => Yii::t('app', 'Create By'),
         ];
     }
 

@@ -17,10 +17,10 @@ class ContactFormTest extends \Codeception\Test\Unit
         $model = new ContactForm();
 
         $model->attributes = [
-            'name' => 'Tester',
-            'email' => 'tester@example.com',
-            'subject' => 'very important letter subject',
-            'body' => 'body of current message',
+            'name'       => 'Tester',
+            'email'      => 'tester@example.com',
+            'subject'    => 'very important letter subject',
+            'body'       => 'body of current message',
             'verifyCode' => 'testme',
         ];
 

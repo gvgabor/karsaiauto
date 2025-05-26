@@ -25,7 +25,7 @@ class AlertTest extends \Codeception\Test\Unit
 
     public function testMultipleErrorMessages()
     {
-        $firstMessage = 'This is the first error message';
+        $firstMessage  = 'This is the first error message';
         $secondMessage = 'This is the second error message';
 
         Yii::$app->session->setFlash('error', [$firstMessage, $secondMessage]);
@@ -59,7 +59,7 @@ class AlertTest extends \Codeception\Test\Unit
 
     public function testMultipleDangerMessages()
     {
-        $firstMessage = 'This is the first danger message';
+        $firstMessage  = 'This is the first danger message';
         $secondMessage = 'This is the second danger message';
 
         Yii::$app->session->setFlash('danger', [$firstMessage, $secondMessage]);
@@ -93,7 +93,7 @@ class AlertTest extends \Codeception\Test\Unit
 
     public function testMultipleSuccessMessages()
     {
-        $firstMessage = 'This is the first danger message';
+        $firstMessage  = 'This is the first danger message';
         $secondMessage = 'This is the second danger message';
 
         Yii::$app->session->setFlash('success', [$firstMessage, $secondMessage]);
@@ -127,7 +127,7 @@ class AlertTest extends \Codeception\Test\Unit
 
     public function testMultipleInfoMessages()
     {
-        $firstMessage = 'This is the first info message';
+        $firstMessage  = 'This is the first info message';
         $secondMessage = 'This is the second info message';
 
         Yii::$app->session->setFlash('info', [$firstMessage, $secondMessage]);
@@ -161,7 +161,7 @@ class AlertTest extends \Codeception\Test\Unit
 
     public function testMultipleWarningMessages()
     {
-        $firstMessage = 'This is the first warning message';
+        $firstMessage  = 'This is the first warning message';
         $secondMessage = 'This is the second warning message';
 
         Yii::$app->session->setFlash('warning', [$firstMessage, $secondMessage]);
@@ -177,11 +177,12 @@ class AlertTest extends \Codeception\Test\Unit
         verify($renderingResult)->stringNotContainsString('alert-info');
     }
 
-    public function testSingleMixedMessages() {
-        $errorMessage = 'This is an error message';
-        $dangerMessage = 'This is a danger message';
+    public function testSingleMixedMessages()
+    {
+        $errorMessage   = 'This is an error message';
+        $dangerMessage  = 'This is a danger message';
         $successMessage = 'This is a success message';
-        $infoMessage = 'This is a info message';
+        $infoMessage    = 'This is a info message';
         $warningMessage = 'This is a warning message';
 
         Yii::$app->session->setFlash('error', $errorMessage);
@@ -204,16 +205,17 @@ class AlertTest extends \Codeception\Test\Unit
         verify($renderingResult)->stringContainsString('alert-warning');
     }
 
-    public function testMultipleMixedMessages() {
-        $firstErrorMessage = 'This is the first error message';
-        $secondErrorMessage = 'This is the second error message';
-        $firstDangerMessage = 'This is the first danger message';
-        $secondDangerMessage = 'This is the second';
-        $firstSuccessMessage = 'This is the first success message';
+    public function testMultipleMixedMessages()
+    {
+        $firstErrorMessage    = 'This is the first error message';
+        $secondErrorMessage   = 'This is the second error message';
+        $firstDangerMessage   = 'This is the first danger message';
+        $secondDangerMessage  = 'This is the second';
+        $firstSuccessMessage  = 'This is the first success message';
         $secondSuccessMessage = 'This is the second success message';
-        $firstInfoMessage = 'This is the first info message';
-        $secondInfoMessage = 'This is the second info message';
-        $firstWarningMessage = 'This is the first warning message';
+        $firstInfoMessage     = 'This is the first info message';
+        $secondInfoMessage    = 'This is the second info message';
+        $firstWarningMessage  = 'This is the first warning message';
         $secondWarningMessage = 'This is the second warning message';
 
         Yii::$app->session->setFlash('error', [$firstErrorMessage, $secondErrorMessage]);
@@ -243,7 +245,7 @@ class AlertTest extends \Codeception\Test\Unit
 
     public function testFlashIntegrity()
     {
-        $errorMessage = 'This is an error message';
+        $errorMessage     = 'This is an error message';
         $unrelatedMessage = 'This is a message that is not related to the alert widget';
 
         Yii::$app->session->setFlash('error', $errorMessage);

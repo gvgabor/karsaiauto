@@ -13,13 +13,12 @@ use yii\web\Response;
 
 class MenuAction extends MainAction
 {
-
     public ?int $felhasznaloiJogId = null;
 
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $query = Menu::find()->orderBy(["{{%_menu}}.sorrend" => SORT_ASC]);
+        $query                      = Menu::find()->orderBy(["{{%_menu}}.sorrend" => SORT_ASC]);
 
         if ($this->felhasznaloiJogId) {
             $menuIdList = FelhasznaloiJogokMenu::find()->menuIdList($this->felhasznaloiJogId);
@@ -36,7 +35,7 @@ class MenuAction extends MainAction
     {
 
         $result = [];
-        $model = empty($formData["id"]) ? new Menu() : Menu::findOne($formData["id"]);
+        $model  = empty($formData["id"]) ? new Menu() : Menu::findOne($formData["id"]);
 
         $transaction = Yii::$app->db->beginTransaction();
 
@@ -44,13 +43,13 @@ class MenuAction extends MainAction
             $model->setAttributes($formData);
             $model->save() ?: throw new BadRequestHttpException(Json::encode($model->errors));
             $result["success"] = true;
-            $result["model"] = $model;
+            $result["model"]   = $model;
             $transaction->commit();
         } catch (Throwable $exception) {
             Yii::$app->response->statusCode = 400;
             $transaction->rollBack();
             $result["success"] = false;
-            $result["errors"] = $model->errors;
+            $result["errors"]  = $model->errors;
             $result["message"] = $exception->getMessage();
         }
 

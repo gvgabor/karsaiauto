@@ -19,8 +19,6 @@ use Yii;
  */
 abstract class FelhasznaloiJogok extends MainActiveRecord
 {
-
-
     /**
      * {@inheritdoc}
      */
@@ -50,14 +48,14 @@ abstract class FelhasznaloiJogok extends MainActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
+            'id'               => Yii::t('app', 'ID'),
             'jogosultsag_neve' => Yii::t('app', 'Jogosultsag Neve'),
-            'deleted' => Yii::t('app', 'Deleted'),
-            'active' => Yii::t('app', 'Active'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
-            'updated_by' => Yii::t('app', 'Updated By'),
-            'create_by' => Yii::t('app', 'Create By'),
+            'deleted'          => Yii::t('app', 'Deleted'),
+            'active'           => Yii::t('app', 'Active'),
+            'created_at'       => Yii::t('app', 'Created At'),
+            'updated_at'       => Yii::t('app', 'Updated At'),
+            'updated_by'       => Yii::t('app', 'Updated By'),
+            'create_by'        => Yii::t('app', 'Create By'),
         ];
     }
 

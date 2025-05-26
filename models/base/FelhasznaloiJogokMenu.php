@@ -10,7 +10,6 @@ use app\models\query\FelhasznaloiJogokMenuQuery;
  */
 class FelhasznaloiJogokMenu extends \app\models\FelhasznaloiJogokMenu
 {
-
     public static function find()
     {
         return new FelhasznaloiJogokMenuQuery(get_called_class());

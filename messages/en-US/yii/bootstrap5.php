@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Message translations.
  *
@@ -17,9 +18,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Button' => '',
-    'Close' => '',
-    'Show' => '',
-    'Toggle Dropdown' => '',
+    'Button'            => '',
+    'Close'             => '',
+    'Show'              => '',
+    'Toggle Dropdown'   => '',
     'Toggle navigation' => '',
 ];

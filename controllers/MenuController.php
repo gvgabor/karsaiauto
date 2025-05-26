@@ -13,7 +13,6 @@ use yii\web\Response;
 
 class MenuController extends ActiveController
 {
-
     public $modelClass = 'app\\models\\base\\Menu';
 
     public function actions()
@@ -44,10 +43,10 @@ class MenuController extends ActiveController
 
     public function actionSaveHozzarendeles()
     {
-        $result = [];
+        $result            = [];
         $felhasznaloiJogId = $this->request->post("felhasznaloiJogId");
-        $menuIdList = Json::decode($this->request->post("menuIdList"));
-        $transaction = Yii::$app->db->beginTransaction();
+        $menuIdList        = Json::decode($this->request->post("menuIdList"));
+        $transaction       = Yii::$app->db->beginTransaction();
         try {
             FelhasznaloiJogokMenu::updateAll(["deleted" => 1], ["felhasznaloi_jogok_id" => $felhasznaloiJogId]);
 
@@ -63,8 +62,8 @@ class MenuController extends ActiveController
             $transaction->commit();
         } catch (Throwable $exception) {
             Yii::$app->response->statusCode = 400;
-            $result["success"] = false;
-            $result["message"] = $exception->getMessage();
+            $result["success"]              = false;
+            $result["message"]              = $exception->getMessage();
             $transaction->rollBack();
         }
 
@@ -74,7 +73,7 @@ class MenuController extends ActiveController
     public function actionDelete($id)
     {
         $result = [];
-        $model = Menu::findOne($id);
+        $model  = Menu::findOne($id);
 
         if (empty($model)) {
             Yii::$app->response->statusCode = 400;
@@ -93,9 +92,9 @@ class MenuController extends ActiveController
 
     public function actionSave()
     {
-        $result = [];
+        $result   = [];
         $formData = $this->request->post("Menu");
-        $model = empty($formData["id"]) ? new Menu() : Menu::findOne($formData["id"]);
+        $model    = empty($formData["id"]) ? new Menu() : Menu::findOne($formData["id"]);
 
         $transaction = Yii::$app->db->beginTransaction();
 
@@ -103,13 +102,13 @@ class MenuController extends ActiveController
             $model->setAttributes($formData);
             $model->save() ?: throw new BadRequestHttpException(Json::encode($model->errors));
             $result["success"] = true;
-            $result["model"] = $model;
+            $result["model"]   = $model;
             $transaction->commit();
         } catch (Throwable $exception) {
             Yii::$app->response->statusCode = 400;
             $transaction->rollBack();
             $result["success"] = false;
-            $result["errors"] = $model->errors;
+            $result["errors"]  = $model->errors;
             $result["message"] = $exception->getMessage();
         }
 
@@ -118,7 +117,7 @@ class MenuController extends ActiveController
 
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
+        $behaviors                                 = parent::behaviors();
         $behaviors['contentNegotiator']['formats'] = [
             'application/json' => Response::FORMAT_JSON,
             'text/html'        => Response::FORMAT_JSON,

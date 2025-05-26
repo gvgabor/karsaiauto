@@ -13,11 +13,10 @@ use yii\web\Response;
 
 class FelhasznalokAction extends MainAction
 {
-
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $query = Felhasznalok::find()->orderById();
+        $query                      = Felhasznalok::find()->orderById();
         return [
             "total" => $query->count(),
             "data"  => $query->all(),
@@ -50,7 +49,7 @@ class FelhasznalokAction extends MainAction
         } catch (Throwable $exception) {
             $result["success"] = false;
             $this->errorStatus();
-            $result["errors"] = $model->errors;
+            $result["errors"]  = $model->errors;
             $result["message"] = $exception->getMessage();
         }
 
@@ -70,7 +69,7 @@ class FelhasznalokAction extends MainAction
     public function save($formData)
     {
         $transaction = Yii::$app->db->beginTransaction();
-        $result = [];
+        $result      = [];
 
         $model = empty($formData["id"]) ? new Felhasznalok() : Felhasznalok::findOne($formData["id"]);
         $this->baseStatus($model);
@@ -90,12 +89,12 @@ class FelhasznalokAction extends MainAction
             }
 
             $result["success"] = true;
-            $result["model"] = $model;
+            $result["model"]   = $model;
             $transaction->commit();
         } catch (Throwable $exception) {
             Yii::error($exception->getMessage());
             $transaction->rollBack();
-            $result["errors"] = $model->errors;
+            $result["errors"]  = $model->errors;
             $result["success"] = false;
             $this->errorStatus();
         }

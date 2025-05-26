@@ -21,13 +21,13 @@ use yii\web\View;
         </div>
     </div>
     <div class="card-body">
-        <?PHP $form = MainForm::begin() ?>
+        <?php $form = MainForm::begin() ?>
         <div style="display: none">
             <?= $form->field($model, "id") ?>
         </div>
 
         <?= $form->field($model, "jogosultsag_neve") ?>
-        <?PHP MainForm::end() ?>
+        <?php MainForm::end() ?>
     </div>
     <div class="card-footer">
         <button class="btn btn-danger save-btn">
