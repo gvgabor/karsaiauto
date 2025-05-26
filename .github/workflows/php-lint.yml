@@ -13,8 +13,9 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # GitHub által biztosított virtuális környezet
 
+    # noinspection YAMLSchemaValidation
     steps:
       - name: Kód letöltése
         # noinspection UndefinedAction
@@ -25,13 +26,35 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           # noinspection UndefinedParamsPresent
-          php-version: '8.2'
+          php-version: '8.2' # PHP 8.2 használata
+          # noinspection UndefinedParamsPresent
+          tools: composer # Fontos: telepíti a Composer-t is
+          # noinspection UndefinedParamsPresent
+          extensions: pdo_mysql, mbstring, gd # Opcionális, de hasznos lehet, ha a projekthez kellenek
 
       - name: Composer install (dev csomagokkal)
-        run: composer install --prefer-dist
+        # --prefer-dist - telepíti a disztribúciós archívumból, ha elérhető
+        # --no-interaction - nem kérdezősködik (fontos az automatizált környezetben)
+        run: composer install --prefer-dist --no-interaction
 
       - name: PHP Lint futtatása
-        run: find . -type f -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+        # Csak a szintaktikai hibákat (parse errors) jelenti, nem a "No syntax errors" üzeneteket.
+        # Ha talált hibát, a `grep -q "Parse error"` gondoskodik róla, hogy a step megbukjon.
+        run: |
+          OUTPUT=$(find . -type f -name "*.php" -not -path "./vendor/*" -exec php -l {} \;)
+          echo "$OUTPUT"
+          echo "$OUTPUT" | grep -q "Parse error" && exit 1 || true
+
+      - name: PHP-CS-Fixer telepítése
+        # A PHP-CS-Fixer futtatásához először telepíteni kell, ha nincs a composer.json-ban (vendor/bin)
+        # Ha a composer.json-ban van a dev-dependencies között, akkor a fenti "composer install" már telepítette.
+        # Feltételezem, hogy ott van, szóval ezt a lépést nem kellene ide írni, ha már fent van.
+        # Ha nincs, akkor: composer require friendsofphp/php-cs-fixer --dev
 
       - name: PHP-CS-Fixer ellenőrzés
-        run: vendor/bin/php-cs-fixer fix --using-cache=no
+        # Feltételezve, hogy a PHP-CS-Fixer telepítve van a vendor/bin/php-cs-fixer útvonalon.
+        # --dry-run: nem módosítja a fájlokat, csak jelzi a hibákat
+        # --diff: mutatja a különbségeket
+        # --stop-on-violation: leáll, ha hibát talál
+        # --config=.php-cs-fixer.dist.php: a konfigurációs fájlod
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --stop-on-violation --config=.php-cs-fixer.dist.php
