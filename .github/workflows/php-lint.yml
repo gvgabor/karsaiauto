@@ -35,10 +35,11 @@ jobs:
 
       - name: PHP-CS-Fixer ellenőrzés
         run: vendor/bin/php-cs-fixer fix --using-cache=no
-               - name: Build mappa előkészítése
-                 run: |
-                   mkdir build
-                   rsync -av --exclude=.git --exclude=build ./ ./build/
+
+      - name: Build mappa előkészítése
+        run: |
+          mkdir build
+          rsync -av --exclude=.git --exclude=build ./ ./build/
 
       - name: Build kicsomagolása ZIP-be
         run: |
