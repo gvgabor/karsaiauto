@@ -5,9 +5,16 @@ export class ClassFormpopup extends ClassUtil {
     public readonly root: HTMLDivElement;
     public readonly layer: HTMLDivElement;
     public form!: HTMLFormElement;
+    public prev: HTMLDivElement;
 
     constructor(title: string = "Karsai autó", content: string = "", width: number = 800) {
         super();
+
+        this.prev = document.querySelector(`div.form-popup`) as HTMLDivElement;
+        if (this.prev) {
+            this.prev.classList.add("back");
+        }
+
 
         this.root = document.createElement("div");
         this.root.classList.add("form-popup")
@@ -17,8 +24,8 @@ export class ClassFormpopup extends ClassUtil {
         this.layer.classList.add("form-popup-layer")
 
         const style = document.createElement("style");
-        style.innerText = `.form-popup-layer { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.2); } .form-popup { background: transparent; position: absolute; top: 0; left: 50%; transition: 0.5s; transform: translateX(-50%); opacity: 0; pointer-events: none; } .form-popup > .card { opacity: 0; transition: 0.5s; } .form-popup.active > .card { box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2); border: none; opacity: 1; } .form-popup.active { opacity: 1; top: 120px; pointer-events: all; } .form-popup .card-footer { display: flex; justify-content: flex-end; } .form-popup .close-box i{ transition: 0.5s; } .form-popup .close-box:hover i { color: red; transform: rotate(360deg) scale(1.5); }
-`;
+        // language=CSS
+        style.innerText = this.style();
 
         document.head.appendChild(style);
         document.body.appendChild(this.layer);
@@ -43,11 +50,18 @@ export class ClassFormpopup extends ClassUtil {
     }
 
 
+    style() {
+        return `.form-popup-layer {position: fixed;inset: 0;background: rgba(0, 0, 0, 0.2);}  .form-popup {background: transparent;position: absolute;top: 0;left: 50%;transition: 0.5s;transform: translateX(-50%);opacity: 0;pointer-events: none;}  .form-popup.back {transition-delay: 0.5s;transform: translateX(-52%) translateY(-10px);}  .form-popup > .card {opacity: 0;transition: 0.5s;}  .form-popup.active > .card {box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);border: none;opacity: 1;}  .form-popup.active {opacity: 1;top: 120px;pointer-events: all;}  .form-popup .card-footer {display: flex;justify-content: flex-end;}  .form-popup .close-box i {transition: 0.5s;}  .form-popup .close-box:hover i {color: red;transform: rotate(360deg) scale(1.5);} `
+    }
+
     close() {
         this.root.ontransitionend = (event) => {
             if (event.propertyName == "top") {
                 this.root.remove();
                 this.layer.remove();
+                if (this.prev) {
+                    this.prev.classList.remove("back");
+                }
             }
         }
         this.root.classList.remove("active");

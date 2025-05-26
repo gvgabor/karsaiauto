@@ -18,6 +18,8 @@ use Yii;
  * @property string|null $updated_at
  * @property int|null $updated_by
  * @property int|null $create_by
+ * @property string|null $remote_key
+ * @property string|null $url
  */
 abstract class AutokImage extends MainActiveRecord
 {
@@ -35,12 +37,16 @@ abstract class AutokImage extends MainActiveRecord
     public function rules()
     {
         return [
-            [['autok_id', 'name', 'created_at', 'updated_at', 'updated_by', 'create_by'], 'default', 'value' => null],
+            [
+                ['autok_id', 'name', 'created_at', 'updated_at', 'updated_by', 'create_by', 'remote_key', 'url'],
+                'default',
+                'value' => null
+            ],
             [['deleted'], 'default', 'value' => 0],
             [['active'], 'default', 'value' => 1],
             [['autok_id', 'sorrend', 'deleted', 'active', 'updated_by', 'create_by'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'remote_key', 'url'], 'string', 'max' => 255],
         ];
     }
 
@@ -60,6 +66,8 @@ abstract class AutokImage extends MainActiveRecord
             'updated_at' => Yii::t('app', 'Updated At'),
             'updated_by' => Yii::t('app', 'Updated By'),
             'create_by'  => Yii::t('app', 'Create By'),
+            'remote_key' => Yii::t('app', 'Remote Key'),
+            'url'        => Yii::t('app', 'Url'),
         ];
     }
 

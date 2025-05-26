@@ -2,10 +2,13 @@
 
 namespace app\controllers;
 
+use app\components\enums\LandingDataSourceType;
+use app\controllers\actions\LandingDatasourceAction;
 use app\models\base\Felhasznalok;
 use Exception;
 use Throwable;
 use Yii;
+use yii\helpers\Inflector;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -13,6 +16,23 @@ use yii\web\Controller;
 class IndexController extends Controller
 {
     public $layout = "index";
+
+    public function createAction($id)
+    {
+        $id = Inflector::camel2words($id);
+        $id = Inflector::slug($id);
+        return parent::createAction($id);
+    }
+
+    public function actions()
+    {
+        return [
+            'akcios-datasource' => [
+                'class' => LandingDatasourceAction::class,
+                'type'  => $this->request->post('type', LandingDataSourceType::AKCIOS->value),
+            ],
+        ];
+    }
 
     public function actionIndex()
     {

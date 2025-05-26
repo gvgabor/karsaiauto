@@ -1,10 +1,10 @@
 import ObservableObject = kendo.data.ObservableObject;
 
 
-
 export interface ApiResponse<T = any> {
     success: boolean;
     errors: any[];
+    message: string;
     model: T;
 }
 
@@ -31,9 +31,7 @@ export class ClassUtil {
         return {
             model: {
                 id: "id",
-                fields: {
-                    id: {type: "number"}
-                }
+                fields: {}
             },
             data: (response: any) => response.data || [],
             total: (response: any) => response.total || 0
@@ -46,15 +44,13 @@ export class ClassUtil {
     }
 
 
-
-
     message(text: string) {
 
         const oldItems: HTMLDivElement[] = Array.from(document.querySelectorAll(`div.message-box`));
         const currentPosition = oldItems.reduce((carry) => {
             carry += 90;
             return carry;
-        },50);
+        }, 50);
 
 
         const messageBox = document.createElement("div");
@@ -74,7 +70,6 @@ export class ClassUtil {
         messageBox.ontransitionend = () => {
 
         }
-
 
 
         requestAnimationFrame(() => messageBox.classList.add("active"));
@@ -159,6 +154,16 @@ export class ClassUtil {
 
         return new Promise(resolve => {
 
+            const formPopup: HTMLDivElement | null = document.querySelector(`div.form-popup`);
+            if (formPopup) {
+                const loader = document.createElement("div");
+                loader.classList.add("loader");
+                loader.style.zIndex = (this.maxZIndex + 1).toString();
+                loader.innerHTML = `˛<img alt="nincs" src="/images/YTup.gif">`;
+                formPopup.appendChild(loader);
+            }
+
+
             const success = [200, 201, 202];
             const layer = document.createElement("div");
             if (addlayer) {
@@ -176,6 +181,7 @@ export class ClassUtil {
             }).then(response => {
                 if (layer) {
                     layer.remove();
+                    document.querySelectorAll(`div.loader`).forEach(item => item.remove());
                 }
                 status = response.status;
                 const contentType = response.headers.get("Content-Type") || "";
@@ -220,6 +226,19 @@ export class ClassUtil {
             body: formData,
             method: "POST"
         });
+        const status = response.status;
+
+        if (status == 403) {
+            alert(await response.text());
+            document.querySelectorAll(`div.form-popup-layer`).forEach(item => item.remove());
+            document.querySelectorAll(`div.form-popup`).forEach(item => item.remove());
+            if (layer) {
+                layer.remove();
+            }
+            return false;
+        }
+
+
         let responseData;
         const contentType = response.headers.get("content-type");
 
@@ -271,7 +290,7 @@ export class ClassUtil {
         const def = jQuery.Deferred();
         const popover = jQuery(element).kendoPopover({
             body: () => {
-                return `<div class="confirm-body"><i class="fa fa-question-circle"></i><div>${text}</div><div><button class="btn btn-primary btn" data-name="no-btn">Nem</button><button class="btn btn-danger btn" data-name="yes-btn">Igen</button></div></div>`
+                return `<div class="confirm-body"><div>${text}</div><div><button class="btn btn-primary btn" data-name="no-btn">Nem</button><button class="btn btn-danger btn" data-name="yes-btn">Igen</button></div></div>`
             },
             position: "left",
             header: () => {

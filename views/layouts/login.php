@@ -54,9 +54,14 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
         <div class="container">
             <div class="row justify-content-center align-items-center vh-100">
                 <div class="col-md-4">
-                    <div class="card shadow-sm">
+                    <div class="card">
                         <div class="card-body">
-
+                            <div class="text-center mb-4" style="height: 60px">
+                                <img
+                                        src="/images/2yqT.gif" alt="Logo"
+                                        class="img-fluid" style="width: 100%"
+                                >
+                            </div>
                             <!-- Logo hozzáadása -->
                             <div class="text-center mb-4">
                                 <img
@@ -64,9 +69,9 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
                                         class="img-fluid" style="max-height:250px;"
                                 >
                             </div>
+
+
                             <h1 class="h3 mb-3 fw-normal text-center">Bejelentkezés</h1>
-
-
                             <?= $content ?>
                         </div>
                     </div>

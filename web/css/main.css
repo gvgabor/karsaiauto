@@ -288,7 +288,7 @@ div.hozzarendeles-grid-box > div:nth-child(2) i {
   font-size: 0.8rem;
 }
 
-#autok-hirdetes_leirasa {
+#autokmodel-hirdetes_leirasa, #eladasmodel-eladas_megjegyzes {
   height: 200px;
   resize: none;
 }
@@ -458,38 +458,47 @@ div.image-item-box img {
   font-size: 0.8rem;
 }
 
+.navbar-nav .lang-item:nth-child(3) {
+  margin-right: 20px !important;
+}
+
+.current-lang {
+  background: white !important;
+  border-radius: 2px !important;
+}
+.current-lang a {
+  color: black !important;
+}
+
+.mb-3 {
+  position: relative;
+}
+
 div.error-box {
-  font-size: 1rem;
-  color: yellow;
-  background: red;
+  font-size: 0.8rem;
+  color: white;
   padding: 10px 10px;
   border-radius: 5px;
   font-weight: 600;
   transition: 0.5s;
-  transform: translateY(-40px);
+  transform: translateX(-40px);
   transition-delay: 0.5s;
-  position: relative;
   font-family: Poppins, serif;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 div.error-box.show {
-  transform: translateY(0);
+  transform: translateX(0);
   background: transparent;
   color: red;
   padding: 10px 0;
 }
-div.error-box:after {
-  content: "\f071";
-  font-family: "Font Awesome 5 Free", serif;
-  font-weight: 600;
-  position: absolute;
-  right: 0;
-  top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 40px;
-  font-size: 1.5rem;
+
+tr.eladva td:nth-child(4) {
+  transition: 0.5s;
+  text-decoration: line-through;
+  color: rgba(0, 0, 0, 0.2);
 }
 
 #form-tab {
@@ -507,6 +516,7 @@ div.error-box:after {
   color: #212529;
   background-color: #ffffff;
   box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.3);
+  width: 300px;
 }
 
 .ping {
@@ -593,7 +603,7 @@ div.error-box:after {
   padding-inline: 1rem;
   border-width: 0 0 1px;
   border-style: solid;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-color: inherit;
   font-weight: 700;
   text-transform: uppercase;
@@ -610,14 +620,14 @@ div.error-box:after {
   animation: ping 1s ease-in-out infinite both;
   animation-iteration-count: infinite;
 }
-.confirm-body div:nth-child(2) {
+.confirm-body div:nth-child(1) {
   text-align: center;
   font-family: Poppins, serif;
   font-size: 1.2rem;
   font-weight: 500;
   margin-bottom: 50px;
 }
-.confirm-body div:nth-child(3) {
+.confirm-body div:nth-child(2) {
   display: flex;
   justify-content: flex-end;
   width: 100%;
@@ -737,6 +747,128 @@ input[type=checkbox]:checked ~ .checkbox__text .checkbox__text--options span.on 
   transform: translateY(-150%);
   opacity: 0;
   font-weight: 800;
+}
+
+div.loader {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#akcios-autok-list div.k-listview-content,
+#kiemelt-autok-list div.k-listview-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  transition: 0.5s;
+}
+@media (max-width: 1200px) {
+  #akcios-autok-list div.k-listview-content,
+  #kiemelt-autok-list div.k-listview-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  #akcios-autok-list div.k-listview-content,
+  #kiemelt-autok-list div.k-listview-content {
+    grid-template-columns: 1fr;
+  }
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item {
+  position: relative;
+  overflow: hidden;
+  transition: 0.5s;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item:hover,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover {
+  cursor: pointer;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img {
+  filter: grayscale(1);
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer {
+  opacity: 1;
+  transform: perspective(600px) rotateX(0deg);
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.vetelar-box,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.vetelar-box {
+  display: flex;
+  justify-content: space-between;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.vetelar-box span.athuzott,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.vetelar-box span.athuzott {
+  text-decoration: line-through;
+  color: rgba(0, 0, 0, 0.2) !important;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box {
+  height: 265px;
+  width: 100%;
+  overflow: hidden;
+  transition: 0.5s;
+  position: relative;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer {
+  position: absolute;
+  inset: 100px 50px 0 50px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px 10px 0 0;
+  opacity: 0;
+  transform: perspective(600px) rotateX(90deg);
+  transition: all 0.5s ease;
+  transform-origin: bottom;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer span,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer span {
+  color: white;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer i,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer i {
+  font-size: 3rem;
+  color: white;
+}
+#akcios-autok-list div.k-listview-content div.autok-list-item div.image-box img,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box img {
+  transition: 0.5s;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hozzad-row {
+  display: flex;
+  background: white;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+.hozzad-row div:first-child {
+  flex-grow: 1;
+  padding: 0;
+  margin: 0 !important;
+}
+
+.detail-view {
+  margin-bottom: 0;
+}
+.detail-view tbody tr th {
+  white-space: nowrap;
+}
+
+.k-button {
+  border-radius: 0 !important;
 }
 
 /*# sourceMappingURL=main.css.map */

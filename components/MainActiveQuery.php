@@ -2,6 +2,7 @@
 
 namespace app\components;
 
+use app\components\behaviors\ActiveRecordBehavior;
 use yii\db\ActiveQuery;
 
 /**
@@ -9,16 +10,17 @@ use yii\db\ActiveQuery;
  */
 class MainActiveQuery extends ActiveQuery
 {
-
     public function init()
     {
         parent::init();
-        $this->andWhere(['deleted' => 0]);
+        $tablename = $this->getPrimaryTableName();
+        $this->andWhere([$tablename . "." . 'deleted' => 0]);
     }
 
     public function withDeleted()
     {
         return $this->andWhere([]);
     }
+
 
 }

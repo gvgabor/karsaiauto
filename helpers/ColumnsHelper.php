@@ -39,26 +39,6 @@ class ColumnsHelper
         return $columns;
     }
 
-    public static function adminColumnsLock(): array
-    {
-        $columns[] = [
-            "command" => [
-                "template" => "<button data-name='edit-btn' class='btn btn-warning  edit-btn rounded-0'><i class='fa fa-pen-alt'></i></button>"
-            ],
-            "attributes" => ["style" => "text-align:center"],
-            "width"      => 60,
-            "locked"     => true
-        ];
-        $columns[] = [
-            "command"    => ["template" => "<button data-name='remove-btn' class='btn btn-danger  remove-btn rounded-0'><i class='fa fa-trash-alt'></i></button>"],
-            "attributes" => ["style" => "text-align:center"],
-            "width"      => 60,
-            "locked"     => true
-        ];
-
-        return $columns;
-    }
-
     public static function idoszakokColumns(): array
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
@@ -75,9 +55,43 @@ class ColumnsHelper
         return $columns;
     }
 
+    public static function dokumentumokColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "name", "title" => Yii::t("app", "Megnevezes")];
+        $columns[] = [
+            "field"      => "extension",
+            "title"      => Yii::t("app", "Kiterjesztes"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 120,
+        ];
+        $columns[] = [
+            "command"    => ["template" => "<button data-name='remove-btn' class='btn btn-danger  remove-btn rounded-0'><i class='fa fa-trash-alt'></i></button>"],
+            "attributes" => ["style" => "text-align:center", "data-delete-text" => Yii::t("app", "Dokumentum Torlese")],
+            "width"      => 60,
+        ];
+        $columns[] = [
+            "command"    => ["template" => "<button data-name='view-btn' class='btn btn-primary  view-btn rounded-0'><i class=\"fa-solid fa-up-right-from-square\"></i></button>"],
+            "attributes" => ["style" => "text-align:center", "data-delete-text" => Yii::t("app", "Dokumentum Torlese")],
+            "width"      => 60,
+        ];
+        return $columns;
+    }
+
     public static function autokColumns(): array
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+
+        $columns[] = [
+            "command" => [
+                "template" => sprintf("<button class='btn btn-primary eladva-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Eladas"))
+            ],
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 120,
+            "locked"     => true,
+            "encoded"    => false,
+        ];
+
         $columns[] = [
             "field"  => "hirdetes_cime",
             "title"  => Yii::t("app", "Hirdetes Cime"),
@@ -97,7 +111,7 @@ class ColumnsHelper
             "width"  => 230
         ];
         $columns[] = [
-            "field"      => "vetelar_format",
+            "field"      => "vetelar",
             "title"      => Yii::t("app", "Vetelar"),
             "attributes" => ["style" => "text-align:right"],
             "locked"     => true,
@@ -114,7 +128,12 @@ class ColumnsHelper
             "title"      => Yii::t("app", "Kepek Szama"),
             "attributes" => ["style" => "text-align:center"],
             "width"      => 160,
-            "locked"     => true,
+        ];
+        $columns[] = [
+            "field"      => "dokumentumok_szama",
+            "title"      => Yii::t("app", "Dokumentumok Szama"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 200,
         ];
         $columns[] = [
             "field"      => "eladva",
@@ -151,6 +170,26 @@ class ColumnsHelper
         }
 
         $columns = array_merge(self::adminColumnsLock(), $columns);
+        return $columns;
+    }
+
+    public static function adminColumnsLock(): array
+    {
+        $columns[] = [
+            "command" => [
+                "template" => "<button data-name='edit-btn' class='btn btn-warning  edit-btn rounded-0'><i class='fa fa-pen-alt'></i></button>"
+            ],
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 60,
+            "locked"     => true
+        ];
+        $columns[] = [
+            "command"    => ["template" => "<button data-name='remove-btn' class='btn btn-danger  remove-btn rounded-0'><i class='fa fa-trash-alt'></i></button>"],
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 60,
+            "locked"     => true
+        ];
+
         return $columns;
     }
 
@@ -250,6 +289,70 @@ class ColumnsHelper
         ];
 
         $columns = array_merge($columns, self::adminColumns());
+        return $columns;
+    }
+
+    public static function ugyfelekColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = [
+            "field"  => "nev",
+            "title"  => Yii::t("app", "Nev"),
+            "locked" => true
+        ];
+        $columns[] = [
+            "field"      => "tipus",
+            "title"      => Yii::t("app", "Tipus"),
+            "attributes" => ["style" => "text-align:left"],
+            "width"      => 155,
+        ];
+        $columns[] = [
+            "field"      => "telefon",
+            "title"      => Yii::t("app", "Telefon"),
+            "attributes" => ["style" => "text-align:left"],
+            "width"      => 180,
+            "locked"     => true
+        ];
+        $columns[] = [
+            "field"  => "email",
+            "title"  => Yii::t("app", "Email"),
+            "locked" => true
+        ];
+        $columns[] = [
+            "field"      => "lakcim",
+            "title"      => Yii::t("app", "Lakcim"),
+            "attributes" => ["style" => "text-align:left;"],
+        ];
+        $columns[] = ["field" => "cegnev", "title" => Yii::t("app", "Cegnev")];
+        $columns[] = [
+            "field"      => "adoszam",
+            "title"      => Yii::t("app", "Adoszam"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 170,
+        ];
+        $columns[] = [
+            "field"      => "szuletesi_datum",
+            "title"      => Yii::t("app", "Szuletesi Datum"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 190,
+        ];
+        $columns[] = [
+            "field"      => "szemelyi_szam",
+            "title"      => Yii::t("app", "Szemelyi Szam"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 170,
+        ];
+
+        foreach ($columns as $key => $value) {
+            if (array_key_exists("locked", $value) === false) {
+                $columns[$key]["locked"] = false;
+            }
+            if (array_key_exists("width", $value) === false) {
+                $columns[$key]["width"] = 200;
+            }
+        }
+
+        $columns = array_merge(self::adminColumnsLock(), $columns);
         return $columns;
     }
 

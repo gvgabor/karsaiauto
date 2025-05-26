@@ -4,6 +4,7 @@ namespace app\helpers;
 
 use app\models\base\FelhasznaloiJogok;
 use app\models\base\Markak;
+use app\models\base\Ugyfelek;
 use Yii;
 use yii\helpers\ArrayHelper;
 
@@ -40,6 +41,11 @@ class OptionsHelper
             1 => Yii::t("app", "Manuális"),
             2 => Yii::t("app", "Automata"),
         ];
+    }
+
+    public static function ugyfelOptions(): array
+    {
+        return ArrayHelper::map(Ugyfelek::find()->all(), "id", "nev");
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 
+use app\models\base\Autok;
 use Yii;
 use yii\helpers\Url;
 use Yiisoft\Html\Html;
@@ -23,34 +24,23 @@ class HtmlHelper
         $languages = [];
 
         $langs = [
-            "Magyar"   => "hu-HU",
-            "English"  => "en-US",
-            "Français" => "fr-FR",
+            "HU" => "hu-HU",
+            "EN" => "en-US",
+            "FR" => "fr-FR",
         ];
 
         foreach ($langs as $key => $item) {
-            $url         = Url::to(["/index/change-language", "lang" => $item]);
-            $languages[] = Html::li()->addContent(
-                Html::a()->class("dropdown-item")->href($url)->addContent('<i class="fa-sharp fa-solid fa-circle" ></i>&nbsp;&nbsp;' . $key)->encode(false),
-            );
+            $url = Url::to(["/index/change-language", "lang" => $item]);
+            $li  = Html::li(
+                Html::a()->class("nav-link")->href($url)->addContent($key)
+            )->class("nav-item lang-item");
+            if (Yii::$app->language == $item) {
+                $li = $li->addClass("current-lang");
+            }
+            $languages[] = $li;
         }
 
-        $li = Html::li()
-            ->class("nav-item dropdown")
-            ->addContent(
-                Html::a("Nyelvek")
-                    ->href("#")
-                    ->class("nav-link dropdown-toggle")
-                    ->addAttributes([
-                        "data-bs-toggle"     => "dropdown",
-                        "data-bs-auto-close" => "outside"
-                    ]),
-                Html::ul()
-                    ->class("dropdown-menu shadow")
-                    ->items(...$languages)
-            );
-
-        return $li->encode(false)->render();
+        return $languages;
     }
 
     public static function formCheckBox($label, $id)
@@ -76,6 +66,23 @@ class HtmlHelper
             ->encode(false);
 
         return $chekboxMain->render();
+    }
+
+    public static function vetelarBox(Autok $model)
+    {
+        $box     = Html::div()->class("vetelar-box");
+        $vetelar = Html::span()->class("h5 text-primary")->addContent($model->formatVetelar . " Ft");
+
+        if ($model->akcios) {
+            $vetelar  = $vetelar->addClass("athuzott");
+            $akciosar = Html::span()->class("h5 text-primary")->addContent($model->formatAkciosar . " Ft");
+            $box      = $box->addContent($vetelar, $akciosar);
+        } else {
+            $box = $box->addContent($vetelar);
+        }
+
+        return $box->render();
+
     }
 
 }

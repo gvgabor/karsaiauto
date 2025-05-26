@@ -80,6 +80,7 @@ export class ClassHozzarendeles extends ClassUtil {
                 formData.append("menuIdList", JSON.stringify(menuIdList));
                 formData.append("action", "1");
                 await this.fetchForm(url, formData);
+                resolve(void 0);
                 popup.close();
             }
         })
@@ -105,6 +106,7 @@ export class ClassHozzarendeles extends ClassUtil {
             // @ts-ignore
             schema.model = {
                 id: "id",
+                // @ts-ignore
                 parentId: "parent_id",
                 expanded: true,
                 fields: {

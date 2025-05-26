@@ -2,12 +2,16 @@
 
 namespace app\commands;
 
+use app\components\enums\UgyfelTipus;
+use app\helpers\DirectoryHelper;
 use app\helpers\OptionsHelper;
-use app\models\base\Autok;
 use app\models\base\FelhasznaloiJogok;
 use app\models\base\Felhasznalok;
 use app\models\base\Menu;
+use app\models\base\Ugyfelek;
 use app\modules\autok\actions\AutokAction;
+use app\modules\autok\models\AutokModel;
+use app\modules\autok\models\EladasModel;
 use Exception;
 use Faker\Factory;
 use Yii;
@@ -138,6 +142,37 @@ class ConsoleController extends Controller
 
     /**
      * @return void
+     * php yii console/convert-web-p
+     */
+    public function actionConvertWebP()
+    {
+        $path    = "C:/Users/Vince/Desktop/tmp/osszes_auto";
+        $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+        $this->writeOut("Memóriahasználat: " . $memoria);
+
+        $files = FileHelper::findFiles($path, [
+            'filter' => function ($path) {
+                return pathinfo($path, PATHINFO_EXTENSION) !== 'webp';
+            }
+        ]);
+        $total = count($files);
+        Console::startProgress(0, $total);
+        $counter = 1;
+
+        foreach ($files as $file) {
+            $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+            Yii::$container->get(AutokAction::class)->convertToWebP($file, $file . ".webp");
+            unlink($file);
+            Console::updateProgress($counter + 1, $total, "Memória: " . $memoria);
+            $counter++;
+        }
+
+        Console::endProgress();
+        Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+    }
+
+    /**
+     * @return void
      * php yii console/fill-autok-data
      */
     public function actionFillAutokData()
@@ -147,14 +182,36 @@ class ConsoleController extends Controller
         $this->writeOut("Memóriahasználat: " . $memoria);
         $total = 10000;
         Console::startProgress(0, $total);
-        $path  = "C:/Users/Vince/Desktop/tmp/osszes_auto";
-        $files = FileHelper::findFiles($path);
+        $path        = "C:/Users/Vince/Desktop/tmp/osszes_auto";
+        $files       = FileHelper::findFiles($path);
+        $autokAction = Yii::$container->get(AutokAction::class);
+        $limitBytes  = 10 * 1024 * 1024 * 1024;
+        $bytesSize   = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
+        $formatSize  = DirectoryHelper::formatBytes($bytesSize);
 
         for ($i = 0; $i < $total; $i++) {
-            $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
-            Console::updateProgress($i + 1, $total, "Memória: " . $memoria);
+            $memoria = sprintf(
+                'Iteráció: %d | Használat: %.2f MB | Csúcs: %.2f MB',
+                $i,
+                memory_get_usage()      / 1024 / 1024,
+                memory_get_peak_usage() / 1024 / 1024
+            );
+
+            if ($i % 100 === 0) {
+                $bytesSize  = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
+                $formatSize = DirectoryHelper::formatBytes($bytesSize);
+                if ($bytesSize !== false && $bytesSize >= $limitBytes) {
+                    Console::updateProgress($i + 1, $total, "MEGÁLLÍTVA! Könyvtár mérete elérte a limitet: " . $formatSize);
+                    Console::endProgress();
+                    Console::output('A fájlgenerálás leállt, mert az "uploads" könyvtár mérete meghaladta a 10 GB-ot.');
+                    Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+                    return; // Kilépés a metódusból
+                }
+            }
+
+            Console::updateProgress($i + 1, $total, "Memória: " . $memoria . " Size: " . $formatSize);
             $model    = $this->actionRandomAuto();
-            $images   = $factory->randomElements($files, random_int(2, 45));
+            $images   = $factory->randomElements($files, random_int(2, 21));
             $formData = [
                 "hirdetes_leirasa" => $model->hirdetes_leirasa,
                 "hirdetes_cime"    => $model->hirdetes_cime,
@@ -168,21 +225,25 @@ class ConsoleController extends Controller
                 "jarmutipus_id"    => $model->jarmutipus_id,
                 "gyartasi_ev"      => $model->gyartasi_ev,
                 "valto_id"         => $model->valto_id,
+                "publikalva"       => 1,
             ];
 
-            $result = Yii::$container->get(AutokAction::class)->save($formData, $images);
+            $result = $autokAction->save($formData, $images);
             if ($result["success"] === false) {
                 throw new Exception($result['message']);
             }
+            unset($model, $images, $formData, $result);
+            gc_collect_cycles();
         }
         Console::endProgress();
         Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+
     }
 
     public function actionRandomAuto()
     {
         $factory                 = Factory::create('hu_HU');
-        $model                   = new Autok();
+        $model                   = new AutokModel();
         $model->hirdetes_leirasa = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
         $model->hirdetes_cime    = mb_strtoupper($factory->randomElement(array_values(OptionsHelper::markakOptions()))) . " 2.3 Mjet LWB 3.5 t";
         $model->teljesitmeny     = (string)$factory->numberBetween(1000, 6000);
@@ -195,6 +256,58 @@ class ConsoleController extends Controller
         $model->jarmutipus_id    = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
         $model->gyartasi_ev      = random_int(1990, 2025);
         $model->valto_id         = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));
+        $model->publikalva       = 1;
+        return $model;
+    }
+
+    /**
+     * @return void
+     * php yii console/fill-ugyfelek
+     */
+    public function actionFillUgyfelek()
+    {
+        $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
+        $this->writeOut("Memóriahasználat: " . $memoria);
+        $total = 5000;
+        Console::startProgress(0, $total);
+        for ($i = 0; $i < $total; $i++) {
+            $memoria = sprintf(
+                'Iteráció: %d | Használat: %.2f MB | Csúcs: %.2f MB',
+                $i,
+                memory_get_usage()      / 1024 / 1024,
+                memory_get_peak_usage() / 1024 / 1024
+            );
+            Console::updateProgress($i + 1, $total, "Memória: " . $memoria);
+            $model = $this->actionRandomUgyfel();
+            $model->save();
+        }
+        Console::endProgress();
+        Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+    }
+
+    public function actionRandomUgyfel()
+    {
+        $factory                = Factory::create('hu_HU');
+        $model                  = new Ugyfelek();
+        $model->nev             = $factory->lastName() . " " . $factory->firstName();
+        $model->email           = $factory->email;
+        $model->telefon         = $factory->phoneNumber();
+        $model->lakcim          = $factory->address();
+        $model->szuletesi_datum = $factory->dateTimeBetween("-90 years", "-20 years")->format("Y-m-d");
+        $model->szemelyi_szam   = $factory->numerify('###########');
+        $model->adoszam         = $factory->numerify('########-#-##');
+        $model->cegnev          = $factory->company;
+        $model->tipus           = $factory->randomElement(array_keys(UgyfelTipus::list()));
+        return $model;
+    }
+
+    public function actionRandomEladasModel($modelId)
+    {
+        $factory                  = Factory::create('hu_HU');
+        $model                    = EladasModel::findOne($modelId);
+        $model->eladas_datuma     = date("Y-m-d");
+        $model->eladas_megjegyzes = $factory->realText(200);
+        $model->eladas_ugyfel_id  = $factory->randomElement(array_keys(OptionsHelper::ugyfelOptions()));
         return $model;
     }
 

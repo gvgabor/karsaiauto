@@ -306,10 +306,9 @@ export class ClassAdmin extends ClassUtil {
                 parentId: "parent_id",
                 expanded: true,
                 fields: {
-                    // @ts-ignore
                     parent_id: {nullable: true, field: "parent_id"}
                 }
-            }
+            } as kendo.data.TreeListModel
             const transport = this.transport;
             transport.read.url = this.url(AdminEndPoints.MENU);
             const dataSource = new kendo.data.TreeListDataSource({

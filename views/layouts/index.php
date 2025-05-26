@@ -32,14 +32,14 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
     <body class="d-flex flex-column h-100">
         <?php $this->beginBody() ?>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg  navbar-dark bg-dark sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="#">KARSAI AUTÓ</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto text-start w-100 w-lg-auto">
+                    <ul class="navbar-nav mx-auto text-center">
                         <li class="nav-item">
                             <a class="nav-link active" href="/">Kezdőlap</a>
                         </li>

@@ -15,6 +15,7 @@ return [
                                       '.hgignore',
                                       '.hgkeep',
                                       '/messages',
+                                      '/web/uploads',
     ],
     'format'      => 'php',          // a fordítások formátuma
     'messagePath' => __DIR__ . '/messages', // a fordítások helye

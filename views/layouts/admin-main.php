@@ -55,7 +55,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <div class="collapse navbar-collapse" id="navbar-content">
                     <?= Felhasznalok::findOne(Yii::$app->user->id)->getHtmlMenu() ?>
                     <ul class="navbar-nav ms-auto">
-                        <?= HtmlHelper::languageSelector() ?>
+                        <?php foreach (HtmlHelper::languageSelector() as $item): ?>
+                            <?= $item->render() ?>
+                        <?php endforeach; ?>
                         <li class="nav-item d-inline-flex align-items-center text-white">
                             <i class="fa fa-user-alt"></i>&nbsp;
                             Felhasználó: <?= Yii::$app->user->identity?->username ?>
