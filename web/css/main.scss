@@ -605,7 +605,7 @@ div.error-box {
 }
 
 tr.eladva {
-  td {
+  td:nth-child(4) {
     transition: 0.5s;
     text-decoration: line-through;
     color: rgba(0, 0, 0, 0.2);
@@ -1034,4 +1034,19 @@ div.loader {
 
   margin-bottom: 1rem;
 
+}
+
+.detail-view {
+  margin-bottom: 0;
+  tbody {
+    tr {
+      th {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.k-button{
+  border-radius: 0 !important;
 }

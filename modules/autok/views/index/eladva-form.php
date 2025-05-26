@@ -21,7 +21,13 @@ use yii\web\View;
         </div>
     </div>
     <div class="card-body">
-        <?php $form = MainForm::begin() ?>
+        <?php $form = MainForm::begin([
+            'options' => [
+                'data-confirm' => htmlspecialchars(Yii::t('app', 'Eladas Megerositese', [
+                        'auto' => $model->hirdetes_cime
+                ]))
+            ]
+        ]) ?>
         <div style="display: none">
             <?= $form->field($model, "id") ?>
         </div>

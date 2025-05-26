@@ -495,7 +495,7 @@ div.error-box.show {
   padding: 10px 0;
 }
 
-tr.eladva td {
+tr.eladva td:nth-child(4) {
   transition: 0.5s;
   text-decoration: line-through;
   color: rgba(0, 0, 0, 0.2);
@@ -858,6 +858,17 @@ div.loader {
   flex-grow: 1;
   padding: 0;
   margin: 0 !important;
+}
+
+.detail-view {
+  margin-bottom: 0;
+}
+.detail-view tbody tr th {
+  white-space: nowrap;
+}
+
+.k-button {
+  border-radius: 0 !important;
 }
 
 /*# sourceMappingURL=main.css.map */

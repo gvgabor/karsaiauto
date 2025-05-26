@@ -14,6 +14,7 @@ use app\models\query\AutokQuery;
  * @property-read string $formatVetelar
  * @property-read AutokImage $firstImage
  * @property-read string $formatAkciosar
+ * @property-read Ugyfelek $eladasUgyfel
  * @property-read Markak $marka
  */
 class Autok extends \app\models\Autok
@@ -36,6 +37,11 @@ class Autok extends \app\models\Autok
     public function getMotortipus(): string
     {
         return OptionsHelper::motortipusOptions()[$this->motortipus_id];
+    }
+
+    public function getEladasUgyfel()
+    {
+        return $this->hasOne(Ugyfelek::class, ['id' => 'eladas_ugyfel_id']);
     }
 
     public function getFormatVetelar(): string

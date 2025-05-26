@@ -22,7 +22,8 @@ use yii\web\UploadedFile;
 
 class AutokAction extends MainAction
 {
-    protected array $_filters = [];
+    public ?int $gridFilterSelector = null;
+    protected array $_filters       = [];
 
     public function runWithParams($params)
     {
@@ -33,6 +34,15 @@ class AutokAction extends MainAction
             ->orderBy(["id" => SORT_DESC])
             ->limit($this->pageSize)
             ->offset(($this->page - 1) * $this->pageSize);
+
+        if (!empty($this->gridFilterSelector)) {
+            if ($this->gridFilterSelector == 1) {
+                $query->andFilterWhere(['eladva' => 1]);
+            }
+            if ($this->gridFilterSelector == 2) {
+                $query->andFilterWhere(['eladva' => 0]);
+            }
+        }
 
         foreach ($this->filters as $item) {
             switch ($item["field"]) {

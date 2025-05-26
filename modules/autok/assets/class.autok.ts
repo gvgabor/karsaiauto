@@ -15,12 +15,16 @@ export enum AutokEndPoints {
     TIPUS_UPLOAD = "upload",
     ELADVA_FORM = "EladvaForm",
     DOKUMENTUMOK_DATASOURCE = "DokumentumokDatasource",
+    DETAIL = "Detail",
 }
 
 export class ClassAutok extends ClassUtil {
     async init() {
+        const gridFilterSelector = jQuery(this.div("grid-filter-selector")).kendoButtonGroup({
+            index: parseInt(localStorage.getItem("grid-filter-selector") || "0"),
+            rounded: "none"
+        }).data("kendoButtonGroup") as kendo.ui.ButtonGroup;
         const autokGrid = await this.autokGrid(this.div("autok-grid"));
-
         this.dataBound(autokGrid, () => {
             const grid = autokGrid;
             this.gridButtonList(grid, "remove-btn").forEach(item => {
@@ -55,7 +59,10 @@ export class ClassAutok extends ClassUtil {
                     const newIcon = document.createElement(`i`);
                     newIcon.classList.add("fa-solid", "fa-database");
                     icon.replaceWith(newIcon);
-                    item.row.classList.add("eladva")
+                    item.row.classList.add("eladva");
+                    item.button.onclick = () => {
+                        this.autoDetail({id: dataItem.id});
+                    }
                 } else {
                     item.button.onclick = async () => {
                         const response = await this.autoForm({id: dataItem.id});
@@ -76,7 +83,15 @@ export class ClassAutok extends ClassUtil {
                     grid.dataSource.pushUpdate(response.model);
                 }
             })
-        })
+        });
+
+        gridFilterSelector.bind("select", () => {
+            localStorage.setItem("grid-filter-selector", gridFilterSelector.current().index().toString());
+            autokGrid.dataSource.transport.options.read.data.gridFilterSelector = gridFilterSelector.current().index();
+            autokGrid.dataSource.read();
+        });
+
+        gridFilterSelector.trigger("select");
 
         const createAutoBtn = this.button("create-auto-btn");
         createAutoBtn.onclick = async () => {
@@ -84,6 +99,16 @@ export class ClassAutok extends ClassUtil {
             autokGrid.dataSource.pushInsert(0, response.model);
 
         }
+    }
+
+    async autoDetail(data = {}) {
+        const url = this.url(AutokEndPoints.DETAIL);
+        const popup = new ClassFormpopup();
+        popup.root.innerHTML = await this.fetchData(url, data);
+        const detailTab = jQuery(this.div("detail-tab")).kendoTabStrip({
+            animation: false
+        }).data("kendoTabStrip") as kendo.ui.TabStrip;
+        detailTab.select(0);
     }
 
     async eladvaForm(data = {}) {
@@ -127,6 +152,7 @@ export class ClassAutok extends ClassUtil {
         const saveBtn = popup.root.querySelector(`button.save-btn`) as HTMLButtonElement;
         return new Promise((resolve) => {
             saveBtn.onclick = async () => {
+                await this.confirm(popup.form.dataset.confirm || "", saveBtn);
                 const formData = new FormData(popup.form);
                 const response = await this.fetchForm(url, formData, popup.form, "eladasmodel") as ApiResponse;
                 resolve(response)
@@ -452,7 +478,7 @@ export class ClassAutok extends ClassUtil {
             columns.find(item => item.field == "vetelar")!.template = (data: {
                 vetelar: string
             }) => `${kendo.toString(parseInt(data.vetelar), "n0")} Ft`
-            jQuery(element).kendoGrid({
+            const grid = jQuery(element).kendoGrid({
                 columns: columns,
                 dataSource: dataSource,
                 filterable: this.filterable,
@@ -460,8 +486,9 @@ export class ClassAutok extends ClassUtil {
                 pageable: {
                     refresh: true
                 },
-                dataBound: event => resolve(event.sender)
-            })
+                autoBind: false,
+            }).data("kendoGrid") as kendo.ui.Grid;
+            resolve(grid);
         })
     }
 

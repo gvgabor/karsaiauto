@@ -13,7 +13,6 @@ use app\modules\autok\models\AutokModel;
 use app\modules\autok\models\EladasModel;
 use Yii;
 use yii\helpers\FileHelper;
-use yii\web\BadRequestHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
@@ -23,10 +22,11 @@ class IndexController extends MainController
     {
         return [
             'autok' => [
-                'class'    => AutokAction::class,
-                'page'     => $this->request->post('page', 1),
-                'pageSize' => $this->request->post('pageSize', 1),
-                'filters'  => $this->request->post('filter')
+                'class'              => AutokAction::class,
+                'page'               => $this->request->post('page', 1),
+                'pageSize'           => $this->request->post('pageSize', 1),
+                'filters'            => $this->request->post('filter'),
+                'gridFilterSelector' => $this->request->post('gridFilterSelector'),
             ],
             'dokumentumok-datasource' => [
                 'class'   => DokumentumokDatasourceAction::class,
@@ -91,6 +91,13 @@ class IndexController extends MainController
         ];
     }
 
+    public function actionDetail()
+    {
+        Yii::$app->response->format = Response::FORMAT_HTML;
+        $model                      = AutokModel::findOne($this->request->post("id"));
+        return $this->renderPartial("detail", ['model' => $model]);
+    }
+
     public function actionAutokForm()
     {
         Yii::$app->response->format = Response::FORMAT_HTML;
@@ -111,7 +118,6 @@ class IndexController extends MainController
         if ($model->eladva) {
             throw new ForbiddenHttpException("El lett már adva");
         }
-
 
         return $this->renderPartial("autok-form", ['model' => $model]);
     }
