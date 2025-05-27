@@ -85,4 +85,13 @@ class HtmlHelper
 
     }
 
+    public static function igenNemFilters(): string
+    {
+        $data = [
+            ["id" => 1, "value" => Yii::t("app", "igen")],
+            ["id" => 0, "value" => Yii::t("app", "nem")],
+        ];
+        return htmlspecialchars(json_encode($data));
+    }
+
 }

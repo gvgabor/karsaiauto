@@ -23,7 +23,11 @@ $this->registerJsFile('@web/webpack/ugyfelek.js', ['depends' => [JqueryAsset::cl
         </div>
     </div>
     <div class="card-body">
-        <div id="ugyfelek-grid" class="border-0"></div>
+        <div
+                id="ugyfelek-grid" class="border-0"
+                data-igennem-filter="<?= HtmlHelper::igenNemFilters() ?>"
+                data-delete-confirm="<?= htmlspecialchars(Yii::t("app", "Biztos Torli az Ugyfelet")) ?>"
+        ></div>
     </div>
 </div>
 

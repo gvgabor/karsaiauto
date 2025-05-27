@@ -24,9 +24,9 @@ use yii\web\View;
     <div class="card-body">
         <?php $form = MainForm::begin() ?>
         <div style="display: none">
-
+            <?= $form->field($model, "id") ?>
         </div>
-        <?= $form->field($model, "id") ?>
+
         <?= $form->field($model, "nev") ?>
         <?= $form->field($model, "lakcim") ?>
         <?= $form->field($model, "tipus")->dropDownList(UgyfelTipus::list(), [

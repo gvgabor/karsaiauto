@@ -51,7 +51,7 @@ export class ClassFormpopup extends ClassUtil {
 
 
     style() {
-        return `.form-popup-layer {position: fixed;inset: 0;background: rgba(0, 0, 0, 0.2);}  .form-popup {background: transparent;position: absolute;top: 0;left: 50%;transition: 0.5s;transform: translateX(-50%);opacity: 0;pointer-events: none;}  .form-popup.back {transition-delay: 0.5s;transform: translateX(-52%) translateY(-10px);}  .form-popup > .card {opacity: 0;transition: 0.5s;}  .form-popup.active > .card {box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);border: none;opacity: 1;}  .form-popup.active {opacity: 1;top: 120px;pointer-events: all;}  .form-popup .card-footer {display: flex;justify-content: flex-end;}  .form-popup .close-box i {transition: 0.5s;}  .form-popup .close-box:hover i {color: red;transform: rotate(360deg) scale(1.5);} `
+        return `.form-popup-layer {position: fixed;inset: 0;background: rgba(0, 0, 0, 0.2);}  .form-popup {background: transparent;position: absolute;top: 0;left: 50%;transition: 0.5s;transform: translateX(-50%) ;transform-origin: bottom;opacity: 0;pointer-events: none;}  .form-popup.back {transition-delay: 0.5s;transform: translateX(-52%) translateY(-10px)  !important;}  .form-popup > .card {opacity: 0;transition: 0.5s;}  .form-popup.active > .card {box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);border: none;opacity: 1;}  .form-popup.active {opacity: 1;top: 120px;pointer-events: all;transform: translateX(-50%) ;}  .form-popup .card-footer {display: flex;justify-content: flex-end;}  .form-popup .close-box i {transition: 0.5s;}  .form-popup .close-box:hover i {color: red;transform: rotate(360deg) scale(1.5);} `
     }
 
     close() {

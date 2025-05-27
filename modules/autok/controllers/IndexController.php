@@ -22,11 +22,12 @@ class IndexController extends MainController
     {
         return [
             'autok' => [
-                'class'              => AutokAction::class,
-                'page'               => $this->request->post('page', 1),
-                'pageSize'           => $this->request->post('pageSize', 1),
-                'filters'            => $this->request->post('filter'),
-                'gridFilterSelector' => $this->request->post('gridFilterSelector'),
+                'class'                    => AutokAction::class,
+                'page'                     => $this->request->post('page', 1),
+                'pageSize'                 => $this->request->post('pageSize', 1),
+                'filters'                  => $this->request->post('filter'),
+                'gridFilterSelector'       => $this->request->post('gridFilterSelector'),
+                'gridStatusFilterSelector' => $this->request->post('gridStatusFilterSelector'),
             ],
             'dokumentumok-datasource' => [
                 'class'   => DokumentumokDatasourceAction::class,

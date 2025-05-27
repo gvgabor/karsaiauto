@@ -124,6 +124,31 @@ class ColumnsHelper
             "width"      => 160,
         ];
         $columns[] = [
+            "field"      => "fooldalra",
+            "title"      => Yii::t("app", "Fooldalra"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 160,
+        ];
+        $columns[] = [
+            "field"      => "eladva",
+            "title"      => Yii::t("app", "Eladva"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 160,
+        ];
+        $columns[] = [
+            "field"      => "akcios",
+            "title"      => Yii::t("app", "Akcios"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 160,
+        ];
+        $columns[] = [
+            "field"      => "publikalva",
+            "title"      => Yii::t("app", "Publikalva"),
+            "attributes" => ["style" => "text-align:center"],
+            "width"      => 160,
+            "filterable" => true,
+        ];
+        $columns[] = [
             "field"      => "kepek_szama",
             "title"      => Yii::t("app", "Kepek Szama"),
             "attributes" => ["style" => "text-align:center"],
@@ -135,30 +160,8 @@ class ColumnsHelper
             "attributes" => ["style" => "text-align:center"],
             "width"      => 200,
         ];
-        $columns[] = [
-            "field"      => "eladva",
-            "title"      => Yii::t("app", "Eladva"),
-            "attributes" => ["style" => "text-align:center"],
-            "width"      => 160,
-        ];
-        $columns[] = [
-            "field"      => "publikalva",
-            "title"      => Yii::t("app", "Publikalva"),
-            "attributes" => ["style" => "text-align:center"],
-            "width"      => 160,
-        ];
-        $columns[] = [
-            "field"      => "akcios",
-            "title"      => Yii::t("app", "Akcios"),
-            "attributes" => ["style" => "text-align:center"],
-            "width"      => 160,
-        ];
-        $columns[] = [
-            "field"      => "fooldalra",
-            "title"      => Yii::t("app", "Fooldalra"),
-            "attributes" => ["style" => "text-align:center"],
-            "width"      => 160,
-        ];
+
+
 
         foreach ($columns as $key => $value) {
             if (array_key_exists("locked", $value) === false) {

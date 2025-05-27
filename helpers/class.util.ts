@@ -433,6 +433,17 @@ export class ClassUtil {
         });
     }
 
+    igenNemFilter(element: Element, gridElement: HTMLDivElement) {
+        jQuery(element).kendoDropDownList({
+            dataValueField: "id",
+            dataTextField: "value",
+            optionLabel: "-----------",
+            dataSource: new kendo.data.DataSource({
+                data: JSON.parse(gridElement.dataset.igennemFilter!)
+            })
+        });
+    }
+
     get filterable() {
         return {
             extra: false,

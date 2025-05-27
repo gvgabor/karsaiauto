@@ -21,6 +21,13 @@ $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class
             <?= Yii::t("app", "Autok Kezelese") ?>
         </div>
         <div class="d-inline-flex gap-2">
+            <div id="grid-status-filter-selector" class="rounded-0">
+                <span><?= Yii::t('app', 'Osszes') ?></span>
+                <span><?= Yii::t('app', 'Fooldalra') ?></span>
+                <span><?= Yii::t('app', 'Akcios') ?></span>
+                <span><?= Yii::t('app', 'Publikalva') ?></span>
+                <span><?= Yii::t('app', 'Nem Publikalva') ?></span>
+            </div>
             <div id="grid-filter-selector" class="rounded-0">
                 <span><?= Yii::t('app', 'Osszes') ?></span>
                 <span><?= Yii::t('app', 'Eladott') ?></span>
@@ -30,7 +37,9 @@ $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class
         </div>
     </div>
     <div class="card-body">
-        <div id="autok-grid" class="border-0"></div>
+        <div
+                data-igennem-filter="<?= HtmlHelper::igenNemFilters() ?>"
+                id="autok-grid" class="border-0"></div>
     </div>
 </div>
 

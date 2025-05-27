@@ -5,6 +5,7 @@ namespace app\components;
 use app\components\behaviors\ActiveRecordBehavior;
 use LogicException;
 use ReflectionClass;
+use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -56,8 +57,13 @@ abstract class MainActiveRecord extends ActiveRecord
 
         /** @noinspection PhpUndefinedFieldInspection */
         $this->deleted = true;
+        $this->save(false);
+        return $this;
+    }
 
-        return $this->save(false);
+    public function deleteMessage($value)
+    {
+        return Yii::t("app", "Torlese Sikeres", ["value" => $value]);
     }
 
     public function getShortname(): string
@@ -70,11 +76,9 @@ abstract class MainActiveRecord extends ActiveRecord
         return str_pad($this->id, 6, '0', STR_PAD_LEFT);
     }
 
-
     public function behaviors()
     {
         return [ActiveRecordBehavior::class];
     }
-
 
 }

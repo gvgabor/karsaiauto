@@ -113,4 +113,5 @@ return [
     'Updated At'             => '',
     'Updated By'             => '',
     'Url'                    => '',
+    'Torlese Sikeres'        => '{value} törlése sikeres',
 ];

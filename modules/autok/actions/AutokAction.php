@@ -22,8 +22,9 @@ use yii\web\UploadedFile;
 
 class AutokAction extends MainAction
 {
-    public ?int $gridFilterSelector = null;
-    protected array $_filters       = [];
+    public ?int $gridFilterSelector       = null;
+    public ?int $gridStatusFilterSelector = null;
+    protected array $_filters             = [];
 
     public function runWithParams($params)
     {
@@ -36,38 +37,34 @@ class AutokAction extends MainAction
             ->offset(($this->page - 1) * $this->pageSize);
 
         if (!empty($this->gridFilterSelector)) {
-            if ($this->gridFilterSelector == 1) {
-                $query->andFilterWhere(['eladva' => 1]);
-            }
-            if ($this->gridFilterSelector == 2) {
-                $query->andFilterWhere(['eladva' => 0]);
-            }
+            match ($this->gridFilterSelector) {
+                1       => $query->andFilterWhere(['eladva' => 1]),
+                2       => $query->andFilterWhere(['eladva' => 0]),
+                default => null
+            };
+        }
+
+        if (!empty($this->gridStatusFilterSelector)) {
+            match ($this->gridStatusFilterSelector) {
+                1       => $query->andFilterWhere(["fooldalra" => 1]),
+                2       => $query->andFilterWhere(["akcios" => 1]),
+                3       => $query->andFilterWhere(["publikalva" => 1]),
+                4       => $query->andFilterWhere(["publikalva" => 0]),
+                default => null
+            };
         }
 
         foreach ($this->filters as $item) {
-            switch ($item["field"]) {
-                case "hirdetes_cime":
-                    $query->andFilterWhere(['like', 'hirdetes_cime', trim($item['value'])]);
-                    break;
-                case "marka":
-                    $query->andFilterWhere(['like', 'markak.name', trim($item['value'])]);
-                    break;
-                case "model":
-                    $query->andFilterWhere(['like', 'model', trim($item['value'])]);
-                    break;
-                case "eladva":
-                    $query->andFilterWhere(['=', 'eladva', boolval($item["value"])]);
-                    break;
-                case "publikalva":
-                    $query->andFilterWhere(['=', 'publikalva', boolval($item["value"])]);
-                    break;
-                case "akcios":
-                    $query->andFilterWhere(['=', 'akcios', boolval($item["value"])]);
-                    break;
-                case "fooldalra":
-                    $query->andFilterWhere(['=', 'fooldalra', boolval($item["value"])]);
-                    break;
-            }
+            match ($item["field"]) {
+                "hirdetes_cime" => $query->andFilterWhere(['like', 'hirdetes_cime', trim($item['value'])]),
+                "marka"         => $query->andFilterWhere(['like', 'markak.name', trim($item['value'])]),
+                "model"         => $query->andFilterWhere(['like', 'model', trim($item['value'])]),
+                "publikalva"    => $query->andFilterWhere(['=', 'publikalva', trim($item['value'])]),
+                "eladva"        => $query->andFilterWhere(['=', 'eladva', trim($item['value'])]),
+                "akcios"        => $query->andFilterWhere(['=', 'akcios', trim($item['value'])]),
+                "fooldalra"     => $query->andFilterWhere(['=', 'fooldalra', trim($item['value'])]),
+                default         => null
+            };
         }
 
         $result = [

@@ -24,7 +24,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'name'       => mb_strtoupper('karsai autó'),
+    'name'       => mb_strtoupper('Cartango'),
     'components' => [
         'r2' => [
             'class'     => 'app\components\R2Uploader',

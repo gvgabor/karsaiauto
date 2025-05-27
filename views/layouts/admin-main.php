@@ -39,7 +39,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <nav class="navbar navbar-expand-xxl  navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="<?= Yii::$app->homeUrl ?>">
-                    MÁRTON HUNGARY KFT
+                    <?= Yii::$app->name ?>
                 </a>
                 <button
                         class="navbar-toggler"

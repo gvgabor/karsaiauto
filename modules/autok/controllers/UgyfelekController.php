@@ -28,6 +28,13 @@ class UgyfelekController extends MainController
         return $this->render("index");
     }
 
+    public function actionRemoveUgyfel()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model                      = Ugyfelek::findOne(intval($this->request->post("id")));
+        return $model->softDelete()->deleteMessage($model->nev);
+    }
+
     public function actionUgyfelekForm()
     {
         Yii::$app->response->format = Response::FORMAT_HTML;
@@ -38,6 +45,10 @@ class UgyfelekController extends MainController
         if ($formData = $this->request->post($model->shortname)) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return Yii::$container->get(UgyfelekAction::class)->save($formData);
+        }
+
+        if ($id = $this->request->post("id")) {
+            $model = Ugyfelek::findOne($id);
         }
         return $this->renderPartial("ugyfelek-form", ['model' => $model]);
     }

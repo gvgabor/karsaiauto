@@ -24,9 +24,17 @@ export class ClassAutok extends ClassUtil {
             index: parseInt(localStorage.getItem("grid-filter-selector") || "0"),
             rounded: "none"
         }).data("kendoButtonGroup") as kendo.ui.ButtonGroup;
+
+        const gridStatusFilterSelector = jQuery(this.div("grid-status-filter-selector")).kendoButtonGroup({
+            rounded: "none",
+            index: parseInt(localStorage.getItem("grid-status-filter-selector") || "0"),
+        }).data("kendoButtonGroup") as kendo.ui.ButtonGroup;
+
+
         const autokGrid = await this.autokGrid(this.div("autok-grid"));
         this.dataBound(autokGrid, () => {
             const grid = autokGrid;
+            grid.autoFitColumn("vetelar");
             this.gridButtonList(grid, "remove-btn").forEach(item => {
 
                 const dataItem = item.data as ObservableObject & {
@@ -85,13 +93,17 @@ export class ClassAutok extends ClassUtil {
             })
         });
 
-        gridFilterSelector.bind("select", () => {
+        const autokFilter = () => {
             localStorage.setItem("grid-filter-selector", gridFilterSelector.current().index().toString());
+            localStorage.setItem("grid-status-filter-selector", gridStatusFilterSelector.current().index().toString());
             autokGrid.dataSource.transport.options.read.data.gridFilterSelector = gridFilterSelector.current().index();
+            autokGrid.dataSource.transport.options.read.data.gridStatusFilterSelector = gridStatusFilterSelector.current().index();
             autokGrid.dataSource.read();
-        });
+        }
 
-        gridFilterSelector.trigger("select");
+        gridFilterSelector.bind("select", () => autokFilter());
+        gridStatusFilterSelector.bind("select", () => autokFilter());
+        autokFilter();
 
         const createAutoBtn = this.button("create-auto-btn");
         createAutoBtn.onclick = async () => {
@@ -475,9 +487,21 @@ export class ClassAutok extends ClassUtil {
                 serverFiltering: true,
             });
             const columns = autokColumns;
+
             columns.find(item => item.field == "vetelar")!.template = (data: {
                 vetelar: string
-            }) => `${kendo.toString(parseInt(data.vetelar), "n0")} Ft`
+            }) => `${kendo.toString(parseInt(data.vetelar), "n0")} Ft`;
+
+
+            ["publikalva", "akcios", "eladva", "fooldalra"].forEach(fieldName => {
+                columns.find(item => item.field == fieldName)!.filterable = {
+                    ui: (filterElement: HTMLElement) => {
+                        this.igenNemFilter(filterElement, element);
+                    }
+                };
+            });
+
+
             const grid = jQuery(element).kendoGrid({
                 columns: columns,
                 dataSource: dataSource,
