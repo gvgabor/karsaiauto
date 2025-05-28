@@ -18,7 +18,6 @@ use Yii;
  * @property string|null $hirdetes_cime
  * @property string|null $hirdetes_leirasa
  * @property int|null $motortipus_id
- * @property string|null $teljesitmeny
  * @property int|null $valto_id
  * @property string|null $muszaki_ervenyes
  * @property int $deleted
@@ -35,6 +34,7 @@ use Yii;
  * @property string|null $eladas_datuma
  * @property string|null $eladas_megjegyzes
  * @property int|null $eladas_ugyfel_id
+ * @property int|null $teljesitmeny
  */
 abstract class Autok extends MainActiveRecord
 {
@@ -63,7 +63,6 @@ abstract class Autok extends MainActiveRecord
                     'hirdetes_cime',
                     'hirdetes_leirasa',
                     'motortipus_id',
-                    'teljesitmeny',
                     'valto_id',
                     'muszaki_ervenyes',
                     'created_at',
@@ -73,7 +72,8 @@ abstract class Autok extends MainActiveRecord
                     'akcios_ar',
                     'eladas_datuma',
                     'eladas_megjegyzes',
-                    'eladas_ugyfel_id'
+                    'eladas_ugyfel_id',
+                    'teljesitmeny'
                 ],
                 'default',
                 'value' => null
@@ -98,13 +98,14 @@ abstract class Autok extends MainActiveRecord
                     'akcios',
                     'fooldalra',
                     'akcios_ar',
-                    'eladas_ugyfel_id'
+                    'eladas_ugyfel_id',
+                    'teljesitmeny'
                 ],
                 'integer'
             ],
             [['hirdetes_leirasa', 'eladas_megjegyzes'], 'string'],
             [['created_at', 'updated_at', 'eladas_datuma'], 'safe'],
-            [['model', 'hirdetes_cime', 'teljesitmeny', 'muszaki_ervenyes'], 'string', 'max' => 255],
+            [['model', 'hirdetes_cime', 'muszaki_ervenyes'], 'string', 'max' => 255],
         ];
     }
 
@@ -124,7 +125,6 @@ abstract class Autok extends MainActiveRecord
             'hirdetes_cime'     => Yii::t('app', 'Hirdetes Cime'),
             'hirdetes_leirasa'  => Yii::t('app', 'Hirdetes Leirasa'),
             'motortipus_id'     => Yii::t('app', 'Motortipus ID'),
-            'teljesitmeny'      => Yii::t('app', 'Teljesitmeny'),
             'valto_id'          => Yii::t('app', 'Valto ID'),
             'muszaki_ervenyes'  => Yii::t('app', 'Muszaki Ervenyes'),
             'deleted'           => Yii::t('app', 'Deleted'),
@@ -141,6 +141,7 @@ abstract class Autok extends MainActiveRecord
             'eladas_datuma'     => Yii::t('app', 'Eladas Datuma'),
             'eladas_megjegyzes' => Yii::t('app', 'Eladas Megjegyzes'),
             'eladas_ugyfel_id'  => Yii::t('app', 'Eladas Ugyfel ID'),
+            'teljesitmeny'      => Yii::t('app', 'Teljesitmeny'),
         ];
     }
 

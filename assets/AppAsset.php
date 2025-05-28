@@ -26,10 +26,12 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/fontawesome.min.css',
         'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css',
+        'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
         'kendo/styles/kendo.common-bootstrap.min.css',
         'kendo/styles/kendo.bootstrap-main.min.css',
         'kendo/styles/bootstrap-4.css',
         'css/main.css',
+        'css/formpopup.css',
     ];
 
     public $js = [

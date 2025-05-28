@@ -15,6 +15,9 @@ use app\models\query\AutokQuery;
  * @property-read AutokImage $firstImage
  * @property-read string $formatAkciosar
  * @property-read Ugyfelek $eladasUgyfel
+ * @property-read string $valto
+ * @property-read string $azonosito
+ * @property-read string $tejlesitmenyText
  * @property-read Markak $marka
  */
 class Autok extends \app\models\Autok
@@ -37,6 +40,26 @@ class Autok extends \app\models\Autok
     public function getMotortipus(): string
     {
         return OptionsHelper::motortipusOptions()[$this->motortipus_id];
+    }
+
+    public function getValto(): string
+    {
+        return OptionsHelper::valtoOptions()[$this->valto_id];
+    }
+
+    public function getAzonosito()
+    {
+        return sprintf("CR-%s", $this->longId);
+    }
+
+    public function getTejlesitmenyText(): string
+    {
+        return sprintf("%s KW (%s LE)", $this->teljesitmeny, $this->kwToLe(floatval($this->teljesitmeny)));
+    }
+
+    public function kwToLe(float $kw): float
+    {
+        return round($kw * 1.35962, 2);
     }
 
     public function getEladasUgyfel()

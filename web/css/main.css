@@ -17,13 +17,14 @@ div.admin-body {
 
 .hero {
   background: var(--back) center/cover no-repeat;
-  height: 50vh;
-  min-height: 50vh;
+  height: 40vh;
+  min-height: 40vh;
   display: flex;
   align-items: center;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
   position: relative;
+  background-size: cover;
 }
 
 .hero::before {
@@ -759,7 +760,7 @@ div.loader {
 }
 
 #akcios-autok-list div.k-listview-content,
-#kiemelt-autok-list div.k-listview-content {
+#kiemelt-autok-list div.k-listview-content, #jarmuvek-list div.k-listview-content {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -767,47 +768,52 @@ div.loader {
 }
 @media (max-width: 1200px) {
   #akcios-autok-list div.k-listview-content,
-  #kiemelt-autok-list div.k-listview-content {
+  #kiemelt-autok-list div.k-listview-content, #jarmuvek-list div.k-listview-content {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 768px) {
   #akcios-autok-list div.k-listview-content,
-  #kiemelt-autok-list div.k-listview-content {
+  #kiemelt-autok-list div.k-listview-content, #jarmuvek-list div.k-listview-content {
     grid-template-columns: 1fr;
   }
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item, #jarmuvek-list div.k-listview-content div.autok-list-item {
   position: relative;
   overflow: hidden;
   transition: 0.5s;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item:hover,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover, #jarmuvek-list div.k-listview-content div.autok-list-item:hover {
   cursor: pointer;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img, #jarmuvek-list div.k-listview-content div.autok-list-item:hover div.image-box img {
   filter: grayscale(1);
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer, #jarmuvek-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer {
   opacity: 1;
   transform: perspective(600px) rotateX(0deg);
 }
+#akcios-autok-list div.k-listview-content div.autok-list-item div.detail > div,
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.detail > div, #jarmuvek-list div.k-listview-content div.autok-list-item div.detail > div {
+  display: flex;
+  justify-content: space-between;
+}
 #akcios-autok-list div.k-listview-content div.autok-list-item div.vetelar-box,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item div.vetelar-box {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.vetelar-box, #jarmuvek-list div.k-listview-content div.autok-list-item div.vetelar-box {
   display: flex;
   justify-content: space-between;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item div.vetelar-box span.athuzott,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item div.vetelar-box span.athuzott {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.vetelar-box span.athuzott, #jarmuvek-list div.k-listview-content div.autok-list-item div.vetelar-box span.athuzott {
   text-decoration: line-through;
   color: rgba(0, 0, 0, 0.2) !important;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item div.image-box,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box, #jarmuvek-list div.k-listview-content div.autok-list-item div.image-box {
   height: 265px;
   width: 100%;
   overflow: hidden;
@@ -815,7 +821,7 @@ div.loader {
   position: relative;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer, #jarmuvek-list div.k-listview-content div.autok-list-item div.image-box div.layer {
   position: absolute;
   inset: 100px 50px 0 50px;
   background: rgba(0, 0, 0, 0.5);
@@ -832,16 +838,16 @@ div.loader {
   transform-origin: bottom;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer span,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer span {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer span, #jarmuvek-list div.k-listview-content div.autok-list-item div.image-box div.layer span {
   color: white;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer i,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer i {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box div.layer i, #jarmuvek-list div.k-listview-content div.autok-list-item div.image-box div.layer i {
   font-size: 3rem;
   color: white;
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item div.image-box img,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box img {
+#kiemelt-autok-list div.k-listview-content div.autok-list-item div.image-box img, #jarmuvek-list div.k-listview-content div.autok-list-item div.image-box img {
   transition: 0.5s;
   width: 100%;
   height: 100%;
@@ -860,6 +866,22 @@ div.loader {
   margin: 0 !important;
 }
 
+.filter-template {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.filter-template span.label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: grey;
+  user-select: none;
+  pointer-events: none;
+  font-weight: 800;
+  font-family: Poppins, serif;
+}
+
 .detail-view {
   margin-bottom: 0;
 }
@@ -869,6 +891,255 @@ div.loader {
 
 .k-button {
   border-radius: 0 !important;
+}
+
+form.filter-form-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 991.98px) {
+  form.filter-form-box {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 575.98px) {
+  form.filter-form-box {
+    grid-template-columns: 1fr;
+  }
+}
+#filter-form span.k-colorpicker, #filter-form span.k-combobox, #filter-form span.k-datepicker, #filter-form span.k-datetimepicker, #filter-form span.k-dropdown, #filter-form span.k-dropdownlist, #filter-form span.k-dropdowntree, #filter-form span.k-numerictextbox, #filter-form span.k-timepicker {
+  background-image: none;
+  border-radius: 0;
+  border: 1px solid blue !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: white !important;
+}
+
+h5.card-title {
+  align-items: center;
+}
+h5.card-title span:last-child {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+div.k-listview-content.empty {
+  min-height: 800px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+div.k-listview-content.empty > div {
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background: white;
+  color: blue;
+  font-weight: 600;
+  font-family: Poppins, serif;
+  text-align: center;
+}
+div.k-listview-content.empty > div i {
+  font-size: 5rem;
+}
+
+.k-button-group > .k-button:last-child:not(:only-child):not(.k-overflow-button) {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  height: 100% !important;
+}
+
+.k-menu-group-md .k-menu-link {
+  padding-block: 0.25rem;
+  padding-inline: 1rem;
+  padding-inline-end: calc(2rem + 16px);
+  padding: 10px;
+}
+
+.simple-slider {
+  position: relative;
+  width: 100%;
+  margin: auto;
+}
+.simple-slider .slides {
+  position: relative;
+  overflow: hidden;
+  height: 800px;
+}
+.simple-slider .slide {
+  transition: 0.5s;
+  opacity: 0;
+  width: 100%;
+  height: 800px;
+  position: absolute;
+  inset: 0;
+}
+.simple-slider .slide.active {
+  display: block;
+  opacity: 1;
+}
+.simple-slider img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+.simple-slider div.close-box {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  opacity: 1;
+  transition: 0.5s;
+}
+.simple-slider div.close-box i {
+  font-size: 2rem;
+}
+.simple-slider .prev-btn,
+.simple-slider .next-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  font-size: 1.5em;
+  padding: 0.2em 0.5em;
+  cursor: pointer;
+  height: 100%;
+  width: 40px;
+  opacity: 1;
+  transition: 0.5s;
+}
+.simple-slider:hover .prev-btn,
+.simple-slider:hover .next-btn, .simple-slider:hover div.close-box {
+  opacity: 1;
+}
+.simple-slider .prev-btn {
+  left: 0;
+}
+.simple-slider .next-btn {
+  right: 0;
+}
+
+.thumb-slider {
+  width: 100%;
+  height: 120px;
+  background: #212529;
+  overflow-x: scroll;
+  display: flex;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+.thumb-slider::-webkit-scrollbar {
+  display: none;
+}
+.thumb-slider .thumb-slide {
+  width: 120px;
+  min-width: 120px;
+  height: 100%;
+  cursor: pointer;
+  filter: grayscale(1);
+  transition: 0.5s;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+.thumb-slider .thumb-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 3px solid #212529;
+  transition: 0.5s;
+  transform-origin: center;
+}
+.thumb-slider .thumb-slide:hover {
+  filter: grayscale(0);
+}
+.thumb-slider .thumb-slide:hover img {
+  transform: scale(2);
+}
+
+div.detail-box .vetelar-box {
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+div.detail-box .vetelar-box h5 {
+  font-weight: 800;
+}
+div.detail-box .adatok-box {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+div.detail-box .adatok-box .leiras-box, div.detail-box .adatok-box .adatok-grid-box {
+  font-size: 1rem;
+}
+div.detail-box .adatok-box .leiras-box {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+}
+div.detail-box .adatok-box .erdeklodo-box {
+  min-height: 120px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+div.detail-box .adatok-box .erdeklodo-box > div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  background: #F8F9FA;
+  border-radius: 10px;
+  padding: 20px;
+}
+div.detail-box .adatok-box .erdeklodo-box > div i {
+  font-size: 3rem;
+}
+div.detail-box .adatok-box .adatok-grid-box {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  font-weight: 600;
+  justify-items: left;
+  justify-content: center;
+  gap: 10px;
+  text-transform: uppercase;
+}
+div.detail-box .adatok-box .adatok-grid-box > div {
+  background: #F8F9FA;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+div.detail-box .adatok-box .adatok-grid-box > div i {
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
 /*# sourceMappingURL=main.css.map */

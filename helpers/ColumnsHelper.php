@@ -93,6 +93,12 @@ class ColumnsHelper
         ];
 
         $columns[] = [
+            "field"  => "azonosito",
+            "title"  => Yii::t("app", "Azonosito"),
+            "locked" => true,
+            "width"  => 170
+        ];
+        $columns[] = [
             "field"  => "hirdetes_cime",
             "title"  => Yii::t("app", "Hirdetes Cime"),
             "locked" => true,

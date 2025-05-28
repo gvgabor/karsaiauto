@@ -12,6 +12,7 @@ module.exports = {
         autok    : './modules/autok/assets/autok.ts',
         ugyfelek : './modules/autok/assets/ugyfelek.ts',
         landing  : './src/index/landing.ts',
+        jarmuvek : './src/index/jarmuvek.ts',
         // login    : './views/assets/login.ts',
     },
     output : {

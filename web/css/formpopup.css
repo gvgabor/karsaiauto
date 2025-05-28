@@ -1,0 +1,56 @@
+.form-popup-layer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1050;
+}
+
+.form-popup {
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-origin: bottom;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+  z-index: 1051;
+}
+.form-popup.fixed {
+  position: absolute;
+  top: var(--ypos) !important;
+  transition: none;
+}
+.form-popup.back {
+  transition-delay: 0.5s;
+  transform: translateX(-52%) translateY(-10px) !important;
+}
+.form-popup > .card {
+  opacity: 0;
+  transition: 0.5s;
+}
+.form-popup.active {
+  top: 120px;
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%);
+}
+.form-popup.active > .card {
+  opacity: 1;
+  border: none;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+.form-popup .card-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+.form-popup .close-box i {
+  transition: 0.5s;
+}
+.form-popup .close-box i:hover {
+  color: red;
+  transform: rotate(360deg) scale(1.5);
+}
+
+/*# sourceMappingURL=formpopup.css.map */

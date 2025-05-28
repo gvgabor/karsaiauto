@@ -5,6 +5,7 @@ export interface ApiResponse<T = any> {
     success: boolean;
     errors: any[];
     message: string;
+    url: string;
     model: T;
 }
 
@@ -461,7 +462,7 @@ export class ClassUtil {
      * @param callback hívási vissza
      * @param call hívható
      */
-    dataBound(grid: kendo.ui.Grid | kendo.ui.TreeList, callback: () => void, call: boolean = true): void {
+    dataBound(grid: kendo.ui.Grid | kendo.ui.TreeList | kendo.ui.ListView, callback: () => void, call: boolean = true): void {
         grid.bind("dataBound", callback);
         if (call) {
             callback();

@@ -2,6 +2,7 @@
 
 namespace app\helpers;
 
+use app\models\index\FilterModel;
 use Yii;
 
 class UtilHelper
@@ -10,6 +11,11 @@ class UtilHelper
     {
         $path = Yii::getAlias("@runtime/local.lock");
         return is_file($path);
+    }
+
+    public static function filterModel(): FilterModel
+    {
+        return Yii::$app->session->get("filterModel", new FilterModel());
     }
 
 }

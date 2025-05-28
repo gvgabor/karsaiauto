@@ -180,12 +180,13 @@ class ConsoleController extends Controller
         $factory = Factory::create('hu_HU');
         $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
         $this->writeOut("Memóriahasználat: " . $memoria);
-        $total = 10000;
+        $total = 5000;
         Console::startProgress(0, $total);
         $path        = "C:/Users/Vince/Desktop/tmp/osszes_auto";
         $files       = FileHelper::findFiles($path);
         $autokAction = Yii::$container->get(AutokAction::class);
-        $limitBytes  = 10 * 1024 * 1024 * 1024;
+        $totalBytes  = 30;
+        $limitBytes  = $totalBytes * 1024 * 1024 * 1024;
         $bytesSize   = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
         $formatSize  = DirectoryHelper::formatBytes($bytesSize);
 
@@ -203,7 +204,7 @@ class ConsoleController extends Controller
                 if ($bytesSize !== false && $bytesSize >= $limitBytes) {
                     Console::updateProgress($i + 1, $total, "MEGÁLLÍTVA! Könyvtár mérete elérte a limitet: " . $formatSize);
                     Console::endProgress();
-                    Console::output('A fájlgenerálás leállt, mert az "uploads" könyvtár mérete meghaladta a 10 GB-ot.');
+                    Console::output(sprintf('A fájlgenerálás leállt, mert az "uploads" könyvtár mérete meghaladta a %s GB-ot.', $totalBytes));
                     Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
                     return; // Kilépés a metódusból
                 }
@@ -211,7 +212,7 @@ class ConsoleController extends Controller
 
             Console::updateProgress($i + 1, $total, "Memória: " . $memoria . " Size: " . $formatSize);
             $model    = $this->actionRandomAuto();
-            $images   = $factory->randomElements($files, random_int(2, 21));
+            $images   = $factory->randomElements($files, random_int(5, 10));
             $formData = [
                 "hirdetes_leirasa" => $model->hirdetes_leirasa,
                 "hirdetes_cime"    => $model->hirdetes_cime,
@@ -246,9 +247,9 @@ class ConsoleController extends Controller
         $model                   = new AutokModel();
         $model->hirdetes_leirasa = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
         $model->hirdetes_cime    = mb_strtoupper($factory->randomElement(array_values(OptionsHelper::markakOptions()))) . " 2.3 Mjet LWB 3.5 t";
-        $model->teljesitmeny     = (string)$factory->numberBetween(1000, 6000);
-        $model->kilometer        = round($factory->numberBetween(100000, 800000), -3);
-        $model->vetelar          = round($factory->numberBetween(1000000, 8000000), -3);
+        $model->teljesitmeny     = (string)$factory->numberBetween(50, 600);
+        $model->kilometer        = round($factory->numberBetween(20000, 800000), -3);
+        $model->vetelar          = round($factory->numberBetween(200000, 20000000), -3);
         $model->muszaki_ervenyes = $factory->dateTimeBetween("now", "+3 years")->format("Y-m");
         $model->motortipus_id    = $factory->randomElement(array_keys(OptionsHelper::motortipusOptions()));
         $model->marka_id         = $factory->randomElement(array_keys(OptionsHelper::markakOptions()));
@@ -306,7 +307,7 @@ class ConsoleController extends Controller
         $factory                  = Factory::create('hu_HU');
         $model                    = EladasModel::findOne($modelId);
         $model->eladas_datuma     = date("Y-m-d");
-        $model->eladas_megjegyzes = $factory->realText(200);
+        $model->eladas_megjegyzes = $factory->realText();
         $model->eladas_ugyfel_id  = $factory->randomElement(array_keys(OptionsHelper::ugyfelOptions()));
         return $model;
     }

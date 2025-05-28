@@ -38,20 +38,21 @@ final class AutokModel extends Autok
         $fields["edit_text"]          = fn () => Yii::t("app", "edit_text", ["name" => $this->hirdetes_cime]);
         $fields["delete_text"]        = fn () => Yii::t("app", "delete_text", ["name" => $this->hirdetes_cime]);
         $fields["confirm_text"]       = fn () => Yii::t("app", "confirm_text", ["name" => $this->hirdetes_cime]);
+        $fields["azonosito"]          = fn () => $this->azonosito;
         return $fields;
     }
 
-    public function beforeValidate()
-    {
-        $numbers = ['kilometer', 'vetelar', 'gyartasi_ev', 'akcios_ar'];
-        foreach ($numbers as $value) {
-            if (isset($this->$value)) {
-                $this->$value = preg_replace('/\D/', '', $this->$value);
-            }
-        }
-
-        return parent::beforeValidate();
-    }
+    //    public function beforeValidate()
+    //    {
+    //        $numbers = ['kilometer', 'vetelar', 'gyartasi_ev', 'akcios_ar'];
+    //        foreach ($numbers as $value) {
+    //            if (isset($this->$value)) {
+    //                $this->$value = preg_replace('/\D/', '', $this->$value);
+    //            }
+    //        }
+    //
+    //        return parent::beforeValidate();
+    //    }
 
     public function behaviors()
     {
@@ -63,6 +64,7 @@ final class AutokModel extends Autok
                 'vetelar',
                 'gyartasi_ev',
                 'akcios_ar',
+                'teljesitmeny',
             ],
         ];
         return $behaviors;

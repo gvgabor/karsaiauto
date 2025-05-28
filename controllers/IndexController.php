@@ -3,15 +3,20 @@
 namespace app\controllers;
 
 use app\components\enums\LandingDataSourceType;
+use app\controllers\actions\JarmuvekFilterDataSource;
 use app\controllers\actions\LandingDatasourceAction;
+use app\helpers\UtilHelper;
 use app\models\base\Felhasznalok;
+use app\models\index\LandingAutok;
 use Exception;
 use Throwable;
 use Yii;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\Response;
 
 class IndexController extends Controller
 {
@@ -31,12 +36,44 @@ class IndexController extends Controller
                 'class' => LandingDatasourceAction::class,
                 'type'  => $this->request->post('type', LandingDataSourceType::AKCIOS->value),
             ],
+            'jarmuvek-filter-data-source' => [
+                'class'    => JarmuvekFilterDataSource::class,
+                'page'     => $this->request->post('page', 1),
+                'pageSize' => $this->request->post('pageSize', 1),
+            ]
         ];
     }
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = UtilHelper::filterModel();
+        return $this->render('index', ['model' => $model]);
+    }
+
+    public function actionSaveFilter()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $result                     = [];
+        $model                      = UtilHelper::filterModel();
+        if ($model->load($this->request->post()) && $model->validate()) {
+            Yii::$app->session->set("filterModel", $model);
+        }
+
+        $result["url"] = Url::to(["/index/jarmuvek"]);
+        return $result;
+    }
+
+    public function actionAutoDetail()
+    {
+        Yii::$app->response->format = Response::FORMAT_HTML;
+        $model                      = LandingAutok::findOne($this->request->post("id"));
+        return $this->renderPartial("auto-detail", ["model" => $model]);
+    }
+
+    public function actionJarmuvek()
+    {
+        $model = UtilHelper::filterModel();
+        return $this->render('jarmuvek', ['model' => $model]);
     }
 
     public function actionLogout()

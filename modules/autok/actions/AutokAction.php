@@ -63,7 +63,12 @@ class AutokAction extends MainAction
                 "eladva"        => $query->andFilterWhere(['=', 'eladva', trim($item['value'])]),
                 "akcios"        => $query->andFilterWhere(['=', 'akcios', trim($item['value'])]),
                 "fooldalra"     => $query->andFilterWhere(['=', 'fooldalra', trim($item['value'])]),
-                default         => null
+                "azonosito"     => $query->andFilterWhere([
+                    "=",
+                    "{{%autok}}.id",
+                    trim(intval(str_replace("CR-", "", $item["value"])))
+                ]),
+                default => null
             };
         }
 
