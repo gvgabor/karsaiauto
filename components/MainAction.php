@@ -11,6 +11,7 @@ use yii\web\Request;
  *
  * @property-read Request $request
  * @property array $filters
+ * @property array $sort
  * @property-read array $adminColumns
  */
 class MainAction extends Action
@@ -19,6 +20,7 @@ class MainAction extends Action
     public int $page     = 1;
 
     protected array $_filters = [];
+    protected array $_sort    = [];
 
     public function getRequest(): ?Request
     {
@@ -59,6 +61,26 @@ class MainAction extends Action
         }
         $filters        = array_key_exists("filters", $filters) === false ? [] : $filters["filters"];
         $this->_filters = $filters;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSort()
+    {
+        return $this->_sort;
+    }
+
+    /**
+     * @param array $sort
+     */
+    public function setSort($sort)
+    {
+        if (is_array($sort) === false) {
+            $sort = [];
+        }
+        //        $sort = array_key_exists("filters", $sort) === false ? [] : $sort["filters"];
+        $this->_sort = $sort;
     }
 
 }

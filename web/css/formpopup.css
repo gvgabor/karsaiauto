@@ -22,10 +22,6 @@
   top: var(--ypos) !important;
   transition: none;
 }
-.form-popup.back {
-  transition-delay: 0.5s;
-  transform: translateX(-52%) translateY(-10px) !important;
-}
 .form-popup > .card {
   opacity: 0;
   transition: 0.5s;

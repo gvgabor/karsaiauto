@@ -108,8 +108,10 @@ return [
     'Kilometer novekvo'        => '',
     'Kiterjesztes'             => '',
     'Lakcim'                   => '',
+    'Muveletek'                => '',
     'Nem Eladott'              => '',
     'Nem Publikalva'           => '',
+    'Nemreg Szerkesztve'       => '',
     'Nev'                      => '',
     'Osszes'                   => '',
     'Remote Key'               => '',
@@ -127,4 +129,5 @@ return [
     'Url'                      => '',
     'Vetelar csokkeno'         => '',
     'Vetelar novekvo'          => '',
+    'Webes Nezet'              => '',
 ];

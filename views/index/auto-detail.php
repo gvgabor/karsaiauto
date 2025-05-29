@@ -32,6 +32,7 @@ use yii\web\View;
             <div class="close-box">
                 <i class="fa-solid fa-xmark"></i>
             </div>
+            <div id="counter-box" class="counter-box">1/1</div>
         </div>
 
         <div id="thumb-slider" class="thumb-slider">
@@ -40,6 +41,17 @@ use yii\web\View;
                     <img src="<?= $item->imageUrl ?>" class="img-fluid  w-100" alt="Autó kép 1">
                 </div>
             <?php endforeach; ?>
+        </div>
+        <div class="bg-light vetelar-box">
+            <h5 class="mb-0">Vételár</h5>
+            <h5 class=" mb-0"><?= $model->formatVetelar ?> Ft</h5>
+            <?php if (Yii::$app->request->get("admin") && $model->eladva == 0): ?>
+                <div>
+                    <button id="auto-edit-btn" class="btn btn-warning">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                </div>
+            <?php endif ?>
         </div>
 
         <div class="adatok-box">
@@ -85,31 +97,31 @@ use yii\web\View;
             </div>
 
 
-<!--            <h4 class="mb-3 mt-3">-->
-<!--               Letölthető dokumentumok-->
-<!--            </h4>-->
-<!---->
-<!--            <div class="adatok-grid-box">-->
-<!--                <div>-->
-<!--                    <i class="fas fa-wrench me-2 text-muted"></i>-->
-<!--                    <span>Műszaki</span>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <i class="fas fa-book-medical me-2 text-muted"></i>-->
-<!--                    <span>Szervízkönyv</span>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <i class="fas fa-id-badge me-2 text-muted"></i>-->
-<!--                    <span>Eredetiség vizsgálat</span>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <i class="fas fa-leaf me-2 text-muted"></i>-->
-<!--                    <span>Zöldkönyv</span>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <h4 class="mb-3 mt-3">-->
+            <!--               Letölthető dokumentumok-->
+            <!--            </h4>-->
+            <!---->
+            <!--            <div class="adatok-grid-box">-->
+            <!--                <div>-->
+            <!--                    <i class="fas fa-wrench me-2 text-muted"></i>-->
+            <!--                    <span>Műszaki</span>-->
+            <!--                </div>-->
+            <!--                <div>-->
+            <!--                    <i class="fas fa-book-medical me-2 text-muted"></i>-->
+            <!--                    <span>Szervízkönyv</span>-->
+            <!--                </div>-->
+            <!--                <div>-->
+            <!--                    <i class="fas fa-id-badge me-2 text-muted"></i>-->
+            <!--                    <span>Eredetiség vizsgálat</span>-->
+            <!--                </div>-->
+            <!--                <div>-->
+            <!--                    <i class="fas fa-leaf me-2 text-muted"></i>-->
+            <!--                    <span>Zöldkönyv</span>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div class="leiras-box">
-                <?= $model->hirdetes_leirasa ?>
+                <?= $model->hirdetesLeirasa ?>
             </div>
 
 
@@ -129,12 +141,8 @@ use yii\web\View;
             </div>
 
 
+        </div>
 
-        </div>
-        <div class="bg-light p-3 rounded vetelar-box">
-            <h5 class=" mb-0">Vételár</h5>
-            <h5 class=" mb-0"><?= $model->formatVetelar ?> Ft</h5>
-        </div>
     </div>
 </div>
 

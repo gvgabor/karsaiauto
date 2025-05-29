@@ -2,6 +2,7 @@ import {ApiResponse, ClassUtil} from "../../../helpers/class.util";
 import {ClassFormpopup} from "../../../helpers/class.formpopup";
 import Cleave from "cleave.js";
 import {ClassUgyfelek, UgyfelekEndPoint} from "./class.ugyfelek";
+import {ClassCardetail} from "../../../src/index/class.cardetail";
 import ObservableObject = kendo.data.ObservableObject;
 
 
@@ -90,6 +91,46 @@ export class ClassAutok extends ClassUtil {
                     this.message(response.message);
                     grid.dataSource.pushUpdate(response.model);
                 }
+            });
+            this.gridButtonList(grid, "action-btn").forEach(item => {
+                const cell = item.button.closest(`td`)!;
+                let muveletek: Array<any> = JSON.parse(cell.dataset.muveletek!);
+                const dataItem = item.data as ObservableObject & { id: number, eladva_int: number };
+                if (dataItem.eladva_int == 1) {
+                    muveletek = muveletek.filter(item => item.id != "eladas");
+                    item.row.classList.add("eladva");
+                }
+                item.row.querySelector(`button.edit-btn`) as HTMLButtonElement;
+                const showAdatlap = async (id: Number) => {
+                    const cardetail = new ClassCardetail(id);
+                    await cardetail.showDetail(true);
+                    const autoEditBtn = this.button("auto-edit-btn");
+                    autoEditBtn.onclick = async () => {
+                        const response = await this.autoForm({id: dataItem.id});
+                        grid.dataSource.pushUpdate(response.model);
+                        grid.dataSource.fetch();
+                        await cardetail.carViewPopup?.close();
+                        await showAdatlap(id);
+                        // setTimeout(() => showAdatlap(id), 500)
+                    }
+                }
+
+                jQuery(item.button).kendoSplitButton({
+                    themeColor: "warning",
+                    items: muveletek,
+                    click: async (event: kendo.ui.SplitButtonClickEvent) => {
+                        if (event.id) {
+                            if (event.id == "eladas") {
+                                const response = await this.eladvaForm({id: dataItem.id}) as ApiResponse;
+                                this.message(response.message);
+                                grid.dataSource.pushUpdate(response.model);
+                            }
+                            if (event.id == "adatlap") {
+                                await showAdatlap(dataItem.id);
+                            }
+                        }
+                    }
+                });
             })
         });
 
@@ -98,7 +139,7 @@ export class ClassAutok extends ClassUtil {
             localStorage.setItem("grid-status-filter-selector", gridStatusFilterSelector.current().index().toString());
             autokGrid.dataSource.transport.options.read.data.gridFilterSelector = gridFilterSelector.current().index();
             autokGrid.dataSource.transport.options.read.data.gridStatusFilterSelector = gridStatusFilterSelector.current().index();
-            autokGrid.dataSource.read();
+            autokGrid.dataSource.page(1);
         }
 
         gridFilterSelector.bind("select", () => autokFilter());
@@ -485,8 +526,13 @@ export class ClassAutok extends ClassUtil {
                 schema: schema,
                 serverPaging: true,
                 serverFiltering: true,
+                serverSorting: true,
             });
             const columns = autokColumns;
+            const markakFilter: Array<string> = JSON.parse(element.dataset.markakFilter!);
+            const vetelarFilterSource: Array<string> = JSON.parse(element.dataset.vetelarFilter!);
+            const vetelarFilter: Array<any> = [];
+            for (const [key, value] of Object.entries(vetelarFilterSource)) vetelarFilter.push({id: key, value: value});
 
             columns.find(item => item.field == "vetelar")!.template = (data: {
                 vetelar: string
@@ -502,6 +548,49 @@ export class ClassAutok extends ClassUtil {
             });
 
 
+            columns.find(item => item.field == "marka")!.filterable = {
+                operators: {
+                    string: {
+                        eq: element.dataset.egyenlo
+                    }
+                },
+                ui: (element: HTMLElement) => {
+                    jQuery(element).kendoDropDownList({
+                        filter: "contains",
+                        optionLabel: "----------",
+                        height: 400,
+                        dataSource: {
+                            data: markakFilter
+                        }
+                    })
+                }
+            }
+
+            columns.find(item => item.field == "vetelar")!.filterable = {
+                operators: {
+                    string: {
+                        eq: element.dataset.egyenlo
+                    }
+                },
+                ui: (element: HTMLElement) => {
+                    jQuery(element).kendoDropDownList({
+                        filter: "contains",
+                        optionLabel: "----------",
+                        height: 400,
+                        dataValueField: "id",
+                        dataTextField: "value",
+                        dataSource: {
+                            data: vetelarFilter
+                        }
+                    })
+                }
+            }
+
+
+            columns.find(item => item.field == "hirdetes_cime")!.template = (data: any) => {
+                return data.edit == 0 ? `${data.hirdetes_cime}` : `<div class="edited-box"><span>${data.hirdetes_cime}</span><span><i class="fa-solid fa-user-pen"></i></span></div>`;
+            }
+
             const grid = jQuery(element).kendoGrid({
                 columns: columns,
                 dataSource: dataSource,
@@ -511,6 +600,7 @@ export class ClassAutok extends ClassUtil {
                     refresh: true
                 },
                 autoBind: false,
+                sortable: true,
             }).data("kendoGrid") as kendo.ui.Grid;
             resolve(grid);
         })

@@ -161,7 +161,7 @@ class ConsoleController extends Controller
 
         foreach ($files as $file) {
             $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
-            Yii::$container->get(AutokAction::class)->convertToWebP($file, $file . ".webp");
+            Yii::$container->get(AutokAction::class)->convertToWebP($file, $file . ".webp", 80, 800, 800);
             unlink($file);
             Console::updateProgress($counter + 1, $total, "Memória: " . $memoria);
             $counter++;
@@ -185,7 +185,7 @@ class ConsoleController extends Controller
         $path        = "C:/Users/Vince/Desktop/tmp/osszes_auto";
         $files       = FileHelper::findFiles($path);
         $autokAction = Yii::$container->get(AutokAction::class);
-        $totalBytes  = 30;
+        $totalBytes  = 10;
         $limitBytes  = $totalBytes * 1024 * 1024 * 1024;
         $bytesSize   = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
         $formatSize  = DirectoryHelper::formatBytes($bytesSize);
@@ -212,7 +212,7 @@ class ConsoleController extends Controller
 
             Console::updateProgress($i + 1, $total, "Memória: " . $memoria . " Size: " . $formatSize);
             $model    = $this->actionRandomAuto();
-            $images   = $factory->randomElements($files, random_int(5, 10));
+            $images   = $factory->randomElements($files, random_int(10, 20));
             $formData = [
                 "hirdetes_leirasa" => $model->hirdetes_leirasa,
                 "hirdetes_cime"    => $model->hirdetes_cime,

@@ -9,8 +9,9 @@ final class LandingAutok extends Autok
 {
     public function fields()
     {
-        $fields             = parent::fields();
-        $fields["template"] = fn () => AutokitemWidget::widget(['model' => $this]);
+        $fields                     = parent::fields();
+        $fields["template"]         = fn () => AutokitemWidget::widget(['model' => $this]);
+        $fields["hirdetes_leirasa"] = fn () => $this->hirdetesLeirasa;
         return $fields;
     }
 

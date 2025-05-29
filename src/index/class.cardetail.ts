@@ -9,6 +9,7 @@ export enum detailEndPoint {
 export class ClassCardetail extends ClassUtil {
 
     private readonly autoId: Number = 0;
+    private popup: ClassFormpopup | null = null;
 
 
     url(action: string): string {
@@ -20,10 +21,21 @@ export class ClassCardetail extends ClassUtil {
         this.autoId = autoId;
     }
 
-    async showDetail() {
-        const url = this.url(detailEndPoint.AUTO_DETAIL);
+    get carViewPopup() {
+        return this.popup;
+    }
+
+    async showDetail(admin: boolean = false) {
+        let url = this.url(detailEndPoint.AUTO_DETAIL);
+        if (admin) {
+            const adminUrl: URL = new URL(url, window.location.origin);
+            adminUrl.searchParams.set("admin", "1");
+            url = adminUrl.toString();
+        }
+
         const width = Math.min(1200, document.body.offsetWidth);
         const popup = new ClassFormpopup("", "", width);
+        this.popup = popup;
         popup.root.innerHTML = await this.fetchData(url, {id: this.autoId});
 
         const formPopupLayer: HTMLDivElement = document.querySelector(`div.form-popup-layer`) as HTMLDivElement;
@@ -38,16 +50,18 @@ export class ClassCardetail extends ClassUtil {
         let idx = 0;
         slides[idx].classList.add("active");
         const thumbSlider = this.div("thumb-slider");
+        const counterBox = this.div("counter-box");
+        counterBox.innerHTML = `1/${slides.length}`
 
         const show = (newidx: number) => {
             slides.forEach(item => item.classList.remove("active"));
             idx = newidx;
+            counterBox.innerHTML = `${newidx + 1}/${slides.length}`
             slides[idx].classList.add("active");
             thumbSlider.scrollTo({
                 left: (thumbSlider.children[idx] as HTMLDivElement).offsetLeft - thumbSlider.offsetLeft,
                 behavior: "smooth"
             })
-            // thumbSlider.children[idx].scrollIntoView({behavior: "smooth"});
         }
 
         const prevBtn = this.button("prev-btn");

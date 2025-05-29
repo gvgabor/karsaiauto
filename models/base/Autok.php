@@ -4,6 +4,7 @@ namespace app\models\base;
 
 use app\helpers\OptionsHelper;
 use app\models\query\AutokQuery;
+use yii\helpers\Html;
 
 /**
  *
@@ -18,6 +19,7 @@ use app\models\query\AutokQuery;
  * @property-read string $valto
  * @property-read string $azonosito
  * @property-read string $tejlesitmenyText
+ * @property-read mixed $hirdetesLeirasa
  * @property-read Markak $marka
  */
 class Autok extends \app\models\Autok
@@ -90,5 +92,10 @@ class Autok extends \app\models\Autok
     public function getAutokDokumentumok()
     {
         return $this->hasMany(AutokDokumentumok::class, ['autok_id' => 'id']);
+    }
+
+    public function getHirdetesLeirasa()
+    {
+        return nl2br(Html::encode($this->hirdetes_leirasa));
     }
 }

@@ -29,8 +29,8 @@ $form-popup-offset: 120px;
   }
 
   &.back {
-    transition-delay: $form-popup-transition;
-    transform: translateX(-52%) translateY(-10px) !important;
+    //transition-delay: $form-popup-transition;
+    //transform: translateX(-52%) translateY(-10px) !important;
   }
 
   > .card {

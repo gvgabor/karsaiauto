@@ -5,6 +5,8 @@
 
 use app\helpers\ColumnsHelper;
 use app\helpers\HtmlHelper;
+use app\helpers\OptionsHelper;
+use yii\helpers\Json;
 use yii\web\JqueryAsset;
 use yii\web\View;
 
@@ -27,6 +29,7 @@ $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class
                 <span><?= Yii::t('app', 'Akcios') ?></span>
                 <span><?= Yii::t('app', 'Publikalva') ?></span>
                 <span><?= Yii::t('app', 'Nem Publikalva') ?></span>
+                <span><?= Yii::t('app', 'Nemreg Szerkesztve') ?></span>
             </div>
             <div id="grid-filter-selector" class="rounded-0">
                 <span><?= Yii::t('app', 'Osszes') ?></span>
@@ -38,8 +41,12 @@ $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class
     </div>
     <div class="card-body">
         <div
+                data-markak-filter="<?= htmlspecialchars(Json::encode(array_values(OptionsHelper::markakOptions()))) ?>"
+                data-vetelar-filter="<?= htmlspecialchars(Json::encode(OptionsHelper::vetelarOptions())) ?>"
                 data-igennem-filter="<?= HtmlHelper::igenNemFilters() ?>"
-                id="autok-grid" class="border-0"></div>
+                data-egyenlo="<?= Yii::t("app", "Egyenlo") ?>"
+                id="autok-grid" class="border-0"
+        ></div>
     </div>
 </div>
 

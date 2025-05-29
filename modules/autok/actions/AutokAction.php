@@ -4,10 +4,13 @@ namespace app\modules\autok\actions;
 
 use app\components\MainAction;
 use app\helpers\R2Helper;
+use app\models\base\Arvalaszto;
 use app\models\base\AutokDokumentumok;
 use app\models\base\AutokImage;
+use app\models\query\AutokQuery;
 use app\modules\autok\models\AutokModel;
 use app\modules\autok\models\EladasModel;
+use DateTime;
 use SplFileInfo;
 use Throwable;
 use Yii;
@@ -29,6 +32,7 @@ class AutokAction extends MainAction
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $currentDate                = new DateTime();
         $query                      = AutokModel::find()
             ->joinWith(["marka"])
             ->with(["autokImage", "autokDokumentumok"])
@@ -46,10 +50,15 @@ class AutokAction extends MainAction
 
         if (!empty($this->gridStatusFilterSelector)) {
             match ($this->gridStatusFilterSelector) {
-                1       => $query->andFilterWhere(["fooldalra" => 1]),
-                2       => $query->andFilterWhere(["akcios" => 1]),
-                3       => $query->andFilterWhere(["publikalva" => 1]),
-                4       => $query->andFilterWhere(["publikalva" => 0]),
+                1 => $query->andFilterWhere(["fooldalra" => 1]),
+                2 => $query->andFilterWhere(["akcios" => 1]),
+                3 => $query->andFilterWhere(["publikalva" => 1]),
+                4 => $query->andFilterWhere(["publikalva" => 0]),
+                5 => $query->andFilterWhere([
+                    ">=",
+                    "{{%autok}}.updated_at",
+                    $currentDate->modify("-1 hour")->format("Y-m-d H:i:s")
+                ]),
                 default => null
             };
         }
@@ -57,7 +66,7 @@ class AutokAction extends MainAction
         foreach ($this->filters as $item) {
             match ($item["field"]) {
                 "hirdetes_cime" => $query->andFilterWhere(['like', 'hirdetes_cime', trim($item['value'])]),
-                "marka"         => $query->andFilterWhere(['like', 'markak.name', trim($item['value'])]),
+                "marka"         => $query->andFilterWhere(['=', 'markak.name', trim($item['value'])]),
                 "model"         => $query->andFilterWhere(['like', 'model', trim($item['value'])]),
                 "publikalva"    => $query->andFilterWhere(['=', 'publikalva', trim($item['value'])]),
                 "eladva"        => $query->andFilterWhere(['=', 'eladva', trim($item['value'])]),
@@ -68,8 +77,28 @@ class AutokAction extends MainAction
                     "{{%autok}}.id",
                     trim(intval(str_replace("CR-", "", $item["value"])))
                 ]),
-                default => null
+                "vetelar" => $this->vetelarFilter($item, $query),
+                default   => null
             };
+        }
+
+        $alma = 1;
+
+        if (!empty($this->sort)) {
+            $sortText = "";
+            foreach ($this->sort as $item) {
+                $field = match ($item["field"]) {
+                    "hirdetes_cime" => "hirdetes_cime",
+                    "model"         => "model",
+                    "marka"         => "markak.name",
+                    "vetelar"       => "vetelar",
+                    default         => null
+                };
+                if ($field) {
+                    $sortText .= sprintf("%s %s,", $field, $item["dir"]);
+                }
+            }
+            $query->orderBy($sortText);
         }
 
         $result = [
@@ -77,6 +106,25 @@ class AutokAction extends MainAction
             "data"  => $query->all(),
         ];
         return $result;
+    }
+
+    protected function vetelarFilter(array $filterItem, AutokQuery &$query)
+    {
+        $arvalaszto = Arvalaszto::findOne($filterItem["value"]);
+        if ($arvalaszto->veg_osszeg) {
+            $query->andFilterWhere([
+                "between",
+                "{{%autok}}.vetelar",
+                $arvalaszto->kezdo_osszeg,
+                $arvalaszto->veg_osszeg
+            ]);
+        } else {
+            $query->andFilterWhere([
+                ">=",
+                "{{%autok}}.vetelar",
+                $arvalaszto->kezdo_osszeg,
+            ]);
+        }
     }
 
     public function eladas($formData): array
@@ -143,7 +191,7 @@ class AutokAction extends MainAction
                         $currentImage->saveAs($directory . DIRECTORY_SEPARATOR . $name);
                         $source      = $directory . DIRECTORY_SEPARATOR . $name;
                         $destination = $directory . DIRECTORY_SEPARATOR . $name . ".webp";
-                        $this->convertToWebP($source, $destination);
+                        $this->convertToWebP($source, $destination, 80, 800, 800);
                         unlink($source);
 
                         $autokImage = new AutokImage([
@@ -254,10 +302,15 @@ class AutokAction extends MainAction
         return $result;
     }
 
-    public function convertToWebP(string $sourcePath, string $destinationPath, int $quality = 80): bool
+    public function convertToWebP(string $sourcePath, string $destinationPath, int $quality = 80, int $maxWidth = null, int $maxHeight = null): bool
     {
         $info = getimagesize($sourcePath);
-        $mime = $info['mime'];
+        if ($info === false) {
+            return false;
+        }
+
+        [$originalWidth, $originalHeight,] = $info;
+        $mime                              = $info['mime'];
 
         switch ($mime) {
             case 'image/jpeg':
@@ -265,18 +318,49 @@ class AutokAction extends MainAction
                 break;
             case 'image/png':
                 $image = imagecreatefrompng($sourcePath);
-                // transzparencia támogatás
                 imagepalettetotruecolor($image);
                 imagealphablending($image, true);
                 imagesavealpha($image, true);
                 break;
             default:
-                return false; // nem támogatott formátum
+                return false;
         }
 
-        // WebP mentés
-        $result = imagewebp($image, $destinationPath, $quality);
+        // Ha nincs méret megadva, akkor megtartjuk az eredetit
+        if ($maxWidth === null && $maxHeight === null) {
+            $newWidth  = $originalWidth;
+            $newHeight = $originalHeight;
+        } else {
+            $aspectRatio = $originalWidth / $originalHeight;
+
+            if ($maxWidth !== null && $maxHeight !== null) {
+                // Mindkét max érték megadva: a szűkebb korlát szerint arányosan
+                $widthRatio  = $maxWidth  / $originalWidth;
+                $heightRatio = $maxHeight / $originalHeight;
+                $scale       = min($widthRatio, $heightRatio);
+            } elseif ($maxWidth !== null) {
+                $scale = $maxWidth / $originalWidth;
+            } else {
+                $scale = $maxHeight / $originalHeight;
+            }
+
+            $newWidth  = (int) round($originalWidth * $scale);
+            $newHeight = (int) round($originalHeight * $scale);
+        }
+
+        $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        if ($mime === 'image/png') {
+            imagealphablending($resizedImage, false);
+            imagesavealpha($resizedImage, true);
+        }
+
+        imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
         imagedestroy($image);
+
+        $result = imagewebp($resizedImage, $destinationPath, $quality);
+        imagedestroy($resizedImage);
+
         return $result;
     }
 

@@ -501,6 +501,11 @@ tr.eladva td:nth-child(4) {
   text-decoration: line-through;
   color: rgba(0, 0, 0, 0.2);
 }
+tr.eladva td:nth-child(5) {
+  transition: 0.5s;
+  text-decoration: line-through;
+  color: rgba(0, 0, 0, 0.2);
+}
 
 #form-tab {
   margin-top: 20px;
@@ -965,10 +970,31 @@ div.k-listview-content.empty > div i {
   padding: 10px;
 }
 
+div.edited-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .simple-slider {
   position: relative;
   width: 100%;
   margin: auto;
+}
+.simple-slider .counter-box {
+  position: absolute;
+  top: 10px;
+  right: 50px;
+  background: rgba(0, 0, 0, 0.2);
+  width: 120px;
+  height: 60px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  user-select: none;
+  font-weight: 600;
 }
 .simple-slider .slides {
   position: relative;
@@ -1069,19 +1095,23 @@ div.k-listview-content.empty > div i {
   object-fit: cover;
   border: 3px solid #212529;
   transition: 0.5s;
-  transform-origin: center;
+  transform-origin: bottom;
+  transform: scale(1);
 }
 .thumb-slider .thumb-slide:hover {
   filter: grayscale(0);
 }
 .thumb-slider .thumb-slide:hover img {
-  transform: scale(2);
+  transform: scale(1);
 }
 
 div.detail-box .vetelar-box {
   display: flex;
   justify-content: space-between;
   text-transform: uppercase;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #cccccc;
 }
 div.detail-box .vetelar-box h5 {
   font-weight: 800;
@@ -1097,7 +1127,8 @@ div.detail-box .adatok-box .leiras-box, div.detail-box .adatok-box .adatok-grid-
 }
 div.detail-box .adatok-box .leiras-box {
   margin-bottom: 20px;
-  font-size: 1.2rem;
+  margin-top: 20px;
+  font-size: 1rem;
 }
 div.detail-box .adatok-box .erdeklodo-box {
   min-height: 120px;
@@ -1140,6 +1171,20 @@ div.detail-box .adatok-box .adatok-grid-box > div {
 div.detail-box .adatok-box .adatok-grid-box > div i {
   font-size: 2rem;
   margin-bottom: 10px;
+}
+
+span.k-menu-link {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.k-split-button {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.k-split-button * {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /*# sourceMappingURL=main.css.map */

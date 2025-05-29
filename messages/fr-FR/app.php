@@ -115,7 +115,9 @@ return [
     'Kisteherautó'             => '',
     'Manuális'                 => '',
     'Menu ID'                  => '',
+    'Muveletek'                => '',
     'Nem Publikalva'           => '',
+    'Nemreg Szerkesztve'       => '',
     'Remote Key'               => '',
     'Sorbarendezes'            => '',
     'Szuperadmin'              => '',
@@ -127,4 +129,5 @@ return [
     'Url'                      => '',
     'Vetelar csokkeno'         => '',
     'Vetelar novekvo'          => '',
+    'Webes Nezet'              => '',
 ];

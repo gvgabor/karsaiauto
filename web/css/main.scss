@@ -611,6 +611,12 @@ tr.eladva {
     text-decoration: line-through;
     color: rgba(0, 0, 0, 0.2);
   }
+
+  td:nth-child(5) {
+    transition: 0.5s;
+    text-decoration: line-through;
+    color: rgba(0, 0, 0, 0.2);
+  }
 }
 
 #form-tab {
@@ -1177,10 +1183,35 @@ div.k-listview-content {
   padding: 10px;
 }
 
+div.edited-box{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .simple-slider {
   position: relative;
   width: 100%;
   margin: auto;
+
+  .counter-box {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    background: rgba(0, 0, 0, 0.2);
+    width: 120px;
+    height: 60px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    user-select: none;
+    font-weight: 600;
+  }
+
+
+
 
   .slides {
     position: relative;
@@ -1299,14 +1330,15 @@ div.k-listview-content {
       object-fit: cover;
       border: 3px solid #212529;
       transition: 0.5s;
-      transform-origin: center;
+      transform-origin: bottom;
+      transform: scale(1);
     }
 
     &:hover {
-      filter: grayscale(0);
+      filter: grayscale(0) ;
 
       img {
-        transform: scale(2);
+        transform: scale(1);
       }
     }
 
@@ -1319,6 +1351,9 @@ div.detail-box {
     display: flex;
     justify-content: space-between;
     text-transform: uppercase;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #cccccc;
 
     h5 {
       font-weight: 800;
@@ -1340,7 +1375,8 @@ div.detail-box {
 
     .leiras-box {
       margin-bottom: 20px;
-      font-size: 1.2rem;
+      margin-top: 20px;
+      font-size: 1.0rem;
     }
 
     .erdeklodo-box {
@@ -1384,7 +1420,8 @@ div.detail-box {
         justify-content: center;
         align-items: center;
         border-radius: 5px;
-        i{
+
+        i {
           font-size: 2rem;
           margin-bottom: 10px;
         }
@@ -1394,4 +1431,23 @@ div.detail-box {
 
 
 }
+
+
+span.k-menu-link {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.k-split-button {
+  outline: none !important;
+  box-shadow: none !important;
+
+
+  * {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+
 

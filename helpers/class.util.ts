@@ -99,6 +99,10 @@ export class ClassUtil {
         for (const [key, value] of Object.entries(errors)) {
             /**@type {HTMLDivElement | null} **/
             const fieldBox: HTMLDivElement | null = form.querySelector(`div.field-${model}-${key}`) as HTMLDivElement | null;
+            console.log({
+                model:model,
+                key:key
+            });
             const errorBox = document.createElement("div");
             errorBox.classList.add("error-box");
             errorBox.style.zIndex = (this.maxZIndex + 1).toString();
@@ -155,13 +159,13 @@ export class ClassUtil {
 
         return new Promise(resolve => {
 
-            const formPopup: HTMLDivElement | null = document.querySelector(`div.form-popup`);
+            const formPopup: HTMLDivElement[] | null = Array.from(document.querySelectorAll(`div.form-popup`));
             if (formPopup) {
                 const loader = document.createElement("div");
                 loader.classList.add("loader");
                 loader.style.zIndex = (this.maxZIndex + 1).toString();
                 loader.innerHTML = `˛<img alt="nincs" src="/images/YTup.gif">`;
-                formPopup.appendChild(loader);
+                formPopup[formPopup.length - 1]?.appendChild(loader);
             }
 
 
@@ -169,9 +173,9 @@ export class ClassUtil {
             const layer = document.createElement("div");
             if (addlayer) {
                 layer.classList.add("popup-layer");
-                layer.style.zIndex = (this.maxZIndex + 1).toString();
                 document.body.appendChild(layer);
                 layer.classList.add("animate");
+                layer.style.zIndex = (this.maxZIndex + 1).toString();
             }
 
             formData.append("_csrf", yii.getCsrfToken());

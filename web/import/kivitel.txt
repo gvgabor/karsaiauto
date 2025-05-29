@@ -1,0 +1,19 @@
+Billencs
+Cabrio
+Coupe
+Dobozos
+Duplakabinos -platós
+Duplakabinos pickup
+Egyterű
+Ferdehátú
+Kisbusz
+Kombi
+Naked
+Platós
+Ponyvás
+Sedan
+Sport
+Terepjáró
+Városi terepjáró
+Üvegezett
+Zárt

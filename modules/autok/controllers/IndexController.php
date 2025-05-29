@@ -26,6 +26,7 @@ class IndexController extends MainController
                 'page'                     => $this->request->post('page', 1),
                 'pageSize'                 => $this->request->post('pageSize', 1),
                 'filters'                  => $this->request->post('filter'),
+                'sort'                     => $this->request->post('sort'),
                 'gridFilterSelector'       => $this->request->post('gridFilterSelector'),
                 'gridStatusFilterSelector' => $this->request->post('gridStatusFilterSelector'),
             ],

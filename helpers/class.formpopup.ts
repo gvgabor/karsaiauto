@@ -19,6 +19,7 @@ export class ClassFormpopup extends ClassUtil {
         this.root = document.createElement("div");
         this.root.classList.add("form-popup")
         this.root.style.width = `${width}px`
+        this.root.style.zIndex = `${this.maxZIndex + 1}`
 
         this.layer = document.createElement("div");
         this.layer.classList.add("form-popup-layer")
@@ -46,17 +47,20 @@ export class ClassFormpopup extends ClassUtil {
 
 
     close() {
-        this.root.ontransitionend = (event) => {
-            console.log(event.propertyName)
-            if (event.propertyName == "top" || event.propertyName == "border-bottom-color") {
-                this.root.remove();
-                this.layer.remove();
-                if (this.prev) {
-                    this.prev.classList.remove("back");
+        return new Promise<void>((resolve) => {
+            this.root.ontransitionend = (event) => {
+                if (event.propertyName == "top" || event.propertyName == "border-bottom-color") {
+                    this.root.remove();
+                    this.layer.remove();
+                    resolve();
+                    if (this.prev) {
+                        this.prev.classList.remove("back");
+                    }
                 }
             }
-        }
-        this.root.classList.remove("active");
+            this.root.classList.remove("active");
+        })
+
     }
 
 }

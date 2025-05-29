@@ -3,6 +3,7 @@
 namespace app\helpers;
 
 use Yii;
+use yii\helpers\Json;
 
 class ColumnsHelper
 {
@@ -82,21 +83,40 @@ class ColumnsHelper
     {
         $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
 
+        $muveletek = [
+            ["id" => "eladas", "text" => Yii::t("app", "Eladas"), "icon" => "gear"],
+            ["id" => "adatlap", "text" => Yii::t("app", "Webes Nezet"), "icon" => "gear"],
+        ];
+
+        //        $columns[] = [
+        //            "command"    => [
+        //                "template" => sprintf("<button class='btn btn-primary eladva-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Eladas"))
+        //            ],
+        //            "attributes" => ["style" => "text-align:center",],
+        //            "width"      => 120,
+        //            "locked"     => true,
+        //            "encoded"    => false,
+        //        ];
+
         $columns[] = [
             "command" => [
-                "template" => sprintf("<button class='btn btn-primary eladva-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Eladas"))
+                "template" => sprintf("<button class='btn btn-primary action-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Muveletek"))
             ],
-            "attributes" => ["style" => "text-align:center"],
-            "width"      => 120,
-            "locked"     => true,
-            "encoded"    => false,
+            "attributes" => [
+                "style"          => "text-align:center",
+                "data-muveletek" => htmlspecialchars(Json::encode($muveletek))
+            ],
+            "width"   => 180,
+            "locked"  => true,
+            "encoded" => false,
         ];
 
         $columns[] = [
-            "field"  => "azonosito",
-            "title"  => Yii::t("app", "Azonosito"),
-            "locked" => true,
-            "width"  => 170
+            "field"    => "azonosito",
+            "title"    => Yii::t("app", "Azonosito"),
+            "locked"   => true,
+            "width"    => 170,
+            "sortable" => false,
         ];
         $columns[] = [
             "field"  => "hirdetes_cime",
@@ -128,6 +148,7 @@ class ColumnsHelper
             "title"      => Yii::t("app", "Gyartasi Ev"),
             "attributes" => ["style" => "text-align:center"],
             "width"      => 160,
+            "sortable"   => false,
         ];
         $columns[] = [
             "field"      => "fooldalra",
@@ -140,12 +161,14 @@ class ColumnsHelper
             "title"      => Yii::t("app", "Eladva"),
             "attributes" => ["style" => "text-align:center"],
             "width"      => 160,
+            "sortable"   => false,
         ];
         $columns[] = [
             "field"      => "akcios",
             "title"      => Yii::t("app", "Akcios"),
             "attributes" => ["style" => "text-align:center"],
             "width"      => 160,
+            "sortable"   => false,
         ];
         $columns[] = [
             "field"      => "publikalva",
@@ -153,21 +176,22 @@ class ColumnsHelper
             "attributes" => ["style" => "text-align:center"],
             "width"      => 160,
             "filterable" => true,
+            "sortable"   => false,
         ];
         $columns[] = [
             "field"      => "kepek_szama",
             "title"      => Yii::t("app", "Kepek Szama"),
             "attributes" => ["style" => "text-align:center"],
             "width"      => 160,
+            "sortable"   => false,
         ];
         $columns[] = [
             "field"      => "dokumentumok_szama",
             "title"      => Yii::t("app", "Dokumentumok Szama"),
             "attributes" => ["style" => "text-align:center"],
             "width"      => 200,
+            "sortable"   => false,
         ];
-
-
 
         foreach ($columns as $key => $value) {
             if (array_key_exists("locked", $value) === false) {
@@ -362,6 +386,14 @@ class ColumnsHelper
         }
 
         $columns = array_merge(self::adminColumnsLock(), $columns);
+        return $columns;
+    }
+
+    public static function baseColumns(): array
+    {
+        $columns[] = ["field" => "id", "title" => Yii::t("app", "ID"), "hidden" => true];
+        $columns[] = ["field" => "name", "title" => Yii::t("app", "Name")];
+        $columns   = array_merge($columns, self::adminColumns());
         return $columns;
     }
 
