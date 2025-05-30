@@ -25,6 +25,8 @@ final class AutokModel extends Autok
      */
     public ?array $dokumentumok = null;
 
+    public ?array $felszereltseg = null;
+
     public function fields()
     {
         $fields                       = parent::fields();
@@ -53,18 +55,6 @@ final class AutokModel extends Autok
         };
         return $fields;
     }
-
-    //    public function beforeValidate()
-    //    {
-    //        $numbers = ['kilometer', 'vetelar', 'gyartasi_ev', 'akcios_ar'];
-    //        foreach ($numbers as $value) {
-    //            if (isset($this->$value)) {
-    //                $this->$value = preg_replace('/\D/', '', $this->$value);
-    //            }
-    //        }
-    //
-    //        return parent::beforeValidate();
-    //    }
 
     public function behaviors()
     {
@@ -98,6 +88,12 @@ final class AutokModel extends Autok
                     'valto_id'
                 ],
                 'required'
+            ],
+            [
+                [
+                    'felszereltseg'
+                ],
+                'safe'
             ],
             [
                 ['image'],

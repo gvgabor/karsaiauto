@@ -13,6 +13,12 @@ export enum MarkakEndPoints {
 
 
 export class ClassMarkak extends ClassUtil {
+
+    url(action: string): string {
+        return `/karbantartas/markak/${action}`;
+    }
+
+
     async init() {
         const markakGrid = await this.markakGrid(this.div("markak-grid"));
 

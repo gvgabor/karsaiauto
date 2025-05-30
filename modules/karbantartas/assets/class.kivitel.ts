@@ -12,6 +12,11 @@ export enum ENDPOINTS {
 }
 
 export class ClassKivitel extends ClassUtil {
+
+    url(action: string): string {
+        return `/karbantartas/kivitel/${action}`;
+    }
+
     async init() {
         const grid = await this.grid(this.div("grid"));
 

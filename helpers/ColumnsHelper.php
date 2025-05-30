@@ -88,15 +88,6 @@ class ColumnsHelper
             ["id" => "adatlap", "text" => Yii::t("app", "Webes Nezet"), "icon" => "gear"],
         ];
 
-        //        $columns[] = [
-        //            "command"    => [
-        //                "template" => sprintf("<button class='btn btn-primary eladva-btn'><i class=\"fa-solid fa-square-check\"></i>&nbsp;%s</button>", Yii::t("app", "Eladas"))
-        //            ],
-        //            "attributes" => ["style" => "text-align:center",],
-        //            "width"      => 120,
-        //            "locked"     => true,
-        //            "encoded"    => false,
-        //        ];
 
         $columns[] = [
             "command" => [
@@ -118,12 +109,7 @@ class ColumnsHelper
             "width"    => 170,
             "sortable" => false,
         ];
-        $columns[] = [
-            "field"  => "hirdetes_cime",
-            "title"  => Yii::t("app", "Hirdetes Cime"),
-            "locked" => true,
-            "width"  => 400
-        ];
+
         $columns[] = [
             "field"  => "marka",
             "title"  => Yii::t("app", "Marka ID"),
@@ -191,6 +177,12 @@ class ColumnsHelper
             "attributes" => ["style" => "text-align:center"],
             "width"      => 200,
             "sortable"   => false,
+        ];
+
+        $columns[] = [
+            "field"  => "hirdetes_cime",
+            "title"  => Yii::t("app", "Hirdetes Cime"),
+            "locked" => false,
         ];
 
         foreach ($columns as $key => $value) {

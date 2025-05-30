@@ -3,6 +3,10 @@ import {ClassFormpopup} from "../../../helpers/class.formpopup";
 import Cleave from "cleave.js";
 import {ClassUgyfelek, UgyfelekEndPoint} from "./class.ugyfelek";
 import {ClassCardetail} from "../../../src/index/class.cardetail";
+import {ClassMarkak} from "../../karbantartas/assets/class.markak";
+import {ClassSzinek} from "../../karbantartas/assets/class.szinek";
+import {ClassKivitel} from "../../karbantartas/assets/class.kivitel";
+import {ClassFelszereltseg} from "../../karbantartas/assets/class.felszereltseg";
 import ObservableObject = kendo.data.ObservableObject;
 
 
@@ -36,6 +40,7 @@ export class ClassAutok extends ClassUtil {
         this.dataBound(autokGrid, () => {
             const grid = autokGrid;
             grid.autoFitColumn("vetelar");
+            grid.autoFitColumn("hirdetes_cime");
             this.gridButtonList(grid, "remove-btn").forEach(item => {
 
                 const dataItem = item.data as ObservableObject & {
@@ -241,15 +246,37 @@ export class ClassAutok extends ClassUtil {
         }).data("kendoTabStrip") as kendo.ui.TabStrip;
 
         [
+            "autokmodel-ajtok_szam",
+            "autokmodel-szallithato_szemelyek",
+            "autokmodel-sajat_tomeg",
+            "autokmodel-ossztomeg",
+            "autokmodel-terhelhetoseg",
+            "autokmodel-tengelytav",
+            "autokmodel-hosszusag",
+            "autokmodel-szelesseg",
+            "autokmodel-hengerek_szama",
+            "autokmodel-hengerurtartalom",
+        ].forEach(id => {
+            const element = document.getElementById(id)!;
+            jQuery(element).kendoNumericTextBox({
+                format: "n0",
+                decimals: 0
+            });
+        });
+
+        [
             "autokmodel-jarmutipus_id",
             "autokmodel-marka_id",
             "autokmodel-motortipus_id",
             "autokmodel-valto_id",
+            "autokmodel-szinek_id",
+            "autokmodel-kivitel_id",
         ].forEach(id => {
             const element = document.getElementById(id)!;
             jQuery(element).kendoDropDownList({
-                filter: "contains"
-            })
+                filter: "contains",
+                height: 400
+            });
         });
 
         [
@@ -279,6 +306,19 @@ export class ClassAutok extends ClassUtil {
                 start: "year"
             })
         })
+
+        const felszereltseg = this.input("autokmodel-felszereltseg");
+        const felszereltsegIdList = JSON.parse(felszereltseg.dataset.felszereltsegIdList!);
+        jQuery(felszereltseg).kendoMultiSelect({
+            clearButton: true,
+            height: 400,
+            autoClose: false,
+            highlightFirst: true,
+            downArrow: false,
+            filter: "contains",
+            value: felszereltsegIdList,
+        })
+
 
         formTab.select(0);
         const dokumentumokGrid = await this.dokumentumokGrid(this.div("dokumentumok-grid"));
@@ -380,6 +420,50 @@ export class ClassAutok extends ClassUtil {
                 }
                 this.sortImages(uploadKepekBox);
             }
+        }
+
+        const markaHozzaadBtn = this.button("marka-hozzaad-btn");
+        markaHozzaadBtn.onclick = async () => {
+            const select = jQuery(markaHozzaadBtn.parentElement!.querySelector(`select`)!).data("kendoDropDownList") as kendo.ui.DropDownList;
+            const response = await new ClassMarkak().markaForm() as ApiResponse;
+            select.dataSource.add({
+                value: response.model.id,
+                text: response.model.name,
+            });
+            select.select(select.dataSource.data().length - 1);
+        }
+
+        const szinHozzaadBtn = this.button("szin-hozzaad-btn");
+        szinHozzaadBtn.onclick = async () => {
+            const select = jQuery(szinHozzaadBtn.parentElement!.querySelector(`select`)!).data("kendoDropDownList") as kendo.ui.DropDownList;
+            const response = await new ClassSzinek().form() as ApiResponse;
+            select.dataSource.add({
+                value: response.model.id,
+                text: response.model.szin_neve,
+            });
+            select.select(select.dataSource.data().length - 1);
+        }
+
+        const kivitelHozzaadBtn = this.button("kivitel-hozzaad-btn");
+        kivitelHozzaadBtn.onclick = async () => {
+            const select = jQuery(kivitelHozzaadBtn.parentElement!.querySelector(`select`)!).data("kendoDropDownList") as kendo.ui.DropDownList;
+            const response = await new ClassKivitel().form() as ApiResponse;
+            select.dataSource.add({
+                value: response.model.id,
+                text: response.model.name,
+            });
+            select.select(select.dataSource.data().length - 1);
+        }
+
+        const felszereltsegHozzaadBtn = this.button("felszereltseg-hozzaad-btn");
+        felszereltsegHozzaadBtn.onclick = async () => {
+            const select = jQuery(felszereltsegHozzaadBtn.parentElement!.querySelector(`select`)!).data("kendoMultiSelect") as kendo.ui.MultiSelect;
+            const response = await new ClassFelszereltseg().form() as ApiResponse;
+            select.dataSource.add({
+                value: response.model.id,
+                text: response.model.name,
+            });
+            select.value(select.value().concat([response.model.id]));
         }
 
         const saveBtn: HTMLButtonElement = popup.root.querySelector(`button.save-btn`)!;
@@ -587,8 +671,8 @@ export class ClassAutok extends ClassUtil {
             }
 
 
-            columns.find(item => item.field == "hirdetes_cime")!.template = (data: any) => {
-                return data.edit == 0 ? `${data.hirdetes_cime}` : `<div class="edited-box"><span>${data.hirdetes_cime}</span><span><i class="fa-solid fa-user-pen"></i></span></div>`;
+            columns.find(item => item.field == "azonosito")!.template = (data: any) => {
+                return data.edit == 0 ? `${data.azonosito}` : `<div class="edited-box"><span>${data.azonosito}</span><span><i class="fa-solid fa-user-pen"></i></span></div>`;
             }
 
             const grid = jQuery(element).kendoGrid({

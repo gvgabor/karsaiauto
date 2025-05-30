@@ -38,6 +38,10 @@ export class ClassCardetail extends ClassUtil {
         this.popup = popup;
         popup.root.innerHTML = await this.fetchData(url, {id: this.autoId});
 
+
+        document.querySelectorAll(`section`).forEach(item => item.classList.add("blur"));
+        document.querySelectorAll(`nav`).forEach(item => item.classList.add("blur"));
+
         const formPopupLayer: HTMLDivElement = document.querySelector(`div.form-popup-layer`) as HTMLDivElement;
         formPopupLayer.style.cursor = "pointer";
         formPopupLayer.onclick = () => popup.close();

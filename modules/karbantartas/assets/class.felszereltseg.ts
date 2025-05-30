@@ -15,6 +15,11 @@ export enum ENDPOINTS {
 export class ClassFelszereltseg extends ClassUtil {
 
 
+    url(action: string): string {
+        return `/karbantartas/felszereltseg/${action}`;
+    }
+
+
     async init() {
         const grid = await this.grid(this.div("grid"));
 

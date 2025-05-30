@@ -6,6 +6,7 @@ use app\components\MainAction;
 use app\helpers\R2Helper;
 use app\models\base\Arvalaszto;
 use app\models\base\AutokDokumentumok;
+use app\models\base\AutokFelszereltseg;
 use app\models\base\AutokImage;
 use app\models\query\AutokQuery;
 use app\modules\autok\models\AutokModel;
@@ -82,7 +83,6 @@ class AutokAction extends MainAction
             };
         }
 
-        $alma = 1;
 
         if (!empty($this->sort)) {
             $sortText = "";
@@ -108,7 +108,7 @@ class AutokAction extends MainAction
         return $result;
     }
 
-    protected function vetelarFilter(array $filterItem, AutokQuery &$query)
+    protected function vetelarFilter(array $filterItem, AutokQuery $query)
     {
         $arvalaszto = Arvalaszto::findOne($filterItem["value"]);
         if ($arvalaszto->veg_osszeg) {
@@ -160,6 +160,9 @@ class AutokAction extends MainAction
         $this->baseStatus($model);
         try {
             $imageIdList = $model->getAutokImage()->select(["id"])->column();
+            if (empty($formData["felszereltseg"])) {
+                $formData["felszereltseg"] = [];
+            }
             $model->setAttributes($formData);
             $model->image = UploadedFile::getInstances($model, "image");
             $model->save() ?: throw new BadRequestHttpException(Json::encode($model->errors));
@@ -288,6 +291,15 @@ class AutokAction extends MainAction
                 }
             }
 
+            AutokFelszereltseg::updateAll(["deleted" => 1], ["autok_id" => $model->id]);
+            foreach ($model->felszereltseg as $value) {
+                $autokFelszereltseg = new AutokFelszereltseg([
+                    "autok_id"         => $model->id,
+                    "felszereltseg_id" => $value
+                ]);
+                $autokFelszereltseg->save() ?: throw new BadRequestHttpException(Json::encode($autokFelszereltseg->errors));
+            }
+
             $result["success"] = true;
             $result["model"]   = $model;
             $transaction->commit();
@@ -326,15 +338,12 @@ class AutokAction extends MainAction
                 return false;
         }
 
-        // Ha nincs méret megadva, akkor megtartjuk az eredetit
+
         if ($maxWidth === null && $maxHeight === null) {
             $newWidth  = $originalWidth;
             $newHeight = $originalHeight;
         } else {
-            $aspectRatio = $originalWidth / $originalHeight;
-
             if ($maxWidth !== null && $maxHeight !== null) {
-                // Mindkét max érték megadva: a szűkebb korlát szerint arányosan
                 $widthRatio  = $maxWidth  / $originalWidth;
                 $heightRatio = $maxHeight / $originalHeight;
                 $scale       = min($widthRatio, $heightRatio);
@@ -344,8 +353,8 @@ class AutokAction extends MainAction
                 $scale = $maxHeight / $originalHeight;
             }
 
-            $newWidth  = (int) round($originalWidth * $scale);
-            $newHeight = (int) round($originalHeight * $scale);
+            $newWidth  = (int)round($originalWidth * $scale);
+            $newHeight = (int)round($originalHeight * $scale);
         }
 
         $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
@@ -356,6 +365,20 @@ class AutokAction extends MainAction
         }
 
         imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
+        $watermarkText = Yii::$app->name;
+        $fontFile      = __DIR__ . "/../../../web/fonts/BebasNeue-Regular.ttf";
+        $fontSize      = 14;
+        $angle         = 0;
+        $textColor     = imagecolorallocatealpha($resizedImage, 255, 255, 255, 30);
+
+        $textBox    = imagettfbbox($fontSize, $angle, $fontFile, $watermarkText);
+        $textWidth  = abs($textBox[4] - $textBox[0]);
+        $textHeight = abs($textBox[5] - $textBox[1]);
+
+        $x = $newWidth  - $textWidth - 10;
+        $y = $newHeight - 10;
+        imagettftext($resizedImage, $fontSize, $angle, $x, $y, $textColor, $fontFile, $watermarkText);
+
         imagedestroy($image);
 
         $result = imagewebp($resizedImage, $destinationPath, $quality);

@@ -19,9 +19,11 @@ class JarmuvekFilterDataSource extends MainAction
 
         $filterModel = UtilHelper::filterModel();
         $query       = LandingAutok::find()
+            ->with([])
             ->joinWith(["marka"])
             ->andWhere(["eladva" => 0, "publikalva" => 1])
             ->limit($this->pageSize)
+            ->orderBy(["id" => SORT_DESC])
             ->offset(($this->page - 1) * $this->pageSize);
 
         foreach ($filterModel->attributes as $key => $item) {
@@ -83,7 +85,7 @@ class JarmuvekFilterDataSource extends MainAction
             $query->orderBy($filterModel->sorbarendezes);
         }
 
-        $result["total"] = $query->count();
+        $result["total"] = (clone $query)->count();
         $result["data"]  = $query->all();
 
         return $result;

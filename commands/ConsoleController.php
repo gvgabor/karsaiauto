@@ -7,6 +7,7 @@ use app\helpers\DirectoryHelper;
 use app\helpers\OptionsHelper;
 use app\models\base\FelhasznaloiJogok;
 use app\models\base\Felhasznalok;
+use app\models\base\Markak;
 use app\models\base\Menu;
 use app\models\base\Ugyfelek;
 use app\modules\autok\actions\AutokAction;
@@ -180,7 +181,7 @@ class ConsoleController extends Controller
         $factory = Factory::create('hu_HU');
         $memoria = number_format(memory_get_usage() / 1024 / 1024, 2) . ' MB';
         $this->writeOut("Memóriahasználat: " . $memoria);
-        $total = 5000;
+        $total = 3000;
         Console::startProgress(0, $total);
         $path        = "C:/Users/Vince/Desktop/tmp/osszes_auto";
         $files       = FileHelper::findFiles($path);
@@ -227,6 +228,9 @@ class ConsoleController extends Controller
                 "gyartasi_ev"      => $model->gyartasi_ev,
                 "valto_id"         => $model->valto_id,
                 "publikalva"       => 1,
+                "felszereltseg"    => $model->felszereltseg,
+                "kivitel_id"       => $model->kivitel_id,
+                "szinek_id"        => $model->szinek_id,
             ];
 
             $result = $autokAction->save($formData, $images);
@@ -246,18 +250,26 @@ class ConsoleController extends Controller
         $factory                 = Factory::create('hu_HU');
         $model                   = new AutokModel();
         $model->hirdetes_leirasa = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
-        $model->hirdetes_cime    = mb_strtoupper($factory->randomElement(array_values(OptionsHelper::markakOptions()))) . " 2.3 Mjet LWB 3.5 t";
         $model->teljesitmeny     = (string)$factory->numberBetween(50, 600);
         $model->kilometer        = round($factory->numberBetween(20000, 800000), -3);
         $model->vetelar          = round($factory->numberBetween(200000, 20000000), -3);
         $model->muszaki_ervenyes = $factory->dateTimeBetween("now", "+3 years")->format("Y-m");
         $model->motortipus_id    = $factory->randomElement(array_keys(OptionsHelper::motortipusOptions()));
-        $model->marka_id         = $factory->randomElement(array_keys(OptionsHelper::markakOptions()));
-        $model->model            = $factory->randomElement(array_values(OptionsHelper::markakOptions()));
+        $marka                   = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
+        $marka2                  = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
+        $model->marka_id         = $marka->id;
+        $model->model            = $marka2->name;
+        $model->hirdetes_cime    = mb_strtoupper($marka->name . " " . $marka2->name . " 2.3 Mjet LWB 3.5 t gépjármű");
         $model->jarmutipus_id    = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
         $model->gyartasi_ev      = random_int(1990, 2025);
         $model->valto_id         = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));
         $model->publikalva       = 1;
+        $model->szinek_id        = $factory->randomElement(array_keys(OptionsHelper::szinekOptions()));
+        $model->kivitel_id       = $factory->randomElement(array_keys(OptionsHelper::kivitelOptions()));
+        $felszereltseg           = OptionsHelper::felszereltsegOptions();
+        $count                   = random_int(1, count($felszereltseg) - 1);
+        $extrak                  = $factory->randomElements(array_keys($felszereltseg), $count);
+        $model->felszereltseg    = $extrak;
         return $model;
     }
 

@@ -5,6 +5,7 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
+use app\helpers\OptionsHelper;
 
 AppAsset::register($this);
 
@@ -32,7 +33,7 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
     <body class="d-flex flex-column h-100">
         <?php $this->beginBody() ?>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg  navbar-dark bg-dark sticky-top">
+        <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="#"><?= Yii::$app->name ?></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -53,6 +54,7 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
                 </div>
             </div>
         </nav>
+
 
 
         <!-- Hero Section -->

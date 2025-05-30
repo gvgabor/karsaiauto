@@ -4,6 +4,7 @@ namespace app\models\base;
 
 use app\helpers\OptionsHelper;
 use app\models\query\AutokQuery;
+use yii\db\ActiveQuery;
 use yii\helpers\Html;
 
 /**
@@ -20,6 +21,10 @@ use yii\helpers\Html;
  * @property-read string $azonosito
  * @property-read string $tejlesitmenyText
  * @property-read mixed $hirdetesLeirasa
+ * @property-read array $felszereltsegIdList
+ * @property-read Szinek $szinek
+ * @property-read Kivitel $kivitel
+ * @property-read Felszereltseg[] $felszereltsegList
  * @property-read Markak $marka
  */
 class Autok extends \app\models\Autok
@@ -92,6 +97,30 @@ class Autok extends \app\models\Autok
     public function getAutokDokumentumok()
     {
         return $this->hasMany(AutokDokumentumok::class, ['autok_id' => 'id']);
+    }
+
+    public function getFelszereltsegList()
+    {
+        return $this->hasMany(Felszereltseg::class, ["id" => "felszereltseg_id"])
+            ->viaTable('{{%autok_felszereltseg}}', ["autok_id" => "id"], function (ActiveQuery $query) {
+                $query->andWhere(['{{%autok_felszereltseg}}.deleted' => 0]);
+            })
+            ->orderBy(['{{%felszereltseg}}.name' => SORT_ASC]);
+    }
+
+    public function getKivitel()
+    {
+        return $this->hasOne(Kivitel::class, ["id" => "kivitel_id"]);
+    }
+
+    public function getSzinek()
+    {
+        return $this->hasOne(Szinek::class, ["id" => "szinek_id"]);
+    }
+
+    public function getFelszereltsegIdList()
+    {
+        return $this->hasMany(AutokFelszereltseg::class, ['autok_id' => 'id'])->joinWith('felszereltseg')->select(['{{%felszereltseg}}.id']);
     }
 
     public function getHirdetesLeirasa()

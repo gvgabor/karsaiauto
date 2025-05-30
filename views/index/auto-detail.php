@@ -4,6 +4,7 @@
  * @var LandingAutok $model
  */
 
+use app\helpers\HtmlHelper;
 use app\models\index\LandingAutok;
 use yii\web\View;
 
@@ -58,44 +59,11 @@ use yii\web\View;
             <!-- Autó adatok -->
             <h4 class="mb-3">
                 <?= $model->hirdetes_cime ?>
-                <span class="text-muted small">
-                    <?= $model->marka->name ?> <?= $model->model ?>
-                </span>
             </h4>
 
-            <div class="adatok-grid-box">
-                <div>
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Évjárat:</span>
-                    <span><?= $model->gyartasi_ev ?></span>
-                </div>
-                <div>
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>Kilométer:</span>
-                    <span><?= $model->formatKilometer ?> km</span>
-                </div>
-                <div>
-                    <i class="fas fa-oil-can"></i>
-                    <span>Motor:</span>
-                    <span><?= $model->motortipus ?></span>
-                </div>
-                <div>
-                    <i class="fas fa-cogs"></i>
-                    <span>Váltó:</span>
-                    <span><?= $model->valto ?></span>
-                </div>
-                <div>
-                    <i class="fas fa-wrench"></i>
-                    <span>Müszaki érvényes:</span>
-                    <span><?= $model->muszaki_ervenyes ?></span>
-                </div>
-                <div>
-                    <i class="fas fa-bolt"></i>
-                    <span>Teljesítmény:</span>
-                    <span><?= $model->tejlesitmenyText ?></span>
-                </div>
-            </div>
+            <?= HtmlHelper::adatokBoxGrid($model) ?>
 
+            <?= HtmlHelper::felszereltsegBox($model) ?>
 
             <!--            <h4 class="mb-3 mt-3">-->
             <!--               Letölthető dokumentumok-->
@@ -123,7 +91,6 @@ use yii\web\View;
             <div class="leiras-box">
                 <?= $model->hirdetesLeirasa ?>
             </div>
-
 
             <div class="erdeklodo-box">
                 <div>

@@ -13,6 +13,10 @@ export enum ENDPOINTS {
 
 export class ClassSzinek extends ClassUtil{
 
+    url(action: string): string {
+        return `/karbantartas/szinek/${action}`;
+    }
+
     async init(){
         const grid = await this.grid(this.div("grid"));
 

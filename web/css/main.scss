@@ -1041,7 +1041,7 @@ div.loader {
   background: white;
   align-items: flex-end;
 
-  div:first-child {
+  > div:first-child {
     flex-grow: 1;
     padding: 0;
     margin: 0 !important;
@@ -1183,7 +1183,7 @@ div.k-listview-content {
   padding: 10px;
 }
 
-div.edited-box{
+div.edited-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1209,8 +1209,6 @@ div.edited-box{
     user-select: none;
     font-weight: 600;
   }
-
-
 
 
   .slides {
@@ -1240,7 +1238,7 @@ div.edited-box{
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center;
+    object-position: bottom right;
   }
 
   div.close-box {
@@ -1335,7 +1333,7 @@ div.edited-box{
     }
 
     &:hover {
-      filter: grayscale(0) ;
+      filter: grayscale(0);
 
       img {
         transform: scale(1);
@@ -1370,7 +1368,7 @@ div.detail-box {
 
 
     .leiras-box, .adatok-grid-box {
-      font-size: 1rem;
+      font-size: 0.8rem;
     }
 
     .leiras-box {
@@ -1404,7 +1402,7 @@ div.detail-box {
 
     .adatok-grid-box {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       font-weight: 600;
       justify-items: left;
       justify-content: center;
@@ -1449,5 +1447,84 @@ span.k-menu-link {
   }
 }
 
+.k-chip, .k-numerictextbox {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.k-multiselect {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.k-dropdownlist {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.field-autokmodel-felszereltseg {
+  .form-select {
+    --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 0 0'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  }
+}
+
+.extrak-lista {
+  padding: 1rem;
+  background-color: #f9f9f9;
+  margin-top: 1rem;
+  border-radius: 5px;
+}
+
+.extrak-lista h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.extrak-lista ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+}
+
+.extrak-lista li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+section {
+  //transition: 0.2s;
+}
+
+section.blur, nav.blur {
+  //filter: blur(2px);
+  //transition: 0.2s ease;
+  //pointer-events: none;
 
 
+  &::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+  }
+}
+
+div.egyeb-box {
+  min-height: 800px;
+}

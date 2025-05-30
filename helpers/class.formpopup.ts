@@ -52,6 +52,8 @@ export class ClassFormpopup extends ClassUtil {
                 if (event.propertyName == "top" || event.propertyName == "border-bottom-color") {
                     this.root.remove();
                     this.layer.remove();
+                    document.querySelectorAll(`section`).forEach(item => item.classList.remove("blur"));
+                    document.querySelectorAll(`nav`).forEach(item => item.classList.remove("blur"));
                     resolve();
                     if (this.prev) {
                         this.prev.classList.remove("back");

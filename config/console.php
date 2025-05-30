@@ -1,6 +1,5 @@
 <?php
 
-
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
@@ -17,6 +16,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
+    'name'       => mb_strtoupper('Cartango'),
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',

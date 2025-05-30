@@ -4,8 +4,11 @@ namespace app\helpers;
 
 use app\models\base\Arvalaszto;
 use app\models\base\FelhasznaloiJogok;
+use app\models\base\Felszereltseg;
 use app\models\base\Idoszakok;
+use app\models\base\Kivitel;
 use app\models\base\Markak;
+use app\models\base\Szinek;
 use app\models\base\Ugyfelek;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -94,6 +97,21 @@ class OptionsHelper
             "400-500" => "400-500 ezer",
             "500+"    => "500+ ezer",
         ];
+    }
+
+    public static function szinekOptions()
+    {
+        return ArrayHelper::map(Szinek::find()->all(), "id", "szin_neve");
+    }
+
+    public static function kivitelOptions()
+    {
+        return ArrayHelper::map(Kivitel::find()->all(), "id", "name");
+    }
+
+    public static function felszereltsegOptions()
+    {
+        return ArrayHelper::map(Felszereltseg::find()->orderBy(["name" => SORT_ASC])->all(), "id", "name");
     }
 
 }
