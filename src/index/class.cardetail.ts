@@ -4,6 +4,7 @@ import {ClassFormpopup} from "../../helpers/class.formpopup";
 
 export enum detailEndPoint {
     AUTO_DETAIL = "AutoDetail",
+    EMAIL_FORM = "EmailForm",
 }
 
 export class ClassCardetail extends ClassUtil {
@@ -89,6 +90,46 @@ export class ClassCardetail extends ClassUtil {
             }
             event.preventDefault();
             thumbSlider.scrollLeft += Math.trunc(event.deltaY);
+        }
+
+
+        const emailBtn = this.button("email-btn");
+        emailBtn.onclick = () => {
+            this.kapcsolatForm({autoId: this.autoId})
+        }
+    }
+
+    async kapcsolatForm(data = {}) {
+        const detailBox = this.div("detail-box");
+        const closeSlideBox = this.div("close-slide-box");
+        const popupSlideContentBox = this.div("popup-slide-content-box");
+        const url = this.url(detailEndPoint.EMAIL_FORM);
+        popupSlideContentBox.innerHTML = await this.fetchData(url, data);
+
+
+        detailBox.classList.add("slide-in");
+        closeSlideBox.onclick = () => {
+            detailBox.classList.remove("slide-in");
+        }
+
+        setTimeout(() => {
+            popupSlideContentBox.scrollIntoView({
+                behavior: "smooth"
+            })
+        }, 500)
+
+        const kuldesBtn = this.button("kuldes-btn");
+        kuldesBtn.onclick = async () => {
+            const uzenetForm = document.getElementById("uzenet-form") as HTMLFormElement;
+            const formData = new FormData(uzenetForm);
+            const response = await this.fetchForm(url, formData);
+            if (response.success) {
+                this.message(response.message);
+                detailBox.addEventListener("transitionend", () => popupSlideContentBox.innerHTML = "", {once: true});
+                detailBox.classList.remove("slide-in");
+            } else {
+                this.showFormError("kapcsolatmodel", uzenetForm, JSON.parse(response.errors.toString()))
+            }
         }
 
     }

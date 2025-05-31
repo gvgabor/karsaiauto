@@ -56,6 +56,10 @@ $config = [
             'viewPath' => '@app/mail',
             // send all mails to a file by default.
             'useFileTransport' => true,
+            'messageConfig'    => [
+                'charset' => 'UTF-8',
+                'from'    => ['cartango@cartango.hu' => 'CARTANGO'],
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

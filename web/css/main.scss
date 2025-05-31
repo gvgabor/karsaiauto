@@ -356,7 +356,7 @@ div.hozzarendeles-grid-box {
   font-size: 0.8rem;
 }
 
-#autokmodel-hirdetes_leirasa, #eladasmodel-eladas_megjegyzes {
+#autokmodel-hirdetes_leirasa, #eladasmodel-eladas_megjegyzes, #kapcsolatmodel-uzenet {
   height: 200px;
   resize: none;
 }
@@ -1085,21 +1085,100 @@ div.loader {
 }
 
 form.filter-form-box {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+
+  div.kereses-box {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    row-gap: 20px;
 
 
-  @media (max-width: 991.98px) {
-    grid-template-columns: repeat(2, 1fr);
+    div.hozzad-row {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 991.98px) {
+      grid-template-columns: repeat(2, 1fr);
+
+    }
+
+    @media (max-width: 575.98px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  div.bovitett-kereses-box {
+
+    div.kereses-header {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 1rem;
+      color: #0B5ED7;
+      border-radius: 5px 5px 0 0;
+
+      h2 {
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+
+      i {
+        font-size: 2rem;
+        cursor: pointer;
+      }
+
+      i:nth-child(2) {
+        display: none;
+      }
+    }
+
+    div.bovitett-kereses-box-accordion {
+      display: grid;
+      grid-template-rows: 0fr;
+      background: white;
+      transition: grid-template-rows 0.5s;
+      border-radius: 0 0 5px 5px;
+
+      > div {
+        overflow: hidden;
+
+        > div {
+          padding: 1rem;
+        }
+      }
+    }
+
+    &.open {
+      div.kereses-header {
+        i:nth-child(1) {
+          display: none;
+        }
+
+        i:nth-child(2) {
+          display: block;
+        }
+      }
+
+
+      div.bovitett-kereses-box-accordion {
+        grid-template-rows: 1fr;
+      }
+    }
 
   }
 
-  @media (max-width: 575.98px) {
-    grid-template-columns: 1fr;
-  }
 
   > div:last-child {
+    margin-top: 20px;
     //grid-column: 1 / -1;
     //justify-self: end;
     //width: 100%;
@@ -1193,6 +1272,8 @@ div.edited-box {
   position: relative;
   width: 100%;
   margin: auto;
+  overflow: hidden;
+
 
   .counter-box {
     position: absolute;
@@ -1214,14 +1295,41 @@ div.edited-box {
   .slides {
     position: relative;
     overflow: hidden;
-    height: 800px;
+    width: 100%;
+    aspect-ratio: 16 / 9;
   }
+
+  //@media (max-width: 1200px) {
+  //  .slides {
+  //    height: 600px;
+  //  }
+  //  .slide {
+  //    height: 600px;
+  //  }
+  //  img {
+  //    object-position: center;
+  //  }
+  //
+  //}
+  //
+  //@media (max-width: 768px) {
+  //  .slides {
+  //    height: 280px;
+  //  }
+  //  .slide {
+  //    height: 280px;
+  //  }
+  //  img {
+  //    object-position: center;
+  //  }
+  //}
+
 
   .slide {
     transition: 0.5s;
     opacity: 0;
     width: 100%;
-    height: 800px;
+    height: 100%;
     position: absolute;
     inset: 0;
     //transform: translateX(-100%);
@@ -1238,7 +1346,7 @@ div.edited-box {
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: bottom right;
+    object-position: center;
   }
 
   div.close-box {
@@ -1345,6 +1453,9 @@ div.edited-box {
 
 div.detail-box {
 
+  position: relative;
+  overflow: hidden;
+
   .vetelar-box {
     display: flex;
     justify-content: space-between;
@@ -1377,35 +1488,12 @@ div.detail-box {
       font-size: 1.0rem;
     }
 
-    .erdeklodo-box {
-      min-height: 120px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-
-      > div {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        align-items: center;
-        justify-content: center;
-        background: #F8F9FA;
-        border-radius: 10px;
-        padding: 20px;
-
-        i {
-          font-size: 3rem;
-        }
-
-      }
-    }
-
     .adatok-grid-box {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      justify-content: center;
       font-weight: 600;
       justify-items: left;
-      justify-content: center;
       gap: 10px;
       text-transform: uppercase;
 
@@ -1427,6 +1515,138 @@ div.detail-box {
     }
   }
 
+  #email-btn {
+    cursor: pointer;
+
+    //&:hover {
+    //  background: #cccccc;
+    //}
+  }
+
+  .erdeklodo-box {
+    min-height: 80px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    background: #212529;
+
+    .phone {
+      font-size: 1.0rem;
+      font-weight: 600;
+    }
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      background: #F8F9FA;
+      border-radius: 10px;
+      padding: 10px;
+      width: 222px;
+      transition: 0.5s;
+
+      &:hover {
+        i {
+          transform: rotateY(180deg);
+        }
+      }
+
+
+      a, button {
+        //white-space: nowrap;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        text-decoration: none;
+        color: black;
+      }
+
+      a:hover {
+        color: blue;
+      }
+
+      i {
+        transition: 0.5s;
+        font-size: 2rem;
+      }
+
+    }
+  }
+
+
+  .round-left {
+    border-radius: 5px 0 0 5px !important;
+  }
+
+  .popup-slide-box {
+    position: absolute;
+    height: 800px;
+    width: calc(100%);
+    max-width: 800px;
+    right: 0;
+    top: 50%;
+    background: transparent;
+    transition: 0.5s;
+    transform: translateY(-50%) translateX(100%);
+    display: flex;
+
+
+    div.popup-slide-content-box {
+      background: transparent;
+      //box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
+      flex-grow: 1;
+      border-radius: 5px 0 0 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    div.popup-slide-close-box {
+      min-width: 50px;
+      width: 50px;
+      height: 100%;
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+
+      div.close-item-box {
+        width: 100%;
+        height: 50px;
+        background: white;
+        cursor: pointer;
+        box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 5px 0 0 5px;
+
+        i {
+          font-size: 2rem;
+        }
+      }
+
+    }
+
+
+  }
+
+  &.slide-in {
+    > div:not(.popup-slide-box) {
+      filter: grayscale(1) blur(2px)
+    }
+
+    pointer-events: none;
+
+    .popup-slide-box {
+      transform: translateY(-50%) translateX(0);
+      pointer-events: all;
+      filter: none;
+    }
+  }
 
 }
 

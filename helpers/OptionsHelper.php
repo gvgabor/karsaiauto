@@ -99,6 +99,82 @@ class OptionsHelper
         ];
     }
 
+    public static function ajtokOptions(): array
+    {
+        return [
+            "1-2" => "1-2",
+            "2-4" => "2-4",
+            "5+"  => "5+",
+        ];
+    }
+
+    public static function tomegOptions(): array
+    {
+        return [
+            "0-1000"    => "0-1000 kg",
+            "1000-2000" => "1000-2000 kg",
+            "2000-3000" => "2000-3000 kg",
+            "3000-4000" => "3000-4000 kg",
+            "4000-5000" => "4000-5000 kg",
+            "5000+"     => "5000+ kg",
+        ];
+    }
+
+
+    public static function meretOptions(): array
+    {
+        return [
+            "0-1000"    => "0-1000 mm",
+            "1000-2000" => "1000-2000 mm",
+            "2000-3000" => "2000-3000 mm",
+            "3000-4000" => "3000-4000 mm",
+            "4000-5000" => "4000-5000 mm",
+            "5000+"     => "5000+ mm",
+        ];
+    }
+
+    public static function hengerurtartalomOptions(): array
+    {
+        return [
+            "0-999"     => "0 – 999 cm³",
+            "1000-1399" => "1000 – 1399 cm³",
+            "1400-1599" => "1400 – 1599 cm³",
+            "1600-1799" => "1600 – 1799 cm³",
+            "1800-1999" => "1800 – 1999 cm³",
+            "2000-2499" => "2000 – 2499 cm³",
+            "2500-2999" => "2500 – 2999 cm³",
+            "3000-3499" => "3000 – 3499 cm³",
+            "3500-3999" => "3500 – 3999 cm³",
+            "4000-4999" => "4000 – 4999 cm³",
+            "5000+"     => "5000 cm³ felett",
+        ];
+    }
+
+    public static function hengerSzamOptions(): array
+    {
+        return [
+            "1"  => "1 henger",
+            "2"  => "2 henger",
+            "3"  => "3 henger",
+            "4"  => "4 henger",
+            "5"  => "5 henger",
+            "6"  => "6 henger",
+            "8"  => "8 henger (V8)",
+            "10" => "10 henger (V10)",
+            "12" => "12 henger (V12)",
+            "16" => "16 henger (V16)",
+        ];
+    }
+
+    public static function szallithatoSzemelyekOptions(): array
+    {
+        return [
+            "1-2" => "1-2",
+            "2-4" => "2-4",
+            "5+"  => "5+",
+        ];
+    }
+
     public static function szinekOptions()
     {
         return ArrayHelper::map(Szinek::find()->all(), "id", "szin_neve");

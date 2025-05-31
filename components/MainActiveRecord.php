@@ -61,6 +61,15 @@ abstract class MainActiveRecord extends ActiveRecord
         return $this;
     }
 
+    public function formatNumber($number, $suffix = null)
+    {
+        $format = number_format($number, 0, "", " ");
+        if ($suffix) {
+            $format .= " " . $suffix;
+        }
+        return $format;
+    }
+
     public function deleteMessage($value)
     {
         return Yii::t("app", "Torlese Sikeres", ["value" => $value]);

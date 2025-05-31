@@ -289,7 +289,7 @@ div.hozzarendeles-grid-box > div:nth-child(2) i {
   font-size: 0.8rem;
 }
 
-#autokmodel-hirdetes_leirasa, #eladasmodel-eladas_megjegyzes {
+#autokmodel-hirdetes_leirasa, #eladasmodel-eladas_megjegyzes, #kapcsolatmodel-uzenet {
   height: 200px;
   resize: none;
 }
@@ -898,21 +898,77 @@ div.loader {
   border-radius: 0 !important;
 }
 
-form.filter-form-box {
+form.filter-form-box div.kereses-box {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  row-gap: 20px;
+}
+form.filter-form-box div.kereses-box div.hozzad-row {
+  margin-bottom: 0;
 }
 @media (max-width: 991.98px) {
-  form.filter-form-box {
+  form.filter-form-box div.kereses-box {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (max-width: 575.98px) {
-  form.filter-form-box {
+  form.filter-form-box div.kereses-box {
     grid-template-columns: 1fr;
   }
 }
+form.filter-form-box h2 {
+  font-size: 1rem;
+}
+form.filter-form-box div.bovitett-kereses-box div.kereses-header {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1rem;
+  color: #0B5ED7;
+  border-radius: 5px 5px 0 0;
+}
+form.filter-form-box div.bovitett-kereses-box div.kereses-header h2 {
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+form.filter-form-box div.bovitett-kereses-box div.kereses-header i {
+  font-size: 2rem;
+  cursor: pointer;
+}
+form.filter-form-box div.bovitett-kereses-box div.kereses-header i:nth-child(2) {
+  display: none;
+}
+form.filter-form-box div.bovitett-kereses-box div.bovitett-kereses-box-accordion {
+  display: grid;
+  grid-template-rows: 0fr;
+  background: white;
+  transition: grid-template-rows 0.5s;
+  border-radius: 0 0 5px 5px;
+}
+form.filter-form-box div.bovitett-kereses-box div.bovitett-kereses-box-accordion > div {
+  overflow: hidden;
+}
+form.filter-form-box div.bovitett-kereses-box div.bovitett-kereses-box-accordion > div > div {
+  padding: 1rem;
+}
+form.filter-form-box div.bovitett-kereses-box.open div.kereses-header i:nth-child(1) {
+  display: none;
+}
+form.filter-form-box div.bovitett-kereses-box.open div.kereses-header i:nth-child(2) {
+  display: block;
+}
+form.filter-form-box div.bovitett-kereses-box.open div.bovitett-kereses-box-accordion {
+  grid-template-rows: 1fr;
+}
+form.filter-form-box > div:last-child {
+  margin-top: 20px;
+}
+
 #filter-form span.k-colorpicker, #filter-form span.k-combobox, #filter-form span.k-datepicker, #filter-form span.k-datetimepicker, #filter-form span.k-dropdown, #filter-form span.k-dropdownlist, #filter-form span.k-dropdowntree, #filter-form span.k-numerictextbox, #filter-form span.k-timepicker {
   background-image: none;
   border-radius: 0;
@@ -980,6 +1036,7 @@ div.edited-box {
   position: relative;
   width: 100%;
   margin: auto;
+  overflow: hidden;
 }
 .simple-slider .counter-box {
   position: absolute;
@@ -999,13 +1056,14 @@ div.edited-box {
 .simple-slider .slides {
   position: relative;
   overflow: hidden;
-  height: 800px;
+  width: 100%;
+  aspect-ratio: 16/9;
 }
 .simple-slider .slide {
   transition: 0.5s;
   opacity: 0;
   width: 100%;
-  height: 800px;
+  height: 100%;
   position: absolute;
   inset: 0;
 }
@@ -1018,7 +1076,7 @@ div.edited-box {
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: bottom right;
+  object-position: center;
 }
 .simple-slider div.close-box {
   position: absolute;
@@ -1105,6 +1163,10 @@ div.edited-box {
   transform: scale(1);
 }
 
+div.detail-box {
+  position: relative;
+  overflow: hidden;
+}
 div.detail-box .vetelar-box {
   display: flex;
   justify-content: space-between;
@@ -1130,31 +1192,12 @@ div.detail-box .adatok-box .leiras-box {
   margin-top: 20px;
   font-size: 1rem;
 }
-div.detail-box .adatok-box .erdeklodo-box {
-  min-height: 120px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-div.detail-box .adatok-box .erdeklodo-box > div {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  background: #F8F9FA;
-  border-radius: 10px;
-  padding: 20px;
-}
-div.detail-box .adatok-box .erdeklodo-box > div i {
-  font-size: 3rem;
-}
 div.detail-box .adatok-box .adatok-grid-box {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  justify-content: center;
   font-weight: 600;
   justify-items: left;
-  justify-content: center;
   gap: 10px;
   text-transform: uppercase;
 }
@@ -1171,6 +1214,106 @@ div.detail-box .adatok-box .adatok-grid-box > div {
 div.detail-box .adatok-box .adatok-grid-box > div i {
   font-size: 2rem;
   margin-bottom: 10px;
+}
+div.detail-box #email-btn {
+  cursor: pointer;
+}
+div.detail-box .erdeklodo-box {
+  min-height: 80px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  background: #212529;
+}
+div.detail-box .erdeklodo-box .phone {
+  font-size: 1rem;
+  font-weight: 600;
+}
+div.detail-box .erdeklodo-box > div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  background: #F8F9FA;
+  border-radius: 10px;
+  padding: 10px;
+  width: 222px;
+  transition: 0.5s;
+}
+div.detail-box .erdeklodo-box > div:hover i {
+  transform: rotateY(180deg);
+}
+div.detail-box .erdeklodo-box > div a, div.detail-box .erdeklodo-box > div button {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}
+div.detail-box .erdeklodo-box > div a:hover {
+  color: blue;
+}
+div.detail-box .erdeklodo-box > div i {
+  transition: 0.5s;
+  font-size: 2rem;
+}
+div.detail-box .round-left {
+  border-radius: 5px 0 0 5px !important;
+}
+div.detail-box .popup-slide-box {
+  position: absolute;
+  height: 800px;
+  width: 100%;
+  max-width: 800px;
+  right: 0;
+  top: 50%;
+  background: transparent;
+  transition: 0.5s;
+  transform: translateY(-50%) translateX(100%);
+  display: flex;
+}
+div.detail-box .popup-slide-box div.popup-slide-content-box {
+  background: transparent;
+  flex-grow: 1;
+  border-radius: 5px 0 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+div.detail-box .popup-slide-box div.popup-slide-close-box {
+  min-width: 50px;
+  width: 50px;
+  height: 100%;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+div.detail-box .popup-slide-box div.popup-slide-close-box div.close-item-box {
+  width: 100%;
+  height: 50px;
+  background: white;
+  cursor: pointer;
+  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 5px 0 0 5px;
+}
+div.detail-box .popup-slide-box div.popup-slide-close-box div.close-item-box i {
+  font-size: 2rem;
+}
+div.detail-box.slide-in {
+  pointer-events: none;
+}
+div.detail-box.slide-in > div:not(.popup-slide-box) {
+  filter: grayscale(1) blur(2px);
+}
+div.detail-box.slide-in .popup-slide-box {
+  transform: translateY(-50%) translateX(0);
+  pointer-events: all;
+  filter: none;
 }
 
 span.k-menu-link {

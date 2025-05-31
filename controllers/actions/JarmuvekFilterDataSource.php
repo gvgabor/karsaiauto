@@ -78,7 +78,99 @@ class JarmuvekFilterDataSource extends MainAction
             } else {
                 $query->andFilterWhere([">=", "vetelar", $arvalaszto->kezdo_osszeg]);
             }
+        }
 
+        if ($filterModel->szin) {
+            $query->andFilterWhere(['szinek_id' => $filterModel->szin]);
+        }
+
+        if ($filterModel->kivitel) {
+            $query->andFilterWhere(['kivitel_id' => $filterModel->kivitel]);
+        }
+
+        if ($filterModel->ajtokszama) {
+            $parts = explode("-", $filterModel->ajtokszama);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "ajtok_szam", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "ajtok_szam", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->szallithatoSzemelyek) {
+            $parts = explode("-", $filterModel->szallithatoSzemelyek);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "szallithato_szemelyek", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "szallithato_szemelyek", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->sajatTomeg) {
+            $parts = explode("-", $filterModel->sajatTomeg);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "sajat_tomeg", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "sajat_tomeg", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->ossztomeg) {
+            $parts = explode("-", $filterModel->ossztomeg);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "ossztomeg", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "ossztomeg", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->terhelhetoseg) {
+            $parts = explode("-", $filterModel->terhelhetoseg);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "terhelhetoseg", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "terhelhetoseg", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->tengelytav) {
+            $parts = explode("-", $filterModel->tengelytav);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "tengelytav", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "tengelytav", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->hosszusag) {
+            $parts = explode("-", $filterModel->hosszusag);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "hosszusag", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "hosszusag", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->szelesseg) {
+            $parts = explode("-", $filterModel->szelesseg);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "szelesseg", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "szelesseg", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->hengerurtartalom) {
+            $parts = explode("-", $filterModel->hengerurtartalom);
+            if (count($parts) === 2) {
+                $query->andFilterWhere(["between", "hengerurtartalom", $parts[0], $parts[1]]);
+            } else {
+                $query->andFilterWhere([">=", "hengerurtartalom", str_replace("+", "", $parts[0])]);
+            }
+        }
+
+        if ($filterModel->hengerek_szama) {
+            $query->andFilterWhere(["=", "hengerek_szama", $filterModel->hengerek_szama]);
         }
 
         if (!empty($filterModel->sorbarendezes)) {

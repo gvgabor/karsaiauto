@@ -10,6 +10,7 @@ use app\models\base\Felhasznalok;
 use app\models\base\Markak;
 use app\models\base\Menu;
 use app\models\base\Ugyfelek;
+use app\models\index\KapcsolatModel;
 use app\modules\autok\actions\AutokAction;
 use app\modules\autok\models\AutokModel;
 use app\modules\autok\models\EladasModel;
@@ -172,6 +173,16 @@ class ConsoleController extends Controller
         Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
     }
 
+    public function actionRandomEmail(): KapcsolatModel
+    {
+        $factory       = Factory::create('hu_HU');
+        $model         = new KapcsolatModel();
+        $model->nev    = $factory->name;
+        $model->uzenet = $factory->realText;
+        $model->email  = $factory->email;
+        return $model;
+    }
+
     /**
      * @return void
      * php yii console/fill-autok-data
@@ -192,53 +203,43 @@ class ConsoleController extends Controller
         $formatSize  = DirectoryHelper::formatBytes($bytesSize);
 
         for ($i = 0; $i < $total; $i++) {
-            $memoria = sprintf(
-                'Iteráció: %d | Használat: %.2f MB | Csúcs: %.2f MB',
-                $i,
-                memory_get_usage()      / 1024 / 1024,
-                memory_get_peak_usage() / 1024 / 1024
-            );
+            try {
+                $memoria = sprintf(
+                    'Iteráció: %d | Használat: %.2f MB | Csúcs: %.2f MB',
+                    $i,
+                    memory_get_usage()      / 1024 / 1024,
+                    memory_get_peak_usage() / 1024 / 1024
+                );
 
-            if ($i % 100 === 0) {
-                $bytesSize  = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
-                $formatSize = DirectoryHelper::formatBytes($bytesSize);
-                if ($bytesSize !== false && $bytesSize >= $limitBytes) {
-                    Console::updateProgress($i + 1, $total, "MEGÁLLÍTVA! Könyvtár mérete elérte a limitet: " . $formatSize);
-                    Console::endProgress();
-                    Console::output(sprintf('A fájlgenerálás leállt, mert az "uploads" könyvtár mérete meghaladta a %s GB-ot.', $totalBytes));
-                    Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
-                    return; // Kilépés a metódusból
+                if ($i % 100 === 0) {
+                    $bytesSize  = DirectoryHelper::getDirectorySize(Yii::getAlias('@app/web/uploads'));
+                    $formatSize = DirectoryHelper::formatBytes($bytesSize);
+                    if ($bytesSize !== false && $bytesSize >= $limitBytes) {
+                        Console::updateProgress($i + 1, $total, "MEGÁLLÍTVA! Könyvtár mérete elérte a limitet: " . $formatSize);
+                        Console::endProgress();
+                        Console::output(sprintf('A fájlgenerálás leállt, mert az "uploads" könyvtár mérete meghaladta a %s GB-ot.', $totalBytes));
+                        Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
+                        return; // Kilépés a metódusból
+                    }
                 }
+
+                Console::updateProgress($i + 1, $total, "Memória: " . $memoria . " Size: " . $formatSize);
+                $model  = $this->actionRandomAuto();
+                $images = $factory->randomElements($files, random_int(10, 20));
+
+                $formData                  = array_filter($model->attributes, fn ($value) => $value);
+                $formData["felszereltseg"] = $model->felszereltseg;
+
+                $result = $autokAction->save($formData, $images);
+                if ($result["success"] === false) {
+                    throw new Exception($result['message']);
+                }
+                unset($model, $images, $formData, $result);
+                gc_collect_cycles();
+            } catch (Exception $exception) {
+                Yii::error(__CLASS__, $exception->getMessage());
             }
 
-            Console::updateProgress($i + 1, $total, "Memória: " . $memoria . " Size: " . $formatSize);
-            $model    = $this->actionRandomAuto();
-            $images   = $factory->randomElements($files, random_int(10, 20));
-            $formData = [
-                "hirdetes_leirasa" => $model->hirdetes_leirasa,
-                "hirdetes_cime"    => $model->hirdetes_cime,
-                "teljesitmeny"     => $model->teljesitmeny,
-                "kilometer"        => $model->kilometer,
-                "vetelar"          => $model->vetelar,
-                "muszaki_ervenyes" => $model->muszaki_ervenyes,
-                "motortipus_id"    => $model->motortipus_id,
-                "marka_id"         => $model->marka_id,
-                "model"            => $model->model,
-                "jarmutipus_id"    => $model->jarmutipus_id,
-                "gyartasi_ev"      => $model->gyartasi_ev,
-                "valto_id"         => $model->valto_id,
-                "publikalva"       => 1,
-                "felszereltseg"    => $model->felszereltseg,
-                "kivitel_id"       => $model->kivitel_id,
-                "szinek_id"        => $model->szinek_id,
-            ];
-
-            $result = $autokAction->save($formData, $images);
-            if ($result["success"] === false) {
-                throw new Exception($result['message']);
-            }
-            unset($model, $images, $formData, $result);
-            gc_collect_cycles();
         }
         Console::endProgress();
         Console::output('Max memóriahasználat: ' . number_format(memory_get_peak_usage() / 1024 / 1024, 2) . ' MB');
@@ -247,29 +248,39 @@ class ConsoleController extends Controller
 
     public function actionRandomAuto()
     {
-        $factory                 = Factory::create('hu_HU');
-        $model                   = new AutokModel();
-        $model->hirdetes_leirasa = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
-        $model->teljesitmeny     = (string)$factory->numberBetween(50, 600);
-        $model->kilometer        = round($factory->numberBetween(20000, 800000), -3);
-        $model->vetelar          = round($factory->numberBetween(200000, 20000000), -3);
-        $model->muszaki_ervenyes = $factory->dateTimeBetween("now", "+3 years")->format("Y-m");
-        $model->motortipus_id    = $factory->randomElement(array_keys(OptionsHelper::motortipusOptions()));
-        $marka                   = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
-        $marka2                  = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
-        $model->marka_id         = $marka->id;
-        $model->model            = $marka2->name;
-        $model->hirdetes_cime    = mb_strtoupper($marka->name . " " . $marka2->name . " 2.3 Mjet LWB 3.5 t gépjármű");
-        $model->jarmutipus_id    = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
-        $model->gyartasi_ev      = random_int(1990, 2025);
-        $model->valto_id         = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));
-        $model->publikalva       = 1;
-        $model->szinek_id        = $factory->randomElement(array_keys(OptionsHelper::szinekOptions()));
-        $model->kivitel_id       = $factory->randomElement(array_keys(OptionsHelper::kivitelOptions()));
-        $felszereltseg           = OptionsHelper::felszereltsegOptions();
-        $count                   = random_int(1, count($felszereltseg) - 1);
-        $extrak                  = $factory->randomElements(array_keys($felszereltseg), $count);
-        $model->felszereltseg    = $extrak;
+        $factory                      = Factory::create('hu_HU');
+        $model                        = new AutokModel();
+        $model->hirdetes_leirasa      = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
+        $model->teljesitmeny          = (string)$factory->numberBetween(50, 600);
+        $model->kilometer             = round($factory->numberBetween(20000, 800000), -3);
+        $model->vetelar               = round($factory->numberBetween(200000, 20000000), -3);
+        $model->muszaki_ervenyes      = $factory->dateTimeBetween("now", "+3 years")->format("Y-m");
+        $model->motortipus_id         = $factory->randomElement(array_keys(OptionsHelper::motortipusOptions()));
+        $marka                        = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
+        $marka2                       = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
+        $model->marka_id              = $marka->id;
+        $model->model                 = $marka2->name;
+        $model->hirdetes_cime         = mb_strtoupper($marka->name . " " . $marka2->name . " 2.3 Mjet LWB 3.5 t gépjármű");
+        $model->jarmutipus_id         = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
+        $model->gyartasi_ev           = random_int(1990, 2025);
+        $model->valto_id              = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));
+        $model->publikalva            = 1;
+        $model->szinek_id             = $factory->randomElement(array_keys(OptionsHelper::szinekOptions()));
+        $model->kivitel_id            = $factory->randomElement(array_keys(OptionsHelper::kivitelOptions()));
+        $model->ajtok_szam            = random_int(1, 7);
+        $model->szallithato_szemelyek = random_int(1, 7);
+        $model->sajat_tomeg           = random_int(800, 10000);
+        $model->ossztomeg             = random_int(800, 10000);
+        $model->terhelhetoseg         = random_int(800, 10000);
+        $model->hosszusag             = random_int(500, 10000);
+        $model->szelesseg             = random_int(500, 10000);
+        $model->tengelytav            = random_int(500, 10000);
+        $model->hengerek_szama        = random_int(1, 16);
+        $model->hengerurtartalom      = random_int(500, 10000);
+        $felszereltseg                = OptionsHelper::felszereltsegOptions();
+        $count                        = random_int(1, count($felszereltseg) - 1);
+        $extrak                       = $factory->randomElements(array_keys($felszereltseg), $count);
+        $model->felszereltseg         = $extrak;
         return $model;
     }
 

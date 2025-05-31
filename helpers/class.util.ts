@@ -82,7 +82,7 @@ export class ClassUtil {
         setTimeout(() => {
             messageBox.ontransitionend = () => messageBox.remove();
             messageBox.classList.remove("active");
-        }, 3000);
+        }, 5000);
 
     }
 

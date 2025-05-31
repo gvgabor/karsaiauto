@@ -172,6 +172,83 @@ class HtmlHelper
             ];
         }
 
+        if ($model->ajtok_szam) {
+            $properties[] = [
+                "label" => Yii::t("app", "Ajtok Szam"),
+                "i"     => "fa-solid fa-door-closed",
+                "value" => $model->ajtok_szam,
+            ];
+        }
+
+        if ($model->szallithato_szemelyek) {
+            $properties[] = [
+                "label" => Yii::t("app", "Szallithato Szemelyek"),
+                "i"     => "fa-solid fa-user",
+                "value" => $model->szallithato_szemelyek,
+            ];
+        }
+
+        if ($model->sajat_tomeg) {
+            $properties[] = [
+                "label" => Yii::t("app", "Sajat Tomeg"),
+                "i"     => "fa-solid fa-weight-hanging",
+                "value" => $model->formatNumber($model->sajat_tomeg, "kg"),
+            ];
+        }
+
+        if ($model->ossztomeg) {
+            $properties[] = [
+                "label" => Yii::t("app", "Ossztomeg"),
+                "i"     => "fa-solid fa-weight-hanging",
+                "value" => $model->formatNumber($model->ossztomeg, "kg"),
+            ];
+        }
+
+        if ($model->terhelhetoseg) {
+            $properties[] = [
+                "label" => Yii::t("app", "Terhelhetoseg"),
+                "i"     => "fa-solid fa-scale-balanced",
+                "value" => $model->formatNumber($model->terhelhetoseg, "kg"),
+            ];
+        }
+
+        if ($model->tengelytav) {
+            $properties[] = [
+                "label" => Yii::t("app", "Tengelytav"),
+                "i"     => "fa-solid fa-arrows-left-right",
+                "value" => $model->formatNumber($model->tengelytav, "mm"),
+            ];
+        }
+
+        if ($model->hosszusag) {
+            $properties[] = [
+                "label" => Yii::t("app", "Hosszusag"),
+                "i"     => "fa-solid fa-arrows-left-right",
+                "value" => $model->formatNumber($model->hosszusag, "mm"),
+            ];
+        }
+
+        if ($model->szelesseg) {
+            $properties[] = [
+                "label" => Yii::t("app", "Szelesseg"),
+                "i"     => "fa-solid fa-arrows-left-right",
+                "value" => $model->formatNumber($model->szelesseg, "mm"),
+            ];
+        }
+        if ($model->hengerek_szama) {
+            $properties[] = [
+                "label" => Yii::t("app", "Hengerek Szama"),
+                "i"     => "fa-solid fa-cubes",
+                "value" => $model->formatNumber($model->hengerek_szama),
+            ];
+        }        if ($model->hengerurtartalom) {
+            $properties[] = [
+                "label" => Yii::t("app", "Hengerurtartalom"),
+                "i"     => "fa-solid fa-industry",
+                "value" => $model->formatNumber($model->hengerurtartalom, "m³"),
+            ];
+        }
+
         $children = [];
 
         foreach ($properties as $item) {

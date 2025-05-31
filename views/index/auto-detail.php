@@ -6,12 +6,13 @@
 
 use app\helpers\HtmlHelper;
 use app\models\index\LandingAutok;
+use yii\helpers\Url;
 use yii\web\View;
 
 ?>
 
 
-<div class="card shadow-lg detail-box">
+<div id="detail-box" class="card shadow-lg detail-box">
     <div class="card-body p-0">
 
 
@@ -43,6 +44,29 @@ use yii\web\View;
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <div class="erdeklodo-box">
+            <div>
+                <i class="fa-solid fa-phone"></i>
+                <span class="phone">06 30 261 70 50</span>
+            </div>
+            <div id="email-btn">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span class="phone"><?= Yii::t("app", "Email Kuldok") ?></span>
+            </div>
+            <div>
+                <i class="fab fa-facebook"></i>
+                <a
+                        href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode(Url::to(['auto/view', 'id' => $model->id], true)) ?>"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                >
+                    <span class="phone"> Megosztom a Facebookon</span>
+
+                </a>
+            </div>
+        </div>
+
         <div class="bg-light vetelar-box">
             <h5 class="mb-0">Vételár</h5>
             <h5 class=" mb-0"><?= $model->formatVetelar ?> Ft</h5>
@@ -63,53 +87,28 @@ use yii\web\View;
 
             <?= HtmlHelper::adatokBoxGrid($model) ?>
 
-            <?= HtmlHelper::felszereltsegBox($model) ?>
-
-            <!--            <h4 class="mb-3 mt-3">-->
-            <!--               Letölthető dokumentumok-->
-            <!--            </h4>-->
-            <!---->
-            <!--            <div class="adatok-grid-box">-->
-            <!--                <div>-->
-            <!--                    <i class="fas fa-wrench me-2 text-muted"></i>-->
-            <!--                    <span>Műszaki</span>-->
-            <!--                </div>-->
-            <!--                <div>-->
-            <!--                    <i class="fas fa-book-medical me-2 text-muted"></i>-->
-            <!--                    <span>Szervízkönyv</span>-->
-            <!--                </div>-->
-            <!--                <div>-->
-            <!--                    <i class="fas fa-id-badge me-2 text-muted"></i>-->
-            <!--                    <span>Eredetiség vizsgálat</span>-->
-            <!--                </div>-->
-            <!--                <div>-->
-            <!--                    <i class="fas fa-leaf me-2 text-muted"></i>-->
-            <!--                    <span>Zöldkönyv</span>-->
-            <!--                </div>-->
-            <!--            </div>-->
-
             <div class="leiras-box">
                 <?= $model->hirdetesLeirasa ?>
             </div>
 
-            <div class="erdeklodo-box">
-                <div>
-                    <i class="fa-solid fa-phone"></i>
-                    <a href="tel:+36301234567" class="btn btn-primary rounded-0">Telefonálok</a>
-                </div>
-                <div>
-                    <i class="fa-solid fa-envelope-open-text"></i>
-                    <a href="tel:+36301234567" class="btn btn-primary rounded-0">E-mail-t irok</a>
-                </div>
-                <div>
-                    <i class="fa-solid fa-car"></i>
-                    <a href="tel:+36301234567" class="btn btn-primary rounded-0">Megnézem személyesen</a>
-                </div>
-            </div>
+            <?= HtmlHelper::felszereltsegBox($model) ?>
 
 
         </div>
 
+    </div>
+    <div id="popup-slide-box" class="popup-slide-box">
+        <div class="popup-slide-close-box">
+            <div id="close-slide-box" class="d-flex justify-content-center align-items-center close-item-box">
+                <i class="fa-solid fa-xmark "></i>
+            </div>
+
+        </div>
+        <div id="popup-slide-content-box" class="popup-slide-content-box">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid deleniti error esse illum labore,
+            laudantium magnam odit sunt velit! Distinctio ipsum iusto, nam nesciunt numquam quisquam repellendus saepe
+            suscipit voluptatibus.
+        </div>
     </div>
 </div>
 

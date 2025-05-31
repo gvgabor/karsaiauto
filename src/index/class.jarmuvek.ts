@@ -33,7 +33,7 @@ export class ClassJarmuvek extends ClassUtil {
                 return template;
             },
             change: () => {
-                saveFilterBtn.click();
+                // saveFilterBtn.click();
             }
         }));
 
@@ -65,6 +65,19 @@ export class ClassJarmuvek extends ClassUtil {
                 saveFilterBtn.click();
             }
         });
+
+        const bovitettKeresesBox = this.div("bovitett-kereses-box");
+        Array.from((document.querySelectorAll<HTMLElement>(`.kereses-header i`))).forEach((item) => {
+            item.onclick = () => {
+                bovitettKeresesBox.classList.toggle("open");
+                localStorage.setItem("bovitett-kereses-box", bovitettKeresesBox.classList.contains("open") ? "1" : "0")
+            };
+        });
+
+        if (parseInt(localStorage.getItem("bovitett-kereses-box") || "0") == 1) {
+            bovitettKeresesBox.classList.add("open");
+        }
+
         saveFilterBtn.onclick = async () => {
             const form = document.getElementById("filter-form") as HTMLFormElement;
             const formData = new FormData(form);
@@ -83,7 +96,20 @@ export class ClassJarmuvek extends ClassUtil {
             "filtermodel-jarmutipus", "filtermodel-motortipus",
             "filtermodel-valto",
             "filtermodel-teljesitmeny",
-            "filtermodel-kilometer", "filtermodel-sorbarendezes"
+            "filtermodel-kilometer",
+            "filtermodel-sorbarendezes",
+            "filtermodel-szin",
+            "filtermodel-kivitel",
+            "filtermodel-ajtokszama",
+            "filtermodel-szallithatoszemelyek",
+            "filtermodel-sajattomeg",
+            "filtermodel-ossztomeg",
+            "filtermodel-terhelhetoseg",
+            "filtermodel-tengelytav",
+            "filtermodel-szelesseg",
+            "filtermodel-hosszusag",
+            "filtermodel-hengerek_szama",
+            "filtermodel-hengerurtartalom",
         ];
     }
 

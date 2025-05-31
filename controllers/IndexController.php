@@ -2,15 +2,18 @@
 
 namespace app\controllers;
 
+use app\commands\ConsoleController;
 use app\components\enums\LandingDataSourceType;
 use app\controllers\actions\JarmuvekFilterDataSource;
 use app\controllers\actions\LandingDatasourceAction;
 use app\helpers\UtilHelper;
 use app\models\base\Felhasznalok;
+use app\models\index\KapcsolatModel;
 use app\models\index\LandingAutok;
 use Exception;
 use Throwable;
 use Yii;
+use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
 use yii\helpers\Url;
@@ -68,6 +71,49 @@ class IndexController extends Controller
         Yii::$app->response->format = Response::FORMAT_HTML;
         $model                      = LandingAutok::findOne($this->request->post("id"));
         return $this->renderPartial("auto-detail", ["model" => $model]);
+    }
+
+    public function actionEmailForm()
+    {
+        Yii::$app->response->format = Response::FORMAT_HTML;
+        $model                      = new KapcsolatModel();
+
+        if (UtilHelper::isLocal()) {
+            $model = Yii::$container->get(ConsoleController::class)->actionRandomEmail();
+        }
+        if ($autoId = $this->request->post("autoId")) {
+            $model->autoId = $autoId;
+            $model->targy  = $model->auto->hirdetes_cime;
+        }
+        if ($formData = $this->request->post($model->shortname)) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $result                     = [];
+            try {
+                $model->setAttributes($formData);
+                $model->validate() ?: throw new BadRequestHttpException(Json::encode($model->errors));
+                $email = Yii::$app->mailer->compose();
+                $email
+                    ->setTo(["gvgabor@gmail.com"])
+                    ->setSubject($model->nev);
+
+                $email->setHtmlBody(
+                    "<p><strong>" . Html::encode($model->nev) . "</strong> nevű illető e-mailt küldött.</p>" .
+                    "<p><strong>E-mail:</strong> " . Html::encode($model->email) . "</p>" .
+                    "<p><strong>Üzenet:</strong><br>" . nl2br(Html::encode($model->uzenet)) . "</p>" .
+                    "<p><strong>Tárgy:</strong> " . Html::encode($model->targy) . "</p>"
+                );
+
+                $result["mail"]    = $email->send();
+                $result["message"] = Yii::t("app", "Koszonjuk Erdeklodest", ["nev" => $model->nev]);
+                $result["success"] = true;
+            } catch (Throwable $exception) {
+                $result["success"] = false;
+                $result["errors"]  = $exception->getMessage();
+            }
+
+            return $result;
+        }
+        return $this->renderPartial("email-form", ['model' => $model]);
     }
 
     public function actionJarmuvek()
