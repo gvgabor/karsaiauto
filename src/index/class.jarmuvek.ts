@@ -59,9 +59,9 @@ export class ClassJarmuvek extends ClassUtil {
             jarmuvekPager2.style.display = list.dataSource.data().length == 0 ? "none" : "flex";
             (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
                 const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
-                (item.querySelector(`div.image-box`)! as HTMLDivElement).onclick = () => {
+                (item as HTMLDivElement).onclick = () => {
                     if (this.isMobile()) {
-                        this.navigate(dataItem.oldal);
+                        // this.navigate(dataItem.oldal);
                     } else {
                         new ClassCardetail(dataItem.id).showDetail();
                     }

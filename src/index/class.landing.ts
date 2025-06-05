@@ -31,7 +31,7 @@ export class ClassLanding extends ClassUtil {
             kiemeltAutokLabel.style.display = list.dataSource.data().length == 0 ? "none" : "block";
             (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
                 const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
-                (item.querySelector(`div.image-box`)! as HTMLDivElement).onclick = () => {
+                item.onclick = () => {
                     if (this.isMobile()) {
                         this.navigate(dataItem.oldal);
                     } else {
@@ -46,7 +46,7 @@ export class ClassLanding extends ClassUtil {
             akciosAutokLabel.style.display = list.dataSource.data().length == 0 ? "none" : "block";
             (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
                 const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
-                (item.querySelector(`div.image-box`)! as HTMLDivElement).onclick = () => {
+                item.onclick = () => {
                     if (this.isMobile()) {
                         this.navigate(dataItem.oldal);
                     } else {

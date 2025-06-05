@@ -57,7 +57,7 @@ use yii\web\View;
             <div>
                 <i class="fab fa-facebook"></i>
                 <a
-                        href="https://www.facebook.com/sharer/sharer.php?u=<?= urlencode(Url::to(['auto/view', 'id' => $model->id], true)) ?>"
+                        href="https://www.facebook.com/sharer/sharer.php?u=<?= $model->oldalLink ?>"
                         target="_blank"
                         rel="noopener noreferrer"
                 >

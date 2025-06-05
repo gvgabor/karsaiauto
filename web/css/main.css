@@ -788,19 +788,7 @@ div.loader {
   position: relative;
   overflow: hidden;
   transition: 0.5s;
-}
-#akcios-autok-list div.k-listview-content div.autok-list-item:hover,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover, #jarmuvek-list div.k-listview-content div.autok-list-item:hover {
   cursor: pointer;
-}
-#akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box img, #jarmuvek-list div.k-listview-content div.autok-list-item:hover div.image-box img {
-  filter: grayscale(1);
-}
-#akcios-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer,
-#kiemelt-autok-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer, #jarmuvek-list div.k-listview-content div.autok-list-item:hover div.image-box div.layer {
-  opacity: 1;
-  transform: perspective(600px) rotateX(0deg);
 }
 #akcios-autok-list div.k-listview-content div.autok-list-item div.detail > div,
 #kiemelt-autok-list div.k-listview-content div.autok-list-item div.detail > div, #jarmuvek-list div.k-listview-content div.autok-list-item div.detail > div {
@@ -1076,7 +1064,7 @@ div.edited-box {
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: center;
+  object-position: bottom;
 }
 .simple-slider div.close-box {
   position: absolute;

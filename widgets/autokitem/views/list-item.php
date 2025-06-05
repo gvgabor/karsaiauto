@@ -15,6 +15,7 @@ if (empty($model)) {
 ?>
 
 <div class="card h-100 border-1 autok-list-item">
+
     <div class="image-box">
         <img
                 src="<?= $model->firstImage?->imageUrl ?>" class="card-img-top"
@@ -38,7 +39,11 @@ if (empty($model)) {
             <div><strong>Teljesítmény:</strong> <?= $model->tejlesitmenyText ?></div>
         </div>
 
-
+        <div class="reszletek-box d-flex d-sm-none justify-content-end" style="height: 40px">
+            <a class="btn btn-primary rounded-0" href="<?= $model->oldalLink ?>">
+                <i class="fas fa-tree"></i> Részletek
+            </a>
+        </div>
         <?= HtmlHelper::vetelarBox($model) ?>
     </div>
 

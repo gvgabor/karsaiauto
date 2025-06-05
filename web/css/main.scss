@@ -955,22 +955,23 @@ div.loader {
       position: relative;
       overflow: hidden;
       transition: 0.5s;
+      cursor: pointer;
 
 
-      &:hover {
-        cursor: pointer;
-
-        div.image-box {
-          img {
-            filter: grayscale(1);
-          }
-
-          div.layer {
-            opacity: 1;
-            transform: perspective(600px) rotateX(0deg);
-          }
-        }
-      }
+      //&:hover {
+      //  cursor: pointer;
+      //
+      //  div.image-box {
+      //    img {
+      //      filter: grayscale(1);
+      //    }
+      //
+      //    div.layer {
+      //      opacity: 1;
+      //      transform: perspective(600px) rotateX(0deg);
+      //    }
+      //  }
+      //}
 
       div.detail {
         > div {
@@ -1346,7 +1347,7 @@ div.edited-box {
     height: 100%;
     display: block;
     object-fit: cover;
-    object-position: center;
+    object-position: bottom;
   }
 
   div.close-box {
