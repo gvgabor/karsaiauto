@@ -12,6 +12,7 @@ final class LandingAutok extends Autok
         $fields                     = parent::fields();
         $fields["template"]         = fn () => AutokitemWidget::widget(['model' => $this]);
         $fields["hirdetes_leirasa"] = fn () => $this->hirdetesLeirasa;
+        $fields["oldal"]            = fn () => $this->oldalLink;
         return $fields;
     }
 

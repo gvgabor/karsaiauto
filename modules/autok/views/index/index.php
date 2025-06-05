@@ -1,11 +1,13 @@
 <?php
 /***
  * @var View $this
+ * @var FilterModel $model
  */
 
 use app\helpers\ColumnsHelper;
 use app\helpers\HtmlHelper;
 use app\helpers\OptionsHelper;
+use app\models\index\FilterModel;
 use yii\helpers\Json;
 use yii\web\JqueryAsset;
 use yii\web\View;
@@ -13,11 +15,10 @@ use yii\web\View;
 $this->registerJsVar("autokColumns", ColumnsHelper::autokColumns());
 $this->registerJsVar("dokumentumokColumns", ColumnsHelper::dokumentumokColumns());
 $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class]]);
-
 ?>
 
 
-<div class="card main-card">
+<div id="admin-autok" class="card main-card">
     <div class="card-header">
         <div class="card-title">
             <?= Yii::t("app", "Autok Kezelese") ?>
@@ -47,6 +48,18 @@ $this->registerJsFile('@web/webpack/autok.js', ['depends' => [JqueryAsset::class
                 data-egyenlo="<?= Yii::t("app", "Egyenlo") ?>"
                 id="autok-grid" class="border-0"
         ></div>
+        <div id="filter-slide-panel" class="filter-slide-panel close">
+            <div>
+                <div id="close-slide-box-btn" class="close-slide-box">
+                    <i class="fa-solid fa-angles-right"></i>
+                </div>
+            </div>
+            <div>
+                <div class="slide-content">
+                   <?= $this->render("@app/views/index/kereses-box", ["model" => $model]) ?>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

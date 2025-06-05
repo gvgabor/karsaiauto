@@ -3,11 +3,12 @@
 namespace app\widgets\autokitem;
 
 use app\models\index\LandingAutok;
+use app\modules\autok\models\AutokModel;
 use yii\base\Widget;
 
 class AutokitemWidget extends Widget
 {
-    public ?LandingAutok $model = null;
+    public ?AutokModel $model = null;
 
     public function run()
     {

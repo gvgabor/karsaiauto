@@ -5,7 +5,7 @@
 /** @var string $content */
 
 use app\assets\AppAsset;
-use app\helpers\OptionsHelper;
+use yii\helpers\Url;
 
 AppAsset::register($this);
 
@@ -15,7 +15,10 @@ $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, 
 $this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
-$heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.jpg")
+$heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.jpg");
+if (empty($this->title)) {
+    $this->title = Yii::$app->name;
+}
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -23,7 +26,7 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Használt Kisteherautók</title>
+        <title><?= $this->title ?></title>
         <link
                 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
                 rel="stylesheet"
@@ -42,10 +45,10 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto text-center">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/">Kezdőlap</a>
+                            <a class="nav-link active" href="<?= Yii::$app->homeUrl ?>">Kezdőlap</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Járművek</a>
+                            <a class="nav-link" href="<?= Url::to(['index/jarmuvek']) ?>">Járművek</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Kapcsolat</a>
@@ -54,7 +57,6 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
                 </div>
             </div>
         </nav>
-
 
 
         <!-- Hero Section -->
@@ -66,8 +68,6 @@ $heroBack = Yii::getAlias("@web/images/70fe78fc-202475-ford-transit-350l-nigtt.j
                 </div>
             </div>
         </section>
-
-
 
 
         <?= $content ?>

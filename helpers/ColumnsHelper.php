@@ -86,6 +86,7 @@ class ColumnsHelper
         $muveletek = [
             ["id" => "eladas", "text" => Yii::t("app", "Eladas"), "icon" => "gear"],
             ["id" => "adatlap", "text" => Yii::t("app", "Webes Nezet"), "icon" => "gear"],
+            ["id" => "oldal", "text" => Yii::t("app", "Oldal Nezet"), "icon" => "gear"],
         ];
 
 

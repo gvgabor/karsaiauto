@@ -29,6 +29,7 @@ class OptionsHelper
     {
         return [
             1 => Yii::t("app", "Kisteherautó"),
+            2 => Yii::t("app", "Szemelyauto"),
         ];
     }
 
@@ -119,7 +120,6 @@ class OptionsHelper
             "5000+"     => "5000+ kg",
         ];
     }
-
 
     public static function meretOptions(): array
     {

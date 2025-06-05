@@ -237,7 +237,7 @@ class ConsoleController extends Controller
                 unset($model, $images, $formData, $result);
                 gc_collect_cycles();
             } catch (Exception $exception) {
-                Yii::error(__CLASS__, $exception->getMessage());
+                Yii::error(__CLASS__, $exception->getMessage() . " " . $exception->getLine() . " " . $exception->getFile());
             }
 
         }
@@ -246,21 +246,44 @@ class ConsoleController extends Controller
 
     }
 
+    /**
+     * @return void
+     * php yii console/clear-tables
+     */
+    public function actionClearTables()
+    {
+        $this->stdout(gethostname(), BaseConsole::FG_BLUE, BaseConsole::BOLD);
+        $this->stdout(BaseConsole::ansiFormat(PHP_EOL . "Biztosan töröljük a táblák tartalmát? (igen/nem): ", [BaseConsole::FG_YELLOW]));
+        $response = mb_strtolower(trim(BaseConsole::input()));
+        if ($response === "igen") {
+            Yii::$app->db->createCommand()->truncateTable("autok")->execute();
+            Yii::$app->db->createCommand()->truncateTable("autok_dokumentumok")->execute();
+            Yii::$app->db->createCommand()->truncateTable("autok_felszereltseg")->execute();
+            Yii::$app->db->createCommand()->truncateTable("autok_image")->execute();
+            Yii::$app->db->createCommand()->truncateTable("markak")->execute();
+            Yii::$app->db->createCommand()->truncateTable("ugyfelek")->execute();
+        }
+    }
+
     public function actionRandomAuto()
     {
-        $factory                      = Factory::create('hu_HU');
-        $model                        = new AutokModel();
-        $model->hirdetes_leirasa      = "Fiat Ducato 2.3 JTD A strapabíró és megbízható furgon, ami nem hagy cserben! Ha masszív, tágas és gazdaságos haszongépjárművet keresel, megtaláltad a tökéletes választást! Főbb jellemzők: Erős és takarékos motor alacsony fogyasztás, nagy teherbírás Óriási raktér minden belefér, amit csak szállítani akarsz Megbízható technika üzembiztos, karbantartott állapot Kényelmes vezetés hosszú utakra is ideális Azonnal elvihető! Kedvező ár! Hívj most, és vidd el a tökéletes munkafurgont, mielőtt más csap le rá!";
-        $model->teljesitmeny          = (string)$factory->numberBetween(50, 600);
-        $model->kilometer             = round($factory->numberBetween(20000, 800000), -3);
-        $model->vetelar               = round($factory->numberBetween(200000, 20000000), -3);
-        $model->muszaki_ervenyes      = $factory->dateTimeBetween("now", "+3 years")->format("Y-m");
-        $model->motortipus_id         = $factory->randomElement(array_keys(OptionsHelper::motortipusOptions()));
-        $marka                        = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
-        $marka2                       = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
-        $model->marka_id              = $marka->id;
-        $model->model                 = $marka2->name;
-        $model->hirdetes_cime         = mb_strtoupper($marka->name . " " . $marka2->name . " 2.3 Mjet LWB 3.5 t gépjármű");
+        $factory                 = Factory::create('fr_FR');
+        $model                   = new AutokModel();
+        $model->hirdetes_leirasa = implode("\n", explode(".", $factory->realTextBetween(200, 1000)));
+        $model->teljesitmeny     = (string)$factory->numberBetween(50, 600);
+        $model->kilometer        = round($factory->numberBetween(20000, 800000), -3);
+        $model->vetelar          = round($factory->numberBetween(200000, 20000000), -3);
+        $model->muszaki_ervenyes = $factory->dateTimeBetween("now", "+3 years")->format("Y-m");
+        $model->motortipus_id    = $factory->randomElement(array_keys(OptionsHelper::motortipusOptions()));
+        $marka                   = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
+        $marka2                  = Markak::findOne($factory->randomElement(array_keys(OptionsHelper::markakOptions())));
+        if ($marka) {
+            $model->marka_id      = $marka->id;
+            $model->model         = $marka2->name;
+            $model->hirdetes_cime = mb_strtoupper($marka->name . " " . $marka2->name . " 2.3 Mjet LWB 3.5 t gépjármű");
+        }
+
+
         $model->jarmutipus_id         = $factory->randomElement(array_keys(OptionsHelper::jarmutipusaOptions()));
         $model->gyartasi_ev           = random_int(1990, 2025);
         $model->valto_id              = $factory->randomElement(array_keys(OptionsHelper::valtoOptions()));

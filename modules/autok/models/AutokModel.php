@@ -4,7 +4,7 @@ namespace app\modules\autok\models;
 
 use app\components\behaviors\NumericSanitizeBehavior;
 use app\models\base\Autok;
-use DateTime;
+use app\widgets\autokitem\AutokitemWidget;
 use Throwable;
 use Yii;
 use yii\web\UploadedFile;
@@ -44,15 +44,9 @@ final class AutokModel extends Autok
         $fields["confirm_text"]       = fn () => Yii::t("app", "confirm_text", ["name" => $this->hirdetes_cime]);
         $fields["azonosito"]          = fn () => $this->azonosito;
         $fields["hirdetes_leirasa"]   = fn () => $this->hirdetesLeirasa;
-        $fields["edit"]               = function () {
-            $edit        = 0;
-            $currentDate = new DateTime();
-            $currentDate->modify("-1 hour");
-            if (!empty($this->updated_at) && $this->updated_at > $currentDate->format("Y-m-d H:i:s")) {
-                $edit = 1;
-            }
-            return $edit;
-        };
+        $fields["edit"]               = fn () => $this->edit;
+        $fields["oldal"]              = fn () => $this->oldalLink;
+        $fields["template"]           = fn () => AutokitemWidget::widget(['model' => $this]);
         return $fields;
     }
 

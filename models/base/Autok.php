@@ -4,8 +4,10 @@ namespace app\models\base;
 
 use app\helpers\OptionsHelper;
 use app\models\query\AutokQuery;
+use DateTime;
 use yii\db\ActiveQuery;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  *
@@ -25,6 +27,8 @@ use yii\helpers\Html;
  * @property-read Szinek $szinek
  * @property-read Kivitel $kivitel
  * @property-read Felszereltseg[] $felszereltsegList
+ * @property-read string $oldalLink
+ * @property-read int $edit
  * @property-read Markak $marka
  */
 class Autok extends \app\models\Autok
@@ -97,6 +101,23 @@ class Autok extends \app\models\Autok
     public function getAutokDokumentumok()
     {
         return $this->hasMany(AutokDokumentumok::class, ['autok_id' => 'id']);
+    }
+
+    public function getEdit()
+    {
+        $edit        = 0;
+        $currentDate = new DateTime();
+        $currentDate->modify("-1 hour");
+        if (!empty($this->updated_at) && $this->updated_at > $currentDate->format("Y-m-d H:i:s")) {
+            $edit = 1;
+        }
+        return $edit;
+    }
+
+    public function getOldalLink(): string
+    {
+        $link = Url::to(["/index/auto", "id" => $this->friendly_url], true);
+        return $link;
     }
 
     public function getFelszereltsegList()

@@ -5,6 +5,7 @@ namespace app\controllers\actions;
 use app\components\enums\LandingDataSourceType;
 use app\components\MainAction;
 use app\models\index\LandingAutok;
+use app\modules\autok\models\AutokModel;
 use Yii;
 use yii\web\Response;
 
@@ -15,7 +16,7 @@ class LandingDatasourceAction extends MainAction
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $query                      = LandingAutok::find();
+        $query                      = AutokModel::find();
 
         if ($this->type === LandingDataSourceType::AKCIOS->value) {
             $query->akciosAutok();

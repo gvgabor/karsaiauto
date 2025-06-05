@@ -1462,7 +1462,7 @@ div.detail-box {
     text-transform: uppercase;
     align-items: center;
     padding: 20px;
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid rgba(204, 204, 204, 0.3);
 
     h5 {
       font-weight: 800;
@@ -1621,7 +1621,7 @@ div.detail-box {
         height: 50px;
         background: white;
         cursor: pointer;
-        box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
+
         border-radius: 5px 0 0 5px;
 
         i {
@@ -1640,6 +1640,10 @@ div.detail-box {
     }
 
     pointer-events: none;
+
+    div.close-item-box {
+      box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
 
     .popup-slide-box {
       transform: translateY(-50%) translateX(0);
@@ -1747,4 +1751,79 @@ section.blur, nav.blur {
 
 div.egyeb-box {
   min-height: 800px;
+}
+
+#admin-autok {
+  div.card-body {
+    position: relative;
+    overflow: hidden;
+
+    div.filter-slide-panel {
+      position: absolute;
+      background: transparent;
+      right: 0;
+      top: 50%;
+      transition: 0.5s;
+      transform: translateY(-50%);
+      display: flex;
+      overflow: hidden;
+      padding: 20px 0 20px 20px;
+      width: 1200px;
+
+
+      div.slide-content {
+        padding: 10px;
+      }
+
+      > div:first-child {
+        width: 50px;
+        background: transparent;
+        min-width: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        div.close-slide-box {
+          width: 100%;
+          height: 50px;
+          background: white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          box-shadow: -5px 0 10px 0 rgba(0, 0, 0, 0.1);
+          border-radius: 5px 0 0 5px;
+          perspective: 1000px;
+
+          i {
+            transition-delay: 5s;
+            transition: all 1s;
+            transform: rotateY(0);
+            font-size: 1.5rem;
+            font-weight: 800;
+          }
+        }
+      }
+
+      > div:last-child {
+        flex-grow: 1;
+        background: white;
+        box-shadow: -5px 0 10px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 10px 0 0 10px;
+      }
+
+      &.close {
+        transform: translateY(-50%) translateX(calc(100% - 70px));
+
+        > div:first-child {
+          div.close-slide-box {
+            i {
+              transform: rotateY(180deg);
+            }
+          }
+        }
+      }
+
+    }
+  }
 }

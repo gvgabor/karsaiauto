@@ -73,6 +73,50 @@ class IndexController extends Controller
         return $this->renderPartial("auto-detail", ["model" => $model]);
     }
 
+    public function actionAuto($id)
+    {
+        $model = LandingAutok::findOne(["friendly_url" => $id]);
+        if (empty($model)) {
+            return $this->redirect(Yii::$app->homeUrl);
+        }
+        $this->view->title = $model->hirdetes_cime;
+        Yii::$app->view->registerMetaTag([
+            'name'    => 'description',
+            'content' => $model->hirdetes_leirasa ? mb_substr(strip_tags($model->hirdetes_leirasa), 0, 160) : 'Megbízható használt kisteherautók elérhető áron.',
+        ]);
+        Yii::$app->view->registerMetaTag([
+            'property' => 'og:title',
+            'content'  => $model->hirdetes_cime,
+        ]);
+
+        Yii::$app->view->registerMetaTag([
+            'property' => 'og:description',
+            'content'  => mb_substr(strip_tags($model->hirdetes_leirasa), 0, 160),
+        ]);
+
+        Yii::$app->view->registerMetaTag([
+            'property' => 'og:image',
+            'content'  => Url::to($model->firstImage->imageUrl, true), // teljes URL kell!
+        ]);
+
+        Yii::$app->view->registerMetaTag([
+            'property' => 'og:url',
+            'content'  => $model->oldalLink,
+        ]);
+
+        Yii::$app->view->registerMetaTag([
+            'property' => 'og:type',
+            'content'  => 'article',
+        ]);
+
+        Yii::$app->view->registerLinkTag([
+            'rel'  => 'canonical',
+            'href' => $model->oldalLink,
+        ]);
+
+        return $this->render("auto", ["model" => $model]);
+    }
+
     public function actionEmailForm()
     {
         Yii::$app->response->format = Response::FORMAT_HTML;
@@ -166,7 +210,7 @@ class IndexController extends Controller
                     throw new Exception('Beléptetés sikertelen.');
                 }
 
-                return $this->redirect(['/admin']); // Ezt javítottuk
+                return $this->redirect(['/home']);
             } catch (Throwable $exception) {
                 Yii::error($exception->getMessage(), 'login');
                 $model->addError('jelszo', 'Technikai hiba: ' . $exception->getMessage());

@@ -1,4 +1,6 @@
 import {ClassUtil} from "../../helpers/class.util";
+import {ClassCardetail} from "./class.cardetail";
+import ObservableObject = kendo.data.ObservableObject;
 
 
 export enum LandingEndPoint {
@@ -19,7 +21,6 @@ export class ClassLanding extends ClassUtil {
         });
 
         const akciosAutokList = await this.akciosAutokList(this.div("akcios-autok-list"), LandingEndPoint.TYPE_AKCIOS);
-        console.log("=>(class.landing.ts:22) akciosAutokList", akciosAutokList);
         const kiemeltAutokList = await this.akciosAutokList(this.div("kiemelt-autok-list"), LandingEndPoint.TYPE_KIEMELT);
 
         const kiemeltAutokLabel = document.getElementById("kiemelt-autok-label")!;
@@ -28,13 +29,31 @@ export class ClassLanding extends ClassUtil {
         this.dataBound(kiemeltAutokList, () => {
             const list = kiemeltAutokList;
             kiemeltAutokLabel.style.display = list.dataSource.data().length == 0 ? "none" : "block";
-
+            (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
+                const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
+                (item.querySelector(`div.image-box`)! as HTMLDivElement).onclick = () => {
+                    if (this.isMobile()) {
+                        this.navigate(dataItem.oldal);
+                    } else {
+                        new ClassCardetail(dataItem.id).showDetail();
+                    }
+                }
+            });
         });
 
         this.dataBound(akciosAutokList, () => {
             const list = akciosAutokList;
             akciosAutokLabel.style.display = list.dataSource.data().length == 0 ? "none" : "block";
-
+            (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
+                const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
+                (item.querySelector(`div.image-box`)! as HTMLDivElement).onclick = () => {
+                    if (this.isMobile()) {
+                        this.navigate(dataItem.oldal);
+                    } else {
+                        new ClassCardetail(dataItem.id).showDetail();
+                    }
+                }
+            });
         });
 
 

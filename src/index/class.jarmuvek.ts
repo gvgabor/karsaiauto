@@ -6,6 +6,12 @@ import ObservableObject = kendo.data.ObservableObject;
 
 export enum JarmuvekEndPoint {
     JARMUVEK_FILTER_DATA_SOURCE = "JarmuvekFilterDataSource",
+    FILTER_EVENT = "FilterEvent",
+}
+
+export interface FilterItem {
+    button: HTMLButtonElement,
+    dropdown: kendo.ui.DropDownList
 }
 
 export class ClassJarmuvek extends ClassUtil {
@@ -18,24 +24,26 @@ export class ClassJarmuvek extends ClassUtil {
     async init() {
 
 
-        const saveFilterBtn = this.button("save-filter-btn");
         const jarmuvekPager1 = this.div("jarmuvek-pager-1");
         const jarmuvekPager2 = this.div("jarmuvek-pager-2");
         const jarmuvekList = await this.jarmuvekList(this.div("jarmuvek-list"), jarmuvekPager1, jarmuvekPager2);
-        this.filterSelectIdList.forEach(id => jQuery(this.input(id)).kendoDropDownList({
-            filter: "contains",
-            height: 400,
-            valueTemplate: (data: any) => {
-                let template = `<div class="filter-template"><span class="label">${data.text}</span></div>`;
-                if (data.value) {
-                    template = `<div class="filter-template"><span>${data.text}</span><span class="label">${data.parent()[0].text}</span></div>`
-                }
-                return template;
-            },
-            change: () => {
-                // saveFilterBtn.click();
-            }
-        }));
+
+
+        // this.filterSelectIdList.forEach(id => jQuery(this.input(id)).kendoDropDownList({
+        //     filter: "contains",
+        //     height: 400,
+        //     valueTemplate: (data: any) => {
+        //         let template = `<div class="filter-template"><span class="label">${data.text}</span></div>`;
+        //         if (data.value) {
+        //             template = `<div class="filter-template"><span>${data.text}</span><span class="label">${data.parent()[0].text}</span></div>`
+        //         }
+        //         return template;
+        //     },
+        //     change: () => {
+        //         const filterEvent = new CustomEvent(JarmuvekEndPoint.FILTER_EVENT);
+        //         document.dispatchEvent(filterEvent);
+        //     }
+        // }));
 
 
         this.dataBound(jarmuvekList, () => {
@@ -50,43 +58,110 @@ export class ClassJarmuvek extends ClassUtil {
             jarmuvekPager1.style.display = list.dataSource.data().length == 0 ? "none" : "flex";
             jarmuvekPager2.style.display = list.dataSource.data().length == 0 ? "none" : "flex";
             (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
-                const dataItem = list.dataItem(item) as ObservableObject & { id: number };
-                (item.querySelector(`div.image-box`)! as HTMLDivElement).onclick = (event) => {
-                    console.log(event.clientY)
-                    new ClassCardetail(dataItem.id).showDetail();
+                const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
+                (item.querySelector(`div.image-box`)! as HTMLDivElement).onclick = () => {
+                    if (this.isMobile()) {
+                        this.navigate(dataItem.oldal);
+                    } else {
+                        new ClassCardetail(dataItem.id).showDetail();
+                    }
                 }
             });
         });
-        (Array.from(document.querySelectorAll(`button.remove-filter-btn`)) as HTMLButtonElement[]).forEach((button) => {
+
+        document.addEventListener(JarmuvekEndPoint.FILTER_EVENT, async () => {
+            const form = document.getElementById("filter-form") as HTMLFormElement;
+            const formData = new FormData(form);
+            const url = this.url(LandingEndPoint.SAVE_FILTER);
+            await this.fetchForm(url, formData);
+            jarmuvekList.dataSource.page(1);
+        });
+        this.initKeresesBox();
+
+        // (Array.from(document.querySelectorAll(`button.remove-filter-btn`)) as HTMLButtonElement[]).forEach((button) => {
+        //     const hozzadRow: HTMLDivElement = button.closest("div.hozzad-row")!;
+        //     const currentDropDown = jQuery(hozzadRow.querySelector(`select`)!).data("kendoDropDownList") as kendo.ui.DropDownList;
+        //     button.onclick = () => {
+        //         currentDropDown.value("");
+        //         saveFilterBtn.click();
+        //     }
+        // });
+        //
+        // const bovitettKeresesBox = this.div("bovitett-kereses-box");
+        // Array.from((document.querySelectorAll<HTMLElement>(`.kereses-header i`))).forEach((item) => {
+        //     item.onclick = () => {
+        //         bovitettKeresesBox.classList.toggle("open");
+        //         localStorage.setItem("bovitett-kereses-box", bovitettKeresesBox.classList.contains("open") ? "1" : "0")
+        //     };
+        // });
+        //
+        // if (parseInt(localStorage.getItem("bovitett-kereses-box") || "0") == 1) {
+        //     bovitettKeresesBox.classList.add("open");
+        // }
+        //
+        // saveFilterBtn.onclick = async () => {
+        //     const form = document.getElementById("filter-form") as HTMLFormElement;
+        //     const formData = new FormData(form);
+        //     const url = this.url(LandingEndPoint.SAVE_FILTER);
+        //     await this.fetchForm(url, formData);
+        //     jarmuvekList.dataSource.page(1);
+        // }
+    }
+
+
+    initKeresesBox() {
+        const saveFilterBtn = this.button("save-filter-btn");
+        const resetFilterBtn = this.button("reset-filter-btn");
+
+        this.filterSelectIdList.forEach(id => {
+            const input = jQuery(this.input(id));
+            input.kendoDropDownList({
+                filter: "contains",
+                height: 400,
+                valueTemplate: (data: any) => {
+                    let template = `<div class="filter-template"><span class="label">${data.text}</span></div>`;
+                    if (data.value) {
+                        template = `<div class="filter-template"><span>${data.text}</span><span class="label">${data.parent()[0].text}</span></div>`
+                    }
+                    return template;
+                },
+            });
+        });
+        const bovitettKeresesBox = this.div("bovitett-kereses-box");
+        const filterItemList = (Array.from(document.querySelectorAll(`button.remove-filter-btn`)) as HTMLButtonElement[]).map(button => {
             const hozzadRow: HTMLDivElement = button.closest("div.hozzad-row")!;
             const currentDropDown = jQuery(hozzadRow.querySelector(`select`)!).data("kendoDropDownList") as kendo.ui.DropDownList;
-            button.onclick = () => {
-                currentDropDown.value("");
-                saveFilterBtn.click();
+            const item: FilterItem = {button: button, dropdown: currentDropDown};
+            return item;
+        });
+
+        filterItemList.forEach(item => {
+            item.button.onclick = () => {
+                item.dropdown.value("");
+                const filterEvent = new CustomEvent(JarmuvekEndPoint.FILTER_EVENT);
+                document.dispatchEvent(filterEvent);
             }
         });
 
-        const bovitettKeresesBox = this.div("bovitett-kereses-box");
         Array.from((document.querySelectorAll<HTMLElement>(`.kereses-header i`))).forEach((item) => {
             item.onclick = () => {
                 bovitettKeresesBox.classList.toggle("open");
                 localStorage.setItem("bovitett-kereses-box", bovitettKeresesBox.classList.contains("open") ? "1" : "0")
             };
         });
-
         if (parseInt(localStorage.getItem("bovitett-kereses-box") || "0") == 1) {
-            bovitettKeresesBox.classList.add("open");
+            setTimeout(() => bovitettKeresesBox.classList.add("open"), 500);
         }
-
         saveFilterBtn.onclick = async () => {
-            const form = document.getElementById("filter-form") as HTMLFormElement;
-            const formData = new FormData(form);
-            const url = this.url(LandingEndPoint.SAVE_FILTER);
-            await this.fetchForm(url, formData);
-            jarmuvekList.dataSource.page(1);
+            const filterEvent = new CustomEvent(JarmuvekEndPoint.FILTER_EVENT);
+            document.dispatchEvent(filterEvent);
+        }
+        resetFilterBtn.onclick = () => {
+            filterItemList.forEach(item => item.dropdown.value(""));
+            const filterEvent = new CustomEvent(JarmuvekEndPoint.FILTER_EVENT);
+            document.dispatchEvent(filterEvent);
         }
     }
-
 
     get filterSelectIdList() {
         return [

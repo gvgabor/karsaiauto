@@ -3,11 +3,13 @@
 namespace app\modules\autok\actions;
 
 use app\components\MainAction;
+use app\controllers\actions\JarmuvekFilterDataSource;
 use app\helpers\R2Helper;
 use app\models\base\Arvalaszto;
 use app\models\base\AutokDokumentumok;
 use app\models\base\AutokFelszereltseg;
 use app\models\base\AutokImage;
+use app\models\index\FilterModel;
 use app\models\query\AutokQuery;
 use app\modules\autok\models\AutokModel;
 use app\modules\autok\models\EladasModel;
@@ -17,6 +19,7 @@ use Throwable;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
+use yii\helpers\Inflector;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Application;
@@ -28,18 +31,25 @@ class AutokAction extends MainAction
 {
     public ?int $gridFilterSelector       = null;
     public ?int $gridStatusFilterSelector = null;
+    public ?FilterModel $filterModel      = null;
     protected array $_filters             = [];
 
     public function runWithParams($params)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $currentDate                = new DateTime();
-        $query                      = AutokModel::find()
-            ->joinWith(["marka"])
-            ->with(["autokImage", "autokDokumentumok"])
-            ->orderBy(["id" => SORT_DESC])
-            ->limit($this->pageSize)
-            ->offset(($this->page - 1) * $this->pageSize);
+
+        if ($this->filterModel) {
+            $query = Yii::$container->get(JarmuvekFilterDataSource::class)->createQuery($this->filterModel, true);
+        } else {
+            $query = AutokModel::find()
+                ->joinWith(["marka"])
+                ->with(["autokImage", "autokDokumentumok"])
+                ->orderBy(["id" => SORT_DESC]);
+        }
+
+        $query->limit($this->pageSize);
+        $query->offset(($this->page - 1) * $this->pageSize);
 
         if (!empty($this->gridFilterSelector)) {
             match ($this->gridFilterSelector) {
@@ -82,7 +92,6 @@ class AutokAction extends MainAction
                 default   => null
             };
         }
-
 
         if (!empty($this->sort)) {
             $sortText = "";
@@ -165,6 +174,16 @@ class AutokAction extends MainAction
             }
             $model->setAttributes($formData);
             $model->image = UploadedFile::getInstances($model, "image");
+            if (empty($model->friendly_url)) {
+                $friendly = Inflector::slug($model->hirdetes_cime);
+                $exist    = AutokModel::findOne(["friendly_url" => $friendly]);
+                $counter  = 1;
+                while ($exist) {
+                    $friendly = Inflector::slug($model->hirdetes_cime) . "-" . $counter++;
+                    $exist    = AutokModel::findOne(["friendly_url" => $friendly]);
+                }
+                $model->friendly_url = $friendly;
+            }
             $model->save() ?: throw new BadRequestHttpException(Json::encode($model->errors));
 
             if (Yii::$app instanceof Application) {
@@ -338,7 +357,6 @@ class AutokAction extends MainAction
                 return false;
         }
 
-
         if ($maxWidth === null && $maxHeight === null) {
             $newWidth  = $originalWidth;
             $newHeight = $originalHeight;
@@ -365,15 +383,14 @@ class AutokAction extends MainAction
         }
 
         imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $originalWidth, $originalHeight);
-        $watermarkText = Yii::$app->name;
+        $watermarkText = $_ENV['KEP_FELIRAT'];
         $fontFile      = __DIR__ . "/../../../web/fonts/BebasNeue-Regular.ttf";
         $fontSize      = 14;
         $angle         = 0;
         $textColor     = imagecolorallocatealpha($resizedImage, 255, 255, 255, 30);
 
-        $textBox    = imagettfbbox($fontSize, $angle, $fontFile, $watermarkText);
-        $textWidth  = abs($textBox[4] - $textBox[0]);
-        $textHeight = abs($textBox[5] - $textBox[1]);
+        $textBox   = imagettfbbox($fontSize, $angle, $fontFile, $watermarkText);
+        $textWidth = abs($textBox[4] - $textBox[0]);
 
         $x = $newWidth  - $textWidth - 10;
         $y = $newHeight - 10;

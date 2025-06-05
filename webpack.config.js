@@ -16,6 +16,7 @@ module.exports = {
         szinek       : './modules/karbantartas/assets/szinek.ts',
         landing      : './src/index/landing.ts',
         jarmuvek     : './src/index/jarmuvek.ts',
+        auto         : './src/index/auto.ts',
         // login    : './views/assets/login.ts',
     },
     output : {

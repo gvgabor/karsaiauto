@@ -6,7 +6,8 @@ use app\components\MainAction;
 use app\helpers\UtilHelper;
 use app\models\base\Arvalaszto;
 use app\models\base\Idoszakok;
-use app\models\index\LandingAutok;
+use app\models\index\FilterModel;
+use app\modules\autok\models\AutokModel;
 use Yii;
 use yii\web\Response;
 
@@ -18,13 +19,26 @@ class JarmuvekFilterDataSource extends MainAction
         $result                     = [];
 
         $filterModel = UtilHelper::filterModel();
-        $query       = LandingAutok::find()
-            ->with([])
+        $query       = $this->createQuery($filterModel);
+
+        $result["total"] = (clone $query)->count();
+        $result["data"]  = $query->all();
+
+        return $result;
+    }
+
+    public function createQuery(FilterModel $filterModel, $admin = false)
+    {
+        $query = AutokModel::find()
+            ->with(['autokImage','autokDokumentumok'])
             ->joinWith(["marka"])
-            ->andWhere(["eladva" => 0, "publikalva" => 1])
             ->limit($this->pageSize)
             ->orderBy(["id" => SORT_DESC])
             ->offset(($this->page - 1) * $this->pageSize);
+
+        if ($admin === false) {
+            $query->andWhere(["eladva" => 0, "publikalva" => 1]);
+        }
 
         foreach ($filterModel->attributes as $key => $item) {
             if (!empty($item)) {
@@ -177,10 +191,7 @@ class JarmuvekFilterDataSource extends MainAction
             $query->orderBy($filterModel->sorbarendezes);
         }
 
-        $result["total"] = (clone $query)->count();
-        $result["data"]  = $query->all();
-
-        return $result;
+        return $query;
     }
 
 }

@@ -32,7 +32,7 @@ class AutokImage extends \app\models\AutokImage
         if (empty($this->remote_key)) {
             $path = $this->imagePath;
             if (is_file($path)) {
-                $url = Url::to(["@web/uploads/autok/" . $this->autok->longId . "/" . $this->name]);
+                $url = Url::to(["@web/uploads/autok/" . $this->autok->longId . "/" . $this->name], true);
             }
         } else {
             $url = $this->url;

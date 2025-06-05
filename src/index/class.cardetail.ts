@@ -19,6 +19,7 @@ export class ClassCardetail extends ClassUtil {
 
     constructor(autoId: Number) {
         super();
+        console.log(autoId);
         this.autoId = autoId;
     }
 
@@ -50,13 +51,73 @@ export class ClassCardetail extends ClassUtil {
         const ypos = window.scrollY + 50;
         popup.root.classList.add("fixed");
         popup.root.style.setProperty("--ypos", `${ypos}px`);
+        this.initElements()
 
+        //
+        // const slides = document.querySelectorAll('.simple-slider .slide');
+        // let idx = 0;
+        // slides[idx].classList.add("active");
+        // const thumbSlider = this.div("thumb-slider");
+        // const counterBox = this.div("counter-box");
+        // counterBox.innerHTML = `1/${slides.length}`
+        //
+        // const show = (newidx: number) => {
+        //     slides.forEach(item => item.classList.remove("active"));
+        //     idx = newidx;
+        //     counterBox.innerHTML = `${newidx + 1}/${slides.length}`
+        //     slides[idx].classList.add("active");
+        //     thumbSlider.scrollTo({
+        //         left: (thumbSlider.children[idx] as HTMLDivElement).offsetLeft - thumbSlider.offsetLeft,
+        //         behavior: "smooth"
+        //     })
+        // }
+        //
+        // const prevBtn = this.button("prev-btn");
+        // const nextBtn = this.button("next-btn");
+        //
+        // nextBtn.onclick = () => show(Math.min(idx + 1, slides.length - 1));
+        // prevBtn.onclick = () => show(Math.max(idx - 1, 0));
+        //
+        //
+        // const thumbSlideList: HTMLDivElement[] = Array.from(thumbSlider.querySelectorAll(`div.thumb-slide`)) as HTMLDivElement[];
+        // thumbSlideList.forEach(item => {
+        //     item.onclick = () => {
+        //         const index = Array.from(item.parentElement!.children).indexOf(item);
+        //         show(index);
+        //     }
+        // });
+        //
+        // thumbSlider.onwheel = (event) => {
+        //     if (event.deltaY === 0) {
+        //         return;
+        //     }
+        //     event.preventDefault();
+        //     thumbSlider.scrollLeft += Math.trunc(event.deltaY);
+        // }
+        //
+        //
+        // const emailBtn = this.button("email-btn");
+        // emailBtn.onclick = () => {
+        //     this.kapcsolatForm({autoId: this.autoId})
+        // }
+    }
+
+    initElements(page: boolean = false) {
         const slides = document.querySelectorAll('.simple-slider .slide');
         let idx = 0;
         slides[idx].classList.add("active");
         const thumbSlider = this.div("thumb-slider");
         const counterBox = this.div("counter-box");
         counterBox.innerHTML = `1/${slides.length}`
+
+        if (page) {
+            const detailBox = this.div("detail-box");
+            detailBox.classList.remove("shadow-lg");
+            document.querySelector(`div.close-box`)!.remove();
+            // (document.querySelector(`div.vetelar-box`)! as HTMLDivElement).style.border = "none";
+            (document.querySelector(`div.adatok-box`)! as HTMLDivElement).classList.add("bg-light");
+            detailBox.style.border = "none";
+        }
 
         const show = (newidx: number) => {
             slides.forEach(item => item.classList.remove("active"));
@@ -95,6 +156,7 @@ export class ClassCardetail extends ClassUtil {
 
         const emailBtn = this.button("email-btn");
         emailBtn.onclick = () => {
+            console.log(this.autoId);
             this.kapcsolatForm({autoId: this.autoId})
         }
     }

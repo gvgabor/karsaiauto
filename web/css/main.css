@@ -1173,7 +1173,7 @@ div.detail-box .vetelar-box {
   text-transform: uppercase;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.3);
 }
 div.detail-box .vetelar-box h5 {
   font-weight: 800;
@@ -1298,7 +1298,6 @@ div.detail-box .popup-slide-box div.popup-slide-close-box div.close-item-box {
   height: 50px;
   background: white;
   cursor: pointer;
-  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
   border-radius: 5px 0 0 5px;
 }
 div.detail-box .popup-slide-box div.popup-slide-close-box div.close-item-box i {
@@ -1309,6 +1308,9 @@ div.detail-box.slide-in {
 }
 div.detail-box.slide-in > div:not(.popup-slide-box) {
   filter: grayscale(1) blur(2px);
+}
+div.detail-box.slide-in div.close-item-box {
+  box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2);
 }
 div.detail-box.slide-in .popup-slide-box {
   transform: translateY(-50%) translateX(0);
@@ -1397,6 +1399,65 @@ section.blur::after, nav.blur::after {
 
 div.egyeb-box {
   min-height: 800px;
+}
+
+#admin-autok div.card-body {
+  position: relative;
+  overflow: hidden;
+}
+#admin-autok div.card-body div.filter-slide-panel {
+  position: absolute;
+  background: transparent;
+  right: 0;
+  top: 50%;
+  transition: 0.5s;
+  transform: translateY(-50%);
+  display: flex;
+  overflow: hidden;
+  padding: 20px 0 20px 20px;
+  width: 1200px;
+}
+#admin-autok div.card-body div.filter-slide-panel div.slide-content {
+  padding: 10px;
+}
+#admin-autok div.card-body div.filter-slide-panel > div:first-child {
+  width: 50px;
+  background: transparent;
+  min-width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#admin-autok div.card-body div.filter-slide-panel > div:first-child div.close-slide-box {
+  width: 100%;
+  height: 50px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: -5px 0 10px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px 0 0 5px;
+  perspective: 1000px;
+}
+#admin-autok div.card-body div.filter-slide-panel > div:first-child div.close-slide-box i {
+  transition-delay: 5s;
+  transition: all 1s;
+  transform: rotateY(0);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+#admin-autok div.card-body div.filter-slide-panel > div:last-child {
+  flex-grow: 1;
+  background: white;
+  box-shadow: -5px 0 10px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 10px 0 0 10px;
+}
+#admin-autok div.card-body div.filter-slide-panel.close {
+  transform: translateY(-50%) translateX(calc(100% - 70px));
+}
+#admin-autok div.card-body div.filter-slide-panel.close > div:first-child div.close-slide-box i {
+  transform: rotateY(180deg);
 }
 
 /*# sourceMappingURL=main.css.map */

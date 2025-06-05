@@ -45,6 +45,10 @@ export class ClassUtil {
     }
 
 
+    isMobile(): boolean {
+        return window.innerWidth <= 768 || /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
     message(text: string) {
 
         const oldItems: HTMLDivElement[] = Array.from(document.querySelectorAll(`div.message-box`));
@@ -100,8 +104,8 @@ export class ClassUtil {
             /**@type {HTMLDivElement | null} **/
             const fieldBox: HTMLDivElement | null = form.querySelector(`div.field-${model}-${key}`) as HTMLDivElement | null;
             console.log({
-                model:model,
-                key:key
+                model: model,
+                key: key
             });
             const errorBox = document.createElement("div");
             errorBox.classList.add("error-box");

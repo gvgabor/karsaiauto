@@ -3,6 +3,7 @@
 use app\models\base\Felhasznalok;
 use app\modules\admin\Admin;
 use app\modules\autok\Autok;
+use app\modules\home\Home;
 use app\modules\karbantartas\Karbantartas;
 use yii\i18n\PhpMessageSource;
 use yii\symfonymailer\Mailer;
@@ -24,7 +25,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'name'       => mb_strtoupper('Cartango'),
+    'name'       => mb_strtoupper($_ENV['APP_NAME']),
     'components' => [
         'r2' => [
             'class'     => 'app\components\R2Uploader',
@@ -81,6 +82,7 @@ $config = [
                 'admin/RemoveFelhasznalo/<id:\d+>'       => 'admin/index/remove-felhasznalo',
                 'admin/RemoveFelhasznaloiJogok/<id:\d+>' => 'admin/index/remove-felhasznaloi-jogok',
                 'admin/RemoveMenu/<id:\d+>'              => 'admin/index/remove-menu',
+                'auto/<id:[a-z0-9\-]+>'                  => 'index/auto',
             ],
         ],
         'i18n' => [
@@ -115,6 +117,12 @@ $config = [
         ],
         'autok' => [
             'class'        => Autok::class,
+            'defaultRoute' => 'index',
+            'layoutPath'   => '@app/views/layouts',
+            'layout'       => 'admin-main',
+        ],
+        'home' => [
+            'class'        => Home::class,
             'defaultRoute' => 'index',
             'layoutPath'   => '@app/views/layouts',
             'layout'       => 'admin-main',

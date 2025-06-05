@@ -6,6 +6,7 @@ use app\commands\ConsoleController;
 use app\components\MainController;
 use app\helpers\UtilHelper;
 use app\models\base\AutokDokumentumok;
+use app\models\index\FilterModel;
 use app\modules\autok\actions\AutokAction;
 use app\modules\autok\actions\DokumentumokDatasourceAction;
 use app\modules\autok\actions\UgyfelekAction;
@@ -29,6 +30,7 @@ class IndexController extends MainController
                 'sort'                     => $this->request->post('sort'),
                 'gridFilterSelector'       => $this->request->post('gridFilterSelector'),
                 'gridStatusFilterSelector' => $this->request->post('gridStatusFilterSelector'),
+                'filterModel'              => Yii::$app->session->get("admin-filterModel"),
             ],
             'dokumentumok-datasource' => [
                 'class'   => DokumentumokDatasourceAction::class,
@@ -46,7 +48,18 @@ class IndexController extends MainController
     public function actionIndex()
     {
 
-        return $this->render("index");
+        $model = Yii::$app->session->get("admin-filterModel", new FilterModel());
+        return $this->render("index", ['model' => $model]);
+    }
+
+    public function actionFilterForm()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $result                     = [];
+        $model                      = new FilterModel();
+        $model->setAttributes($this->request->post($model->shortname));
+        Yii::$app->session->set("admin-filterModel", $model);
+        return $result;
     }
 
     public function actionDokumentumok()

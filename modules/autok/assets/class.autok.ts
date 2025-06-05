@@ -7,6 +7,7 @@ import {ClassMarkak} from "../../karbantartas/assets/class.markak";
 import {ClassSzinek} from "../../karbantartas/assets/class.szinek";
 import {ClassKivitel} from "../../karbantartas/assets/class.kivitel";
 import {ClassFelszereltseg} from "../../karbantartas/assets/class.felszereltseg";
+import {ClassJarmuvek} from "../../../src/index/class.jarmuvek";
 import ObservableObject = kendo.data.ObservableObject;
 
 
@@ -21,6 +22,8 @@ export enum AutokEndPoints {
     ELADVA_FORM = "EladvaForm",
     DOKUMENTUMOK_DATASOURCE = "DokumentumokDatasource",
     DETAIL = "Detail",
+    FILTER_EVENT = "FilterEvent",
+    FILTER_FORM = "FilterForm",
 }
 
 export class ClassAutok extends ClassUtil {
@@ -100,7 +103,7 @@ export class ClassAutok extends ClassUtil {
             this.gridButtonList(grid, "action-btn").forEach(item => {
                 const cell = item.button.closest(`td`)!;
                 let muveletek: Array<any> = JSON.parse(cell.dataset.muveletek!);
-                const dataItem = item.data as ObservableObject & { id: number, eladva_int: number };
+                const dataItem = item.data as ObservableObject & { id: number, eladva_int: number, oldal: string };
                 if (dataItem.eladva_int == 1) {
                     muveletek = muveletek.filter(item => item.id != "eladas");
                     item.row.classList.add("eladva");
@@ -133,6 +136,9 @@ export class ClassAutok extends ClassUtil {
                             if (event.id == "adatlap") {
                                 await showAdatlap(dataItem.id);
                             }
+                            if (event.id == "oldal") {
+                                this.navigate(dataItem.oldal, "_blank");
+                            }
                         }
                     }
                 });
@@ -150,6 +156,22 @@ export class ClassAutok extends ClassUtil {
         gridFilterSelector.bind("select", () => autokFilter());
         gridStatusFilterSelector.bind("select", () => autokFilter());
         autokFilter();
+
+        const closeSlideBoxBtn = this.div("close-slide-box-btn");
+        closeSlideBoxBtn.style.zIndex = (this.maxZIndex + 1).toString();
+        const filterSlidePanel = this.div("filter-slide-panel");
+        closeSlideBoxBtn.onclick = () => filterSlidePanel.classList.toggle("close")
+
+        const jarmuvek = new ClassJarmuvek();
+        jarmuvek.initKeresesBox();
+        // setTimeout(() => closeSlideBoxBtn.click(), 1500);
+        document.addEventListener(AutokEndPoints.FILTER_EVENT, async () => {
+            const filterForm = document.getElementById("filter-form") as HTMLFormElement;
+            const url = this.url(AutokEndPoints.FILTER_FORM);
+            const formData = new FormData(filterForm);
+            await this.fetchForm(url, formData);
+            autokGrid.dataSource.read();
+        })
 
         const createAutoBtn = this.button("create-auto-btn");
         createAutoBtn.onclick = async () => {

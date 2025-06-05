@@ -47,6 +47,7 @@ use Yii;
  * @property int|null $szelesseg
  * @property int|null $hengerek_szama
  * @property int|null $hengerurtartalom
+ * @property string|null $friendly_url
  */
 abstract class Autok extends MainActiveRecord
 {
@@ -97,7 +98,8 @@ abstract class Autok extends MainActiveRecord
                     'hosszusag',
                     'szelesseg',
                     'hengerek_szama',
-                    'hengerurtartalom'
+                    'hengerurtartalom',
+                    'friendly_url'
                 ],
                 'default',
                 'value' => null
@@ -141,7 +143,7 @@ abstract class Autok extends MainActiveRecord
             ],
             [['hirdetes_leirasa', 'eladas_megjegyzes'], 'string'],
             [['created_at', 'updated_at', 'eladas_datuma'], 'safe'],
-            [['model', 'hirdetes_cime', 'muszaki_ervenyes'], 'string', 'max' => 255],
+            [['model', 'hirdetes_cime', 'muszaki_ervenyes', 'friendly_url'], 'string', 'max' => 255],
         ];
     }
 
@@ -190,6 +192,7 @@ abstract class Autok extends MainActiveRecord
             'szelesseg'             => Yii::t('app', 'Szelesseg'),
             'hengerek_szama'        => Yii::t('app', 'Hengerek Szama'),
             'hengerurtartalom'      => Yii::t('app', 'Hengerurtartalom'),
+            'friendly_url'          => Yii::t('app', 'Friendly Url'),
         ];
     }
 
