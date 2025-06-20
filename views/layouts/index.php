@@ -51,7 +51,7 @@ if (empty($this->title)) {
                             <a class="nav-link" href="<?= Url::to(['index/jarmuvek']) ?>">Járművek</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Kapcsolat</a>
+                            <a class="nav-link" href="<?= Url::to(['/index/kapcsolat']) ?>">Kapcsolat</a>
                         </li>
                     </ul>
                 </div>

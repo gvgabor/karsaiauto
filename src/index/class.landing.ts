@@ -29,31 +29,32 @@ export class ClassLanding extends ClassUtil {
         this.dataBound(kiemeltAutokList, () => {
             const list = kiemeltAutokList;
             kiemeltAutokLabel.style.display = list.dataSource.data().length == 0 ? "none" : "block";
-            (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
+
+            (Array.from(list.wrapper[0].querySelectorAll(`a.reszletek-link`)) as HTMLLinkElement[]).forEach(item => {
                 const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
-                item.onclick = () => {
-                    if (this.isMobile()) {
-                        this.navigate(dataItem.oldal);
-                    } else {
+                item.onclick = (event) => {
+                    if (this.isMobile() === false) {
+                        event.preventDefault();
                         new ClassCardetail(dataItem.id).showDetail();
                     }
                 }
-            });
+            })
+
         });
 
         this.dataBound(akciosAutokList, () => {
             const list = akciosAutokList;
             akciosAutokLabel.style.display = list.dataSource.data().length == 0 ? "none" : "block";
-            (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
+
+            (Array.from(list.wrapper[0].querySelectorAll(`a.reszletek-link`)) as HTMLLinkElement[]).forEach(item => {
                 const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
-                item.onclick = () => {
-                    if (this.isMobile()) {
-                        this.navigate(dataItem.oldal);
-                    } else {
+                item.onclick = (event) => {
+                    if (this.isMobile() === false) {
+                        event.preventDefault();
                         new ClassCardetail(dataItem.id).showDetail();
                     }
                 }
-            });
+            })
         });
 
 

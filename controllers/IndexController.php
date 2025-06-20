@@ -117,6 +117,11 @@ class IndexController extends Controller
         return $this->render("auto", ["model" => $model]);
     }
 
+    public function actionKapcsolat()
+    {
+        return $this->render("kapcsolat");
+    }
+
     public function actionEmailForm()
     {
         Yii::$app->response->format = Response::FORMAT_HTML;

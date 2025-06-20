@@ -57,16 +57,26 @@ export class ClassJarmuvek extends ClassUtil {
             }
             jarmuvekPager1.style.display = list.dataSource.data().length == 0 ? "none" : "flex";
             jarmuvekPager2.style.display = list.dataSource.data().length == 0 ? "none" : "flex";
-            (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
+            // (Array.from(list.wrapper[0].querySelectorAll(`div.autok-list-item`)) as HTMLDivElement[]).forEach(item => {
+            //     const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
+            //     (item as HTMLDivElement).onclick = () => {
+            //         if (this.isMobile()) {
+            //             // this.navigate(dataItem.oldal);
+            //         } else {
+            //             new ClassCardetail(dataItem.id).showDetail();
+            //         }
+            //     }
+            // });
+
+            (Array.from(list.wrapper[0].querySelectorAll(`a.reszletek-link`)) as HTMLLinkElement[]).forEach(item => {
                 const dataItem = list.dataItem(item) as ObservableObject & { id: number, oldal: string };
-                (item as HTMLDivElement).onclick = () => {
-                    if (this.isMobile()) {
-                        // this.navigate(dataItem.oldal);
-                    } else {
+                item.onclick = (event) => {
+                    if (this.isMobile() === false) {
+                        event.preventDefault();
                         new ClassCardetail(dataItem.id).showDetail();
                     }
                 }
-            });
+            })
         });
 
         document.addEventListener(JarmuvekEndPoint.FILTER_EVENT, async () => {

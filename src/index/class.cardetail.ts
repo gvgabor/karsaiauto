@@ -153,6 +153,29 @@ export class ClassCardetail extends ClassUtil {
             thumbSlider.scrollLeft += Math.trunc(event.deltaY);
         }
 
+        const hero = document.querySelector(`.hero`)! as HTMLDivElement;
+        const jumpBox = document.querySelector(`.jump-box`)! as HTMLDivElement;
+        const jumpHomeBtn = this.div("jump-home-btn");
+
+        if (jumpHomeBtn) {
+            jumpHomeBtn.onclick = () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                const entry = entries[0];
+                if (entry.isIntersecting) {
+                    jumpBox.classList.add("hide");
+                } else {
+                    jumpBox.classList.remove("hide");
+                }
+            });
+            observer.observe(hero);
+        }
+
 
         const emailBtn = this.button("email-btn");
         emailBtn.onclick = () => {

@@ -39,14 +39,14 @@ if (empty($model)) {
             <div><strong>Teljesítmény:</strong> <?= $model->tejlesitmenyText ?></div>
         </div>
 
-        <div class="reszletek-box d-flex d-sm-none justify-content-end" style="height: 40px">
-            <a class="btn btn-primary rounded-0" href="<?= $model->oldalLink ?>">
-                <i class="fas fa-tree"></i> Részletek
-            </a>
-        </div>
         <?= HtmlHelper::vetelarBox($model) ?>
-    </div>
 
+    </div>
+    <div>
+        <a href="<?= $model->oldalLink ?>" class="btn btn-danger rounded-0 w-100 reszletek-link">
+            <i class="fa-solid fa-list"></i>&nbsp;Részletek
+        </a>
+    </div>
 </div>
 
 
